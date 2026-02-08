@@ -1,0 +1,257 @@
+// ═══════════════════════════════════════════════════════════════════════════════
+// TESTIMONIALS SECTION – Bento grid layout
+// ═══════════════════════════════════════════════════════════════════════════════
+
+$teal-primary: #185C60;
+$teal-dark: #124A4E;
+$teal-deeper: #0D3A3E;
+$teal-light: #D4EAEC;
+$teal-lightest: #EDF5F6;
+$lime-accent: #C8E47C;
+$navy: #0F172A;
+$text-secondary: #64748B;
+$text-muted: #94A3B8;
+$border-color: #E2E8F0;
+$font-heading: 'Poppins', sans-serif;
+
+// ─── Section ─────────────────────────────────────────────────────────────────
+
+.testimonials {
+  width: 100%;
+  background: #F3F4F6;
+  padding: 80px 0 96px;
+
+  &__inner {
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: 0 32px;
+  }
+
+  // ─── Header ───
+
+  &__header {
+    text-align: center;
+    margin-bottom: 56px;
+  }
+
+  &__badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: $teal-primary;
+    margin-bottom: 16px;
+  }
+
+  &__badgeBracket {
+    color: $teal-primary;
+    font-size: 1.1rem;
+    font-weight: 300;
+    line-height: 1;
+  }
+
+  &__heading {
+    font-family: $font-heading;
+    font-size: 2.6rem;
+    font-weight: 800;
+    color: $navy;
+    line-height: 1.2;
+    margin-bottom: 14px;
+  }
+
+  &__headingAccent {
+    color: $teal-primary;
+    font-style: italic;
+    font-weight: 700;
+  }
+
+  &__subtitle {
+    font-size: 0.95rem;
+    color: $text-secondary;
+    font-weight: 400;
+  }
+
+  // ─── Bento Grid ───
+
+  &__grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    align-items: stretch;
+  }
+
+  &__rightCol {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  &__bottomRow {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+  }
+
+  // ─── Card base ───
+
+  &__card {
+    background: white;
+    border-radius: 16px;
+    padding: 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+                box-shadow 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+    cursor: default;
+    perspective: 800px;
+    overflow: hidden;
+
+    &:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 20px 48px rgba(24, 92, 96, 0.12),
+                  0 8px 20px rgba(0, 0, 0, 0.04);
+    }
+
+    // Large left card
+    &--large {
+      height: 100%;
+      justify-content: space-between;
+    }
+
+    // Top right card
+    &--topRight {
+      flex: 1;
+    }
+
+    // Dark card
+    &--dark {
+      background: $navy;
+      color: white;
+
+      &:hover {
+        box-shadow: 0 20px 48px rgba(0, 0, 0, 0.25),
+                    0 8px 20px rgba(0, 0, 0, 0.10);
+      }
+
+      .testimonials__quote {
+        color: rgba(255, 255, 255, 0.8);
+      }
+
+      .testimonials__authorName {
+        color: white;
+      }
+
+      .testimonials__authorRole {
+        color: rgba(255, 255, 255, 0.55);
+      }
+    }
+  }
+
+  // ─── 3D Flip inner container ───
+
+  &__flipInner {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    height: 100%;
+    transform-style: preserve-3d;
+    transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1),
+                opacity 0.35s ease;
+
+    &--flipping {
+      transform: rotateY(90deg);
+      opacity: 0;
+    }
+  }
+
+  // ─── Stat ───
+
+  &__stat {
+    margin-bottom: 4px;
+  }
+
+  &__statInline {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    margin-bottom: 4px;
+  }
+
+  &__statNumber {
+    font-family: $font-heading;
+    font-size: 2.2rem;
+    font-weight: 800;
+    color: $navy;
+    line-height: 1;
+
+    .testimonials__card--dark & {
+      color: white;
+    }
+  }
+
+  &__statLabel {
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: $navy;
+    display: block;
+
+    .testimonials__card--dark & {
+      color: rgba(255, 255, 255, 0.8);
+    }
+  }
+
+  // ─── Quote ───
+
+  &__quote {
+    font-size: 0.88rem;
+    line-height: 1.7;
+    color: $text-secondary;
+    flex: 1;
+  }
+
+  // ─── Author ───
+
+  &__author {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: auto;
+    padding-top: 8px;
+  }
+
+  &__authorName {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: $navy;
+    line-height: 1.3;
+  }
+
+  &__authorRole {
+    font-size: 0.72rem;
+    font-weight: 500;
+    color: $text-muted;
+  }
+}
+
+// ─── Avatar ──────────────────────────────────────────────────────────────────
+
+.avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, $teal-light 0%, darken($teal-light, 8%) 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: $teal-primary;
+  flex-shrink: 0;
+
+  &--dark {
+    background: linear-gradient(135deg, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0.08) 100%);
+    color: rgba(255, 255, 255, 0.7);
+  }
+}

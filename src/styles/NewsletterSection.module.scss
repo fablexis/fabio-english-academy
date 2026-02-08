@@ -1,0 +1,175 @@
+// ═══════════════════════════════════════════════════════════════════════════════
+// NEWSLETTER SECTION
+// ═══════════════════════════════════════════════════════════════════════════════
+
+$teal-primary: #185C60;
+$teal-dark: #124A4E;
+$teal-deeper: #0D3A3E;
+$lime-accent: #C8E47C;
+$green-cta: #5CF890;
+$navy: #0F172A;
+$font-heading: 'Poppins', sans-serif;
+
+.newsletter {
+  width: 100%;
+  background: linear-gradient(135deg, #0a1e2e 0%, $navy 40%, darken($teal-deeper, 6%) 100%);
+  padding: 96px 0;
+  position: relative;
+  overflow: hidden;
+
+  // Subtle ambient glow on background
+  &::before {
+    content: '';
+    position: absolute;
+    top: -120px;
+    right: -60px;
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle, rgba($teal-primary, 0.12) 0%, transparent 65%);
+    pointer-events: none;
+  }
+
+  &__inner {
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: 0 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+    z-index: 1;
+  }
+
+  // ─── Left content ───
+
+  &__content {
+    max-width: 580px;
+    flex-shrink: 0;
+  }
+
+  &__heading {
+    font-family: $font-heading;
+    font-size: 2.6rem;
+    font-weight: 800;
+    color: white;
+    line-height: 1.18;
+    margin-bottom: 20px;
+    letter-spacing: -0.01em;
+  }
+
+  &__subtitle {
+    font-size: 0.92rem;
+    line-height: 1.75;
+    color: rgba(255, 255, 255, 0.6);
+    margin-bottom: 32px;
+    max-width: 500px;
+  }
+
+  // ─── Form ───
+
+  &__form {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+
+  &__input {
+    flex: 1;
+    max-width: 340px;
+    padding: 16px 24px;
+    border-radius: 50px;
+    border: none;
+    background: rgba(255, 255, 255, 0.08);
+    color: white;
+    font-size: 0.88rem;
+    font-weight: 500;
+    outline: none;
+    transition: background 0.3s ease, box-shadow 0.3s ease;
+    font-family: inherit;
+
+    &::placeholder {
+      color: rgba(255, 255, 255, 0.35);
+    }
+
+    &:focus {
+      background: rgba(255, 255, 255, 0.12);
+      box-shadow: 0 0 0 2px rgba($lime-accent, 0.25);
+    }
+  }
+
+  &__btn {
+    padding: 16px 32px;
+    border-radius: 50px;
+    border: none;
+    background: white;
+    color: $navy;
+    font-size: 0.88rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+    font-family: inherit;
+
+    &:hover {
+      background: $lime-accent;
+      color: $teal-deeper;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba($lime-accent, 0.25);
+    }
+
+    &:active {
+      transform: translateY(0) scale(0.97);
+    }
+  }
+
+  &__disclaimer {
+    font-size: 0.75rem;
+    line-height: 1.6;
+    color: rgba(255, 255, 255, 0.35);
+    max-width: 440px;
+    font-style: italic;
+  }
+
+  // ─── Right decoration ───
+
+  &__decoration {
+    position: relative;
+    width: 380px;
+    height: 320px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &__glow {
+    position: absolute;
+    width: 260px;
+    height: 260px;
+    border-radius: 50%;
+    background: radial-gradient(
+      circle,
+      rgba($lime-accent, 0.15) 0%,
+      rgba($green-cta, 0.08) 40%,
+      transparent 70%
+    );
+    filter: blur(40px);
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+  }
+
+  &__envelope {
+    position: relative;
+    z-index: 1;
+    filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.3));
+    animation: envelopeFloat 4s ease-in-out infinite;
+  }
+}
+
+@keyframes envelopeFloat {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-12px) rotate(1deg); }
+}

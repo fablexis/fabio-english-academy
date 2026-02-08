@@ -1,0 +1,203 @@
+@use "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,500&family=Poppins:wght@600;700;800;900&display=swap');
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// DESIGN TOKENS
+// ═══════════════════════════════════════════════════════════════════════════════
+
+// ── Primary (Teal – from brochure) ──
+$teal-primary: #185C60;
+$teal-dark: #124A4E;
+$teal-deeper: #0D3A3E;
+$teal-light: #D4EAEC;
+$teal-lightest: #EDF5F6;
+
+// ── Accent (Lime – from brochure) ──
+$lime-accent: #C8E47C;
+$lime-dark: #A8C45C;
+$lime-light: #F0F7DC;
+
+// ── CTA (Bright Green – from brochure) ──
+$green-cta: #5CF890;
+$green-cta-dark: #3CD870;
+
+// ── Decorative ──
+$outline-light: #B8D4E0;
+
+// ── Neutrals ──
+$navy: #0F172A;
+$text-primary: #475569;
+$text-secondary: #64748B;
+$text-muted: #94A3B8;
+$border-color: #E2E8F0;
+$bg-page: #F8FAFC;
+$bg-hero: linear-gradient(135deg, #EDF5F6 0%, #F0F8F8 30%, #F8FAFC 100%);
+$font-heading: 'Poppins', sans-serif;
+$font-body: 'Plus Jakarta Sans', sans-serif;
+$shadow-badge: 0 8px 32px rgba(24, 92, 96, 0.12);
+$shadow-badge-hover: 0 12px 40px rgba(24, 92, 96, 0.20);
+$ease-out-expo: cubic-bezier(0.22, 1, 0.36, 1);
+$ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// RESET & BASE
+// ═══════════════════════════════════════════════════════════════════════════════
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: $font-body;
+  color: $navy;
+  background: #fff;
+  overflow-x: hidden;
+}
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// KEYFRAME ANIMATIONS
+// ═══════════════════════════════════════════════════════════════════════════════
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(80px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-60px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes fadeScaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.6);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes arcReveal {
+  from {
+    opacity: 0;
+    transform: rotate(-40deg) scale(0.7);
+  }
+  to {
+    opacity: 1;
+    transform: rotate(0deg) scale(1);
+  }
+}
+
+@keyframes floatBobA {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes floatBobB {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+@keyframes pulseGlow {
+  0%, 100% { opacity: 0.65; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.12); }
+}
+
+@keyframes spinSlow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// ANIMATION UTILITY CLASSES
+// ═══════════════════════════════════════════════════════════════════════════════
+
+.anim-hidden {
+  opacity: 0;
+}
+
+// Entrance animations — all "forwards" fill mode
+@mixin entrance-anim($name, $duration, $easing) {
+  opacity: 0;
+  animation: $name $duration $easing forwards;
+}
+
+.anim-slide-down   { @include entrance-anim(slideDown,    0.7s, $ease-out-expo); }
+.anim-slide-up     { @include entrance-anim(slideUp,      0.85s, $ease-out-expo); }
+.anim-slide-right  { @include entrance-anim(slideInRight,  1s, $ease-out-expo); }
+.anim-slide-left   { @include entrance-anim(slideInLeft,   0.9s, $ease-out-expo); }
+.anim-fade-scale   { @include entrance-anim(fadeScaleIn,   0.75s, $ease-spring); }
+.anim-arc-reveal   { @include entrance-anim(arcReveal,     1.1s, $ease-out-expo); }
+.anim-fade-in      { @include entrance-anim(fadeIn,        0.8s, ease-out); }
+
+// Delay utilities
+@for $i from 0 through 16 {
+  .delay-#{$i * 100} {
+    animation-delay: #{$i * 100}ms;
+  }
+}
+
+// Continuous / looping animations
+.float-a {
+  animation: floatBobA 3.2s ease-in-out infinite;
+}
+
+.float-b {
+  animation: floatBobB 3.8s ease-in-out infinite 0.6s;
+}
+
+.pulse {
+  animation: pulseGlow 4s ease-in-out infinite;
+}
+
+.spin-slow {
+  animation: spinSlow 14s linear infinite;
+}

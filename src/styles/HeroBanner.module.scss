@@ -1,0 +1,579 @@
+// ═══════════════════════════════════════════════════════════════════════════════
+// HERO BANNER – Scoped styles (Brochure Palette)
+// ═══════════════════════════════════════════════════════════════════════════════
+
+// ── Primary (Teal) ──
+$teal-primary: #185C60;
+$teal-dark: #124A4E;
+$teal-deeper: #0D3A3E;
+$teal-light: #D4EAEC;
+$teal-lightest: #EDF5F6;
+
+// ── Accent (Lime) ──
+$lime-accent: #C8E47C;
+$lime-dark: #A8C45C;
+$lime-light: #F0F7DC;
+
+// ── CTA (Bright Green) ──
+$green-cta: #5CF890;
+$green-cta-dark: #3CD870;
+
+// ── Decorative ──
+$outline-light: #B8D4E0;
+
+// ── Neutrals ──
+$navy: #0F172A;
+$text-secondary: #64748B;
+$text-muted: #94A3B8;
+$border-color: #E2E8F0;
+
+$font-heading: 'Poppins', sans-serif;
+$shadow-badge: 0 8px 32px rgba(24, 92, 96, 0.12);
+$shadow-badge-hover: 0 14px 44px rgba(24, 92, 96, 0.20);
+
+// ─── TOP BAR ──────────────────────────────────────────────────────────────────
+
+.topBar {
+  background-color: $teal-primary;
+  padding: 10px 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  &__link {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: white;
+    font-size: 0.8rem;
+    font-weight: 500;
+    text-decoration: none;
+    transition: opacity 0.25s ease;
+
+    &:hover {
+      opacity: 0.75;
+    }
+  }
+
+  &__left {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+  }
+
+  &__divider {
+    opacity: 0.35;
+    color: white;
+    user-select: none;
+  }
+}
+
+// ─── NAVBAR ───────────────────────────────────────────────────────────────────
+
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 32px;
+  background: white;
+  border-bottom: 1px solid $border-color;
+
+  &__logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  &__brand {
+    font-family: $font-heading;
+    font-size: 1.35rem;
+    font-weight: 800;
+    color: $teal-primary;
+  }
+
+  &__links {
+    display: flex;
+    align-items: center;
+    gap: 32px;
+  }
+
+  &__link {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: $navy;
+    text-decoration: none;
+    position: relative;
+    transition: color 0.25s ease;
+
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: $teal-primary;
+      transition: width 0.3s ease;
+    }
+
+    &:hover {
+      color: $teal-primary;
+
+      &::after {
+        width: 100%;
+      }
+    }
+
+    &--active {
+      color: $teal-primary;
+
+      &::after {
+        width: 100%;
+      }
+    }
+  }
+
+  &__icons {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+
+  &__iconBtn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    position: relative;
+    padding: 4px;
+    transition: opacity 0.2s ease;
+
+    &:hover {
+      opacity: 0.55;
+    }
+  }
+
+  &__cartCount {
+    position: absolute;
+    top: -6px;
+    right: -8px;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: $lime-accent;
+    color: $teal-deeper;
+    font-size: 9px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+// ─── HERO SECTION ─────────────────────────────────────────────────────────────
+
+.hero {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  background: linear-gradient(135deg, $teal-lightest 0%, #F0F8F8 30%, #F8FAFC 100%);
+  min-height: 620px;
+
+  &__inner {
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: 0 32px;
+    display: flex;
+    align-items: center;
+    position: relative;
+    min-height: 620px;
+  }
+
+  // ── Left content ──
+
+  &__content {
+    position: relative;
+    z-index: 10;
+    width: 50%;
+    padding: 64px 32px 64px 0;
+  }
+
+  &__heading {
+    font-family: $font-heading;
+    font-size: 3.25rem;
+    font-weight: 800;
+    line-height: 1.14;
+    color: $navy;
+    margin-bottom: 24px;
+  }
+
+  &__headingAccent {
+    color: $teal-primary;
+  }
+
+  &__paragraph {
+    font-size: 1rem;
+    line-height: 1.75;
+    color: $text-secondary;
+    max-width: 490px;
+    margin-bottom: 36px;
+  }
+
+  &__buttons {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  &__btnPrimary {
+    padding: 14px 30px;
+    border-radius: 50px;
+    background: $green-cta;
+    color: $teal-deeper;
+    font-size: 0.9rem;
+    font-weight: 700;
+    border: 2px solid $green-cta;
+    cursor: pointer;
+    transition: all 0.3s ease;
+
+    &:hover {
+      background: $green-cta-dark;
+      border-color: $green-cta-dark;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba($green-cta, 0.40);
+    }
+
+    &:active {
+      transform: translateY(0) scale(0.97);
+    }
+  }
+
+  &__btnSecondary {
+    padding: 14px 30px;
+    border-radius: 50px;
+    background: transparent;
+    color: $teal-primary;
+    font-size: 0.9rem;
+    font-weight: 600;
+    border: 2px solid $teal-primary;
+    cursor: pointer;
+    transition: all 0.3s ease;
+
+    &:hover {
+      background: $teal-primary;
+      color: white;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba($teal-primary, 0.35);
+    }
+
+    &:active {
+      transform: translateY(0) scale(0.97);
+    }
+  }
+
+  // ── Right visual area ──
+
+  &__visual {
+    position: relative;
+    width: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    min-height: 620px;
+  }
+
+  // ── Decorative shapes (brochure-inspired) ──
+
+  &__glowCircle {
+    position: absolute;
+    width: 480px;
+    height: 480px;
+    top: 55px;
+    right: -20px;
+    border-radius: 50%;
+    background: radial-gradient(
+      circle,
+      rgba($teal-light, 0.55) 0%,
+      rgba($teal-light, 0.20) 40%,
+      rgba($teal-light, 0) 70%
+    );
+    pointer-events: none;
+  }
+
+  &__blobWarm {
+    position: absolute;
+    width: 140px;
+    height: 140px;
+    top: 45px;
+    right: 40px;
+    border-radius: 50%;
+    background: radial-gradient(
+      circle,
+      rgba($lime-accent, 0.18) 0%,
+      rgba($lime-accent, 0) 70%
+    );
+    pointer-events: none;
+  }
+
+  &__blobCool {
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    bottom: 170px;
+    left: 30px;
+    border-radius: 50%;
+    background: radial-gradient(
+      circle,
+      rgba($teal-primary, 0.10) 0%,
+      rgba($teal-primary, 0) 70%
+    );
+    pointer-events: none;
+  }
+
+  &__dotRed1 {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: $lime-accent;
+    opacity: 0.60;
+  }
+
+  &__dotRed2 {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: $teal-primary;
+    opacity: 0.35;
+  }
+
+  &__dotNavy {
+    width: 11px;
+    height: 11px;
+    border-radius: 50%;
+    background: $teal-primary;
+    opacity: 0.25;
+  }
+
+  &__softRing {
+    position: absolute;
+    width: 340px;
+    height: 340px;
+    top: 120px;
+    right: 30px;
+    border-radius: 50%;
+    border: 28px solid rgba($outline-light, 0.25);
+    pointer-events: none;
+  }
+
+  // ── Portrait (character image) ──
+
+  &__portrait {
+    position: relative;
+    width: 420px;
+    height: 540px;
+    z-index: 5;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    // Fade edges so image blends into background
+    -webkit-mask-image:
+      linear-gradient(to bottom, black 55%, transparent 98%),
+      linear-gradient(to top, black 85%, transparent 100%),
+      linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%);
+    mask-image:
+      linear-gradient(to bottom, black 55%, transparent 98%),
+      linear-gradient(to top, black 85%, transparent 100%),
+      linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%);
+    -webkit-mask-composite: source-in;
+    mask-composite: intersect;
+  }
+
+  &__portraitImg {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: bottom center;
+    filter: drop-shadow(0 10px 30px rgba(0, 0, 0, 0.15));
+  }
+
+  // ── Float wrappers (hold absolute position, run float anim) ──
+
+  &__floatWrapTop {
+    position: absolute;
+    z-index: 20;
+    top: 95px;
+    left: 50px;
+  }
+
+  &__floatWrapBottom {
+    position: absolute;
+    z-index: 20;
+    bottom: 85px;
+    right: -30px;
+  }
+
+  // Dot wrappers
+  &__dotWrap {
+    position: absolute;
+    top: 110px;
+    left: 65px;
+  }
+
+  &__dotWrap2 {
+    position: absolute;
+    top: 80px;
+    right: 50px;
+  }
+
+  &__dotWrap3 {
+    position: absolute;
+    bottom: 200px;
+    right: 20px;
+  }
+
+  // ── Floating badges ──
+
+  &__badgeInstructors {
+    background: white;
+    border-radius: 14px;
+    padding: 12px 20px;
+    box-shadow: $shadow-badge;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    transition: box-shadow 0.3s ease;
+
+    &:hover {
+      box-shadow: $shadow-badge-hover;
+    }
+  }
+
+  &__badgeIconSmall {
+    width: 44px;
+    height: 44px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &__badgeLabel {
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: $navy;
+    line-height: 1.2;
+  }
+
+  &__badgeSub {
+    font-size: 0.65rem;
+    color: $text-muted;
+    font-weight: 500;
+  }
+
+  &__badgeCourses {
+    background: white;
+    border-radius: 14px;
+    padding: 12px 20px;
+    box-shadow: $shadow-badge;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    transition: box-shadow 0.3s ease;
+
+    &:hover {
+      box-shadow: $shadow-badge-hover;
+    }
+  }
+
+  &__badgeIconLarge {
+    width: 40px;
+    height: 40px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &__badgeNumber {
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: $navy;
+    line-height: 1.1;
+  }
+
+  &__badgeText {
+    font-size: 0.68rem;
+    font-weight: 600;
+    color: $text-muted;
+    margin-top: 1px;
+  }
+
+  // ── Background soft radials ──
+
+  &__bgBlob {
+    position: absolute;
+    border-radius: 50%;
+    pointer-events: none;
+
+    &--topLeft {
+      width: 350px;
+      height: 350px;
+      top: -100px;
+      left: -100px;
+      background: radial-gradient(circle, rgba($teal-primary, 0.06) 0%, transparent 70%);
+    }
+
+    &--bottomRight {
+      width: 250px;
+      height: 250px;
+      bottom: -50px;
+      right: 180px;
+      background: radial-gradient(circle, rgba($lime-accent, 0.06) 0%, transparent 70%);
+    }
+  }
+}
+
+// ─── BRAND LOGOS BAR ──────────────────────────────────────────────────────────
+
+.brands {
+  width: 100%;
+  background: white;
+  border-top: 1px solid $border-color;
+
+  &__inner {
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: 30px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  &__item {
+    cursor: pointer;
+    user-select: none;
+    color: $navy;
+    font-size: 1.55rem;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+
+    &:hover {
+      opacity: 0.5;
+      transform: scale(1.04);
+    }
+  }
+
+  &__circle {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 2.5px solid currentColor;
+    vertical-align: middle;
+    margin: 0 2px;
+    margin-top: -3px;
+  }
+
+  &__underline {
+    border-bottom: 3px solid currentColor;
+    padding-bottom: 2px;
+  }
+}

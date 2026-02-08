@@ -1,0 +1,671 @@
+// ═══════════════════════════════════════════════════════════════════════════════
+// COURSES SECTION – Scoped styles (Brochure Palette)
+// ═══════════════════════════════════════════════════════════════════════════════
+
+// ── Tokens (mirror global) ──
+$teal-primary: #185C60;
+$teal-dark: #124A4E;
+$teal-deeper: #0D3A3E;
+$teal-light: #D4EAEC;
+$teal-lightest: #EDF5F6;
+$lime-accent: #C8E47C;
+$lime-dark: #A8C45C;
+$green-cta: #5CF890;
+$green-cta-dark: #3CD870;
+$navy: #0F172A;
+$text-secondary: #64748B;
+$text-muted: #94A3B8;
+$border-color: #E2E8F0;
+$font-heading: 'Poppins', sans-serif;
+
+// ─── SECTION ─────────────────────────────────────────────────────────────────
+
+.courses {
+  width: 100%;
+  background: white;
+  padding: 80px 0;
+
+  &__inner {
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: 0 32px;
+  }
+
+  // ─── Heading ───
+
+  &__heading {
+    font-family: $font-heading;
+    font-size: 2.6rem;
+    font-weight: 800;
+    color: $navy;
+    text-align: center;
+    line-height: 1.2;
+    margin-bottom: 40px;
+  }
+
+  &__headingAccent {
+    color: $teal-primary;
+  }
+
+  // ─── Category Filters ───
+
+  &__filters {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 48px;
+    flex-wrap: wrap;
+  }
+
+  &__filterBtn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 22px;
+    border-radius: 50px;
+    border: 1.5px solid $border-color;
+    background: white;
+    color: $navy;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    white-space: nowrap;
+
+    &:hover {
+      border-color: $teal-primary;
+      color: $teal-primary;
+    }
+
+    &--active {
+      background: $teal-primary;
+      border-color: $teal-primary;
+      color: white;
+
+      &:hover {
+        background: $teal-dark;
+        border-color: $teal-dark;
+        color: white;
+      }
+    }
+  }
+
+  &__filterIcon {
+    display: flex;
+    align-items: center;
+    font-size: 0;
+  }
+
+  // ─── Featured Course Card ───
+
+  &__featured {
+    display: flex;
+    background: white;
+    border: 1.5px solid $border-color;
+    border-radius: 16px;
+    overflow: hidden;
+    margin-bottom: 32px;
+    transition: box-shadow 0.3s ease;
+
+    &:hover {
+      box-shadow: 0 8px 32px rgba(24, 92, 96, 0.08);
+    }
+  }
+
+  &__featuredImage {
+    width: 45%;
+    min-height: 340px;
+    flex-shrink: 0;
+    overflow: hidden;
+  }
+
+  &__featuredContent {
+    flex: 1;
+    padding: 32px 36px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  &__featuredTop {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+  }
+
+  &__tag {
+    display: inline-block;
+    padding: 5px 14px;
+    border-radius: 6px;
+    border: 1.5px solid $border-color;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: $navy;
+    background: white;
+  }
+
+  &__popular {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 16px;
+    border-radius: 50px;
+    background: $teal-deeper;
+    color: white;
+    font-size: 0.75rem;
+    font-weight: 700;
+  }
+
+  &__popularDot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: $lime-accent;
+    display: inline-block;
+  }
+
+  &__featuredTitle {
+    font-family: $font-heading;
+    font-size: 1.55rem;
+    font-weight: 700;
+    color: $navy;
+    margin-bottom: 12px;
+    line-height: 1.25;
+  }
+
+  &__featuredDesc {
+    font-size: 0.88rem;
+    line-height: 1.7;
+    color: $text-secondary;
+    margin-bottom: 20px;
+  }
+
+  &__featuredMeta {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+    margin-bottom: 20px;
+  }
+
+  &__metaItem {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: $text-secondary;
+  }
+
+  &__featuredDivider {
+    width: 100%;
+    height: 1px;
+    background: $border-color;
+    margin-bottom: 20px;
+  }
+
+  &__featuredBottom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  &__price {
+    font-family: $font-heading;
+    font-size: 1.65rem;
+    font-weight: 700;
+    color: $teal-primary;
+  }
+
+  &__viewBtn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 22px;
+    border-radius: 50px;
+    border: 1.5px solid $navy;
+    background: white;
+    color: $navy;
+    font-size: 0.82rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.25s ease;
+
+    &:hover {
+      background: $navy;
+      color: white;
+    }
+  }
+
+  &__viewBtnIcon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: $teal-primary;
+    color: white;
+    transition: background 0.25s ease;
+
+    .courses__viewBtn:hover & {
+      background: $green-cta;
+      color: $teal-deeper;
+    }
+  }
+
+  // ─── Course Grid ───
+
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
+
+  &__card {
+    background: white;
+    border: 1.5px solid $border-color;
+    border-radius: 16px;
+    overflow: hidden;
+    transition: box-shadow 0.3s ease, transform 0.3s ease;
+    cursor: pointer;
+
+    &:hover {
+      box-shadow: 0 8px 32px rgba(24, 92, 96, 0.10);
+      transform: translateY(-4px);
+    }
+  }
+
+  &__cardImage {
+    width: 100%;
+    height: 200px;
+    overflow: hidden;
+  }
+
+  &__cardBody {
+    padding: 18px 20px 20px;
+  }
+
+  &__cardTop {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+  }
+
+  &__cardPrice {
+    font-family: $font-heading;
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: $teal-primary;
+  }
+
+  &__cardTitle {
+    font-family: $font-heading;
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: $navy;
+    margin-bottom: 14px;
+    line-height: 1.3;
+  }
+
+  &__cardMeta {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+}
+
+// ─── Course Modal ──────────────────────────────────────────────────────────
+
+.modal {
+  &__overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    background: rgba($navy, 0);
+    backdrop-filter: blur(0px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    pointer-events: none;
+    transition: background 0.35s ease, backdrop-filter 0.35s ease;
+
+    &--visible {
+      background: rgba($navy, 0.55);
+      backdrop-filter: blur(8px);
+      pointer-events: auto;
+    }
+  }
+
+  &__container {
+    position: relative;
+    background: white;
+    border-radius: 20px;
+    max-width: 680px;
+    width: 100%;
+    max-height: 90vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    box-shadow: 0 32px 80px rgba(0, 0, 0, 0.28), 0 0 0 1px rgba($border-color, 0.5);
+    opacity: 0;
+    transform: scale(0.92) translateY(24px);
+    transition: opacity 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+                transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+
+    &--visible {
+      opacity: 1;
+      transform: scale(1) translateY(0);
+    }
+  }
+
+  &__close {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    z-index: 20;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(white, 0.2);
+    backdrop-filter: blur(8px);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &:hover {
+      background: rgba(white, 0.35);
+      transform: scale(1.08);
+    }
+  }
+
+  // ── Header banner ──
+
+  &__header {
+    position: relative;
+    flex-shrink: 0;
+    min-height: 240px;
+    overflow: hidden;
+  }
+
+  &__headerBg {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+  }
+
+  &__headerOverlay {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background: linear-gradient(
+      to bottom,
+      rgba($teal-deeper, 0.5) 0%,
+      rgba($teal-deeper, 0.85) 60%,
+      rgba($teal-deeper, 0.95) 100%
+    );
+  }
+
+  &__headerContent {
+    position: relative;
+    z-index: 2;
+    padding: 32px 36px 28px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    min-height: 240px;
+  }
+
+  &__tags {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+
+  &__tagLight {
+    display: inline-block;
+    padding: 4px 14px;
+    border-radius: 6px;
+    border: 1.5px solid rgba(white, 0.25);
+    font-size: 0.73rem;
+    font-weight: 600;
+    color: white;
+    background: rgba(white, 0.08);
+  }
+
+  &__popularBadge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 14px;
+    border-radius: 50px;
+    background: rgba($lime-accent, 0.18);
+    color: $lime-accent;
+    font-size: 0.73rem;
+    font-weight: 700;
+  }
+
+  &__title {
+    font-family: $font-heading;
+    font-size: 1.7rem;
+    font-weight: 700;
+    color: white;
+    margin-bottom: 10px;
+    line-height: 1.25;
+  }
+
+  &__desc {
+    font-size: 0.85rem;
+    line-height: 1.7;
+    color: rgba(white, 0.7);
+    margin-bottom: 18px;
+  }
+
+  &__headerMeta {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  &__metaChip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 14px;
+    border-radius: 50px;
+    background: rgba(white, 0.1);
+    color: rgba(white, 0.85);
+    font-size: 0.78rem;
+    font-weight: 500;
+  }
+
+  &__priceChip {
+    display: inline-flex;
+    align-items: center;
+    padding: 6px 18px;
+    border-radius: 50px;
+    background: $lime-accent;
+    color: $teal-deeper;
+    font-family: $font-heading;
+    font-size: 0.95rem;
+    font-weight: 700;
+    margin-left: auto;
+  }
+
+  // ── Scrollable body ──
+
+  &__body {
+    flex: 1;
+    overflow-y: auto;
+    padding: 32px 36px 28px;
+
+    // Custom scrollbar
+    &::-webkit-scrollbar { width: 5px; }
+    &::-webkit-scrollbar-track { background: transparent; }
+    &::-webkit-scrollbar-thumb {
+      background: rgba($teal-primary, 0.15);
+      border-radius: 10px;
+    }
+  }
+
+  &__sectionTitle {
+    font-family: $font-heading;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: $navy;
+    margin-bottom: 28px;
+  }
+
+  &__cta {
+    display: flex;
+    justify-content: center;
+    padding-top: 12px;
+    margin-top: 8px;
+  }
+}
+
+// ─── Timeline ─────────────────────────────────────────────────────────────
+
+.timeline {
+  position: relative;
+
+  &__item {
+    display: flex;
+    gap: 20px;
+    padding-bottom: 28px;
+
+    &--last {
+      padding-bottom: 0;
+    }
+  }
+
+  &__rail {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-shrink: 0;
+    width: 40px;
+  }
+
+  &__node {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: $teal-primary;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    box-shadow: 0 0 0 4px rgba($teal-primary, 0.12);
+  }
+
+  &__nodeInner {
+    font-family: $font-heading;
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: white;
+  }
+
+  &__line {
+    width: 2px;
+    flex: 1;
+    background: linear-gradient(to bottom, $teal-primary, rgba($teal-primary, 0.15));
+    margin-top: 6px;
+    border-radius: 2px;
+  }
+
+  &__card {
+    flex: 1;
+    background: $teal-lightest;
+    border-radius: 14px;
+    padding: 18px 22px;
+    border: 1px solid rgba($teal-primary, 0.08);
+    transition: box-shadow 0.25s ease, transform 0.25s ease;
+
+    &:hover {
+      box-shadow: 0 4px 20px rgba($teal-primary, 0.1);
+      transform: translateY(-2px);
+    }
+  }
+
+  &__week {
+    display: inline-block;
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: $teal-primary;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 6px;
+  }
+
+  &__cardTitle {
+    font-family: $font-heading;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: $navy;
+    margin-bottom: 12px;
+    line-height: 1.3;
+  }
+
+  &__topics {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+  }
+
+  &__topic {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    font-size: 0.8rem;
+    line-height: 1.5;
+    color: $text-secondary;
+  }
+
+  &__topicCheck {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: rgba($teal-primary, 0.1);
+    color: $teal-primary;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+}
+
+// ─── Placeholder image ───────────────────────────────────────────────────────
+
+.placeholder {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, $teal-lightest 0%, darken($teal-lightest, 3%) 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  color: $teal-primary;
+
+  span {
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: $text-muted;
+    text-align: center;
+    padding: 0 16px;
+  }
+}
