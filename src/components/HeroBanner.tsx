@@ -27,19 +27,6 @@ const anim = (
     : `${base} anim-hidden`.trim();
 };
 
-// ─── Avatar placeholder ──────────────────────────────────────────────────────
-
-interface AvatarProps {
-  color: string;
-  initials: string;
-}
-
-const Avatar: React.FC<AvatarProps> = ({ color, initials }) => (
-  <div className={s.hero__avatar} style={{ backgroundColor: color }}>
-    {initials}
-  </div>
-);
-
 // ─── Nav links config ────────────────────────────────────────────────────────
 
 const navLinks = [

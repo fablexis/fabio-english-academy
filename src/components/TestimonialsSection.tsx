@@ -124,7 +124,6 @@ const RotatingCard: React.FC<{
   dark?: boolean;
   intervalMs?: number;
 }> = ({ items, dark = false, intervalMs = 4000 }) => {
-  const [currentIdx, setCurrentIdx] = useState(0);
   const [isFlipping, setIsFlipping] = useState(false);
   const [displayIdx, setDisplayIdx] = useState(0);
 
@@ -132,7 +131,6 @@ const RotatingCard: React.FC<{
     setIsFlipping(true);
     setTimeout(() => {
       setDisplayIdx((prev) => (prev + 1) % items.length);
-      setCurrentIdx((prev) => (prev + 1) % items.length);
       setIsFlipping(false);
     }, 400); // halfway through animation — swap content
   }, [items.length]);
