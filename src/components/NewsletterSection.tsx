@@ -1,10 +1,25 @@
 import React, { useState } from 'react';
 import s from '../styles/NewsletterSection.module.scss';
+import { useInView } from '../hooks/useInView';
+
+// ─── Animation helper ────────────────────────────────────────────────────────
+
+const anim = (
+  inView: boolean,
+  animClass: string,
+  delayClass: string,
+  ...extra: string[]
+): string => {
+  const base = extra.filter(Boolean).join(' ');
+  return inView
+    ? `${base} ${animClass} ${delayClass}`.trim()
+    : `${base} anim-hidden`.trim();
+};
 
 // ─── Decorative envelope SVG (right side) ────────────────────────────────────
 
-const EnvelopeDecoration: React.FC = () => (
-  <div className={s.newsletter__decoration}>
+const EnvelopeDecoration: React.FC<{ ready: boolean }> = ({ ready }) => (
+  <div className={anim(ready, 'anim-fade-scale', 'delay-300', s.newsletter__decoration)}>
     {/* Glow backdrop */}
     <div className={s.newsletter__glow} />
     {/* Envelope shape */}
@@ -77,6 +92,7 @@ const EnvelopeDecoration: React.FC = () => (
 
 const NewsletterSection: React.FC = () => {
   const [email, setEmail] = useState('');
+  const { ref, ready } = useInView({ threshold: 0.15 });
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -85,11 +101,11 @@ const NewsletterSection: React.FC = () => {
   };
 
   return (
-    <section className={s.newsletter}>
+    <section className={s.newsletter} ref={ref as React.RefObject<HTMLElement>}>
       <div className={s.newsletter__inner}>
         {/* Left content */}
         <div className={s.newsletter__content}>
-          <h2 className={s.newsletter__heading}>
+          <h2 className={anim(ready, 'anim-slide-up', 'delay-0', s.newsletter__heading)}>
             Exclusive Learning Tips:
             <br />
             Improve Faster, Smarter,
@@ -97,13 +113,13 @@ const NewsletterSection: React.FC = () => {
             and More Confidently!
           </h2>
 
-          <p className={s.newsletter__subtitle}>
+          <p className={anim(ready, 'anim-slide-up', 'delay-100', s.newsletter__subtitle)}>
             Welcome to our newsletter, where we bring you the latest lessons,
             exclusive learning resources, and expert tips to accelerate your
             English journey.
           </p>
 
-          <form className={s.newsletter__form} onSubmit={handleSubmit}>
+          <form className={anim(ready, 'anim-slide-up', 'delay-200', s.newsletter__form)} onSubmit={handleSubmit}>
             <input
               type="email"
               placeholder="name@email.com"
@@ -117,14 +133,14 @@ const NewsletterSection: React.FC = () => {
             </button>
           </form>
 
-          <p className={s.newsletter__disclaimer}>
+          <p className={anim(ready, 'anim-fade-in', 'delay-400', s.newsletter__disclaimer)}>
             "Your information will never be shared with third parties, and you
             can unsubscribe from our updates at any time."
           </p>
         </div>
 
         {/* Right decoration */}
-        <EnvelopeDecoration />
+        <EnvelopeDecoration ready={ready} />
       </div>
     </section>
   );

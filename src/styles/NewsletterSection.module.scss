@@ -2,6 +2,8 @@
 // NEWSLETTER SECTION
 // ═══════════════════════════════════════════════════════════════════════════════
 
+@use "sass:color";
+
 $teal-primary: #185C60;
 $teal-dark: #124A4E;
 $teal-deeper: #0D3A3E;
@@ -12,7 +14,7 @@ $font-heading: 'Poppins', sans-serif;
 
 .newsletter {
   width: 100%;
-  background: linear-gradient(135deg, #0a1e2e 0%, $navy 40%, darken($teal-deeper, 6%) 100%);
+  background: linear-gradient(135deg, #0a1e2e 0%, $navy 40%, color.adjust($teal-deeper, $lightness: -6%) 100%);
   padding: 96px 0;
   position: relative;
   overflow: hidden;
