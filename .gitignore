@@ -26,3 +26,4 @@ yarn-error.log*
 # Temp files
 *.tmp
 *.bak
+.todos/
