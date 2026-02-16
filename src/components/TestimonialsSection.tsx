@@ -1,16 +1,26 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import { Quote } from 'lucide-react';
 import s from '../styles/TestimonialsSection.module.scss';
+import { useInView } from '../hooks/useInView';
+
+// ─── Animation helper ────────────────────────────────────────────────────────
+
+const anim = (
+  inView: boolean,
+  animClass: string,
+  delayClass: string,
+  ...extra: string[]
+): string => {
+  const base = extra.filter(Boolean).join(' ');
+  return inView
+    ? `${base} ${animClass} ${delayClass}`.trim()
+    : `${base} anim-hidden`.trim();
+};
 
 // ─── Quote icon ──────────────────────────────────────────────────────────────
 
 const QuoteIcon: React.FC<{ color?: string }> = ({ color = '#185C60' }) => (
-  <svg width="28" height="22" viewBox="0 0 28 22" fill="none">
-    <path
-      d="M0 13.2C0 6.36 4.08 1.56 10.08 0l1.44 2.88C6.6 4.56 5.16 8.16 5.04 11.04h4.32V22H0V13.2ZM16.56 13.2C16.56 6.36 20.64 1.56 26.64 0l1.36 2.88c-4.92 1.68-6.36 5.28-6.48 8.16h4.32V22H16.56V13.2Z"
-      fill={color}
-      opacity="0.7"
-    />
-  </svg>
+  <Quote size={28} color={color} opacity={0.7} fill={color} />
 );
 
 // ─── Avatar placeholder ──────────────────────────────────────────────────────
@@ -169,24 +179,26 @@ const RotatingCard: React.FC<{
 // ═════════════════════════════════════════════════════════════════════════════
 
 const TestimonialsSection: React.FC = () => {
+  const { ref, ready } = useInView({ threshold: 0.1 });
+
   return (
-    <section className={s.testimonials}>
+    <section className={s.testimonials} ref={ref as React.RefObject<HTMLElement>}>
       <div className={s.testimonials__inner}>
         {/* ─── Header ─── */}
         <div className={s.testimonials__header}>
-          <span className={s.testimonials__badge}>
+          <span className={anim(ready, 'anim-slide-down', 'delay-0', s.testimonials__badge)}>
             <span className={s.testimonials__badgeBracket}>&#x2E22;</span>
             Student Reviews
             <span className={s.testimonials__badgeBracket}>&#x2E23;</span>
           </span>
-          <h2 className={s.testimonials__heading}>
+          <h2 className={anim(ready, 'anim-slide-up', 'delay-100', s.testimonials__heading)}>
             Results that speak volumes
             <br />
             <span className={s.testimonials__headingAccent}>
               Read success stories
             </span>
           </h2>
-          <p className={s.testimonials__subtitle}>
+          <p className={anim(ready, 'anim-slide-up', 'delay-200', s.testimonials__subtitle)}>
             Find out how our students are transforming their English skills.
           </p>
         </div>
@@ -195,7 +207,13 @@ const TestimonialsSection: React.FC = () => {
         <div className={s.testimonials__grid}>
           {/* Card 1 — Large left (static) */}
           <div
-            className={`${s.testimonials__card} ${s['testimonials__card--large']}`}
+            className={anim(
+              ready,
+              'anim-fade-scale',
+              'delay-300',
+              s.testimonials__card,
+              s['testimonials__card--large']
+            )}
           >
             <div className={s.testimonials__stat}>
               <span className={s.testimonials__statNumber}>
@@ -224,7 +242,13 @@ const TestimonialsSection: React.FC = () => {
           <div className={s.testimonials__rightCol}>
             {/* Card 2 — Top right (static, with stat) */}
             <div
-              className={`${s.testimonials__card} ${s['testimonials__card--topRight']}`}
+              className={anim(
+                ready,
+                'anim-fade-scale',
+                'delay-400',
+                s.testimonials__card,
+                s['testimonials__card--topRight']
+              )}
             >
               <div className={s.testimonials__statInline}>
                 <span className={s.testimonials__statNumber}>
@@ -250,7 +274,7 @@ const TestimonialsSection: React.FC = () => {
             </div>
 
             {/* Bottom row: 2 rotating cards */}
-            <div className={s.testimonials__bottomRow}>
+            <div className={anim(ready, 'anim-fade-scale', 'delay-500', s.testimonials__bottomRow)}>
               <RotatingCard items={rotatingSlotA} intervalMs={4000} />
               <RotatingCard items={rotatingSlotB} dark intervalMs={5000} />
             </div>

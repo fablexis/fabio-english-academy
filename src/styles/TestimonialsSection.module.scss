@@ -2,6 +2,8 @@
 // TESTIMONIALS SECTION – Bento grid layout
 // ═══════════════════════════════════════════════════════════════════════════════
 
+@use "sass:color";
+
 $teal-primary: #185C60;
 $teal-dark: #124A4E;
 $teal-deeper: #0D3A3E;
@@ -241,7 +243,7 @@ $font-heading: 'Poppins', sans-serif;
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  background: linear-gradient(135deg, $teal-light 0%, darken($teal-light, 8%) 100%);
+  background: linear-gradient(135deg, $teal-light 0%, color.adjust($teal-light, $lightness: -8%) 100%);
   display: flex;
   align-items: center;
   justify-content: center;

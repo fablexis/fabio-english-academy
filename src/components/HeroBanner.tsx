@@ -5,9 +5,6 @@ import {
   SearchIcon,
   UserIcon,
   CartIcon,
-  MailIcon,
-  PhoneIcon,
-  PeopleAddIcon,
   SelfPacedIcon,
   OfflineContentIcon,
 } from './Icons';
@@ -53,27 +50,8 @@ const HeroBanner: React.FC = () => {
 
   return (
     <div className="w-full overflow-hidden">
-      {/* ═══════ TOP BAR ═══════ */}
-      <div className={anim(ready, 'anim-slide-down', 'delay-0', s.topBar)}>
-        <div className={s.topBar__left}>
-          <a href="#" className={s.topBar__link}>
-            <MailIcon />
-            <span>info@yourenglishjourney.com</span>
-          </a>
-          <span className={s.topBar__divider}>|</span>
-          <a href="#" className={s.topBar__link}>
-            <PhoneIcon />
-            <span>(800) 555‑0XX5</span>
-          </a>
-        </div>
-        <a href="#" className={s.topBar__link}>
-          <PeopleAddIcon />
-          <span>Become An Instructor</span>
-        </a>
-      </div>
-
       {/* ═══════ NAVBAR ═══════ */}
-      <nav className={anim(ready, 'anim-slide-down', 'delay-100', s.navbar)}>
+      <nav className={anim(ready, 'anim-slide-down', 'delay-0', s.navbar)}>
         <div className={s.navbar__logo}>
           <BookStackLogo />
           <span className={s.navbar__brand}>Your English Journey</span>

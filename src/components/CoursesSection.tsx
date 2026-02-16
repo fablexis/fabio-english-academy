@@ -1,68 +1,24 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import {
+  LayoutGrid, CaseSensitive, Mic, Briefcase, ClipboardList, UserRound,
+  Clock, FileText, ArrowUpRight, X, Check, Image,
+} from 'lucide-react';
 import s from '../styles/CoursesSection.module.scss';
+import { useInView } from '../hooks/useInView';
 
-// ─── Category icons as inline SVGs ──────────────────────────────────────────
+// ─── Animation helper ────────────────────────────────────────────────────────
 
-const icons = {
-  grid: (
-    <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
-      <rect x="1" y="1" width="5" height="5" rx="1" />
-      <rect x="10" y="1" width="5" height="5" rx="1" />
-      <rect x="1" y="10" width="5" height="5" rx="1" />
-      <rect x="10" y="10" width="5" height="5" rx="1" />
-    </svg>
-  ),
-  grammar: (
-    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.4">
-      <path d="M2 12l3-8h1l3 8M3.5 9h4" strokeLinecap="round" strokeLinejoin="round" />
-      <path d="M11 5v7M13 7c0-1.1-.9-2-2-2" strokeLinecap="round" />
-    </svg>
-  ),
-  speaking: (
-    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.4">
-      <path d="M2 10V6a4 4 0 018 0v4a4 4 0 01-8 0z" />
-      <path d="M10 8c1.1 0 2-.5 2-1.5M12 5c1 0 1.8-.4 1.8-1.2" strokeLinecap="round" />
-    </svg>
-  ),
-  business: (
-    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.4">
-      <rect x="2" y="5" width="12" height="9" rx="1.5" />
-      <path d="M5 5V3.5A1.5 1.5 0 016.5 2h3A1.5 1.5 0 0111 3.5V5" strokeLinecap="round" />
-    </svg>
-  ),
-  exam: (
-    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.4">
-      <rect x="2" y="1" width="12" height="14" rx="1.5" />
-      <path d="M5 5h6M5 8h4M5 11h2" strokeLinecap="round" />
-    </svg>
-  ),
-  kids: (
-    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.4">
-      <circle cx="8" cy="5" r="3" />
-      <path d="M3 14c0-2.8 2.2-5 5-5s5 2.2 5 5" strokeLinecap="round" />
-    </svg>
-  ),
+const anim = (
+  inView: boolean,
+  animClass: string,
+  delayClass: string,
+  ...extra: string[]
+): string => {
+  const base = extra.filter(Boolean).join(' ');
+  return inView
+    ? `${base} ${animClass} ${delayClass}`.trim()
+    : `${base} anim-hidden`.trim();
 };
-
-const ClockIcon = () => (
-  <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="1.3">
-    <circle cx="7" cy="7" r="5.5" />
-    <path d="M7 4v3l2 1.5" strokeLinecap="round" strokeLinejoin="round" />
-  </svg>
-);
-
-const LectureIcon = () => (
-  <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="1.3">
-    <rect x="2" y="1.5" width="10" height="11" rx="1" />
-    <path d="M5 4.5h4M5 7h3" strokeLinecap="round" />
-  </svg>
-);
-
-const ArrowIcon = () => (
-  <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="1.8">
-    <path d="M3 11L11 3M11 3H5M11 3v6" strokeLinecap="round" strokeLinejoin="round" />
-  </svg>
-);
 
 // ─── Data ────────────────────────────────────────────────────────────────────
 
@@ -72,12 +28,12 @@ interface Category {
 }
 
 const categories: Category[] = [
-  { label: 'All Categories', icon: icons.grid },
-  { label: 'Grammar', icon: icons.grammar },
-  { label: 'Speaking', icon: icons.speaking },
-  { label: 'Business English', icon: icons.business },
-  { label: 'Exam Prep', icon: icons.exam },
-  { label: 'Kids & Teens', icon: icons.kids },
+  { label: 'All Categories', icon: <LayoutGrid size={20} /> },
+  { label: 'Grammar', icon: <CaseSensitive size={20} /> },
+  { label: 'Speaking', icon: <Mic size={20} /> },
+  { label: 'Business English', icon: <Briefcase size={20} /> },
+  { label: 'Exam Prep', icon: <ClipboardList size={20} /> },
+  { label: 'Kids & Teens', icon: <UserRound size={20} /> },
 ];
 
 interface Module {
@@ -185,29 +141,9 @@ const PlaceholderImg: React.FC<{ label: string; className?: string }> = ({
   className,
 }) => (
   <div className={`${s.placeholder} ${className || ''}`}>
-    <svg width="40" height="40" viewBox="0 0 40 40" fill="none" opacity="0.35">
-      <rect x="4" y="8" width="32" height="24" rx="3" stroke="currentColor" strokeWidth="1.5" />
-      <circle cx="14" cy="17" r="3" stroke="currentColor" strokeWidth="1.5" />
-      <path d="M4 28l8-6 6 4 8-7 10 9" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round" />
-    </svg>
+    <Image size={40} opacity={0.35} color="currentColor" />
     <span>{label}</span>
   </div>
-);
-
-// ─── Close icon ─────────────────────────────────────────────────────────────
-
-const CloseIcon = () => (
-  <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="2">
-    <path d="M5 5l10 10M15 5L5 15" strokeLinecap="round" />
-  </svg>
-);
-
-// ─── Timeline icons ─────────────────────────────────────────────────────────
-
-const CheckIcon = () => (
-  <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="2">
-    <path d="M3 7.5l3 3 5-6" strokeLinecap="round" strokeLinejoin="round" />
-  </svg>
 );
 
 // ─── Course Modal ───────────────────────────────────────────────────────────
@@ -251,7 +187,7 @@ const CourseModal: React.FC<CourseModalProps> = ({ course, onClose, isVisible })
       >
         {/* Close button */}
         <button className={s.modal__close} onClick={onClose} aria-label="Close">
-          <CloseIcon />
+          <X size={20} />
         </button>
 
         {/* ── Header banner ── */}
@@ -274,11 +210,11 @@ const CourseModal: React.FC<CourseModalProps> = ({ course, onClose, isVisible })
             <p className={s.modal__desc}>{course.description}</p>
             <div className={s.modal__headerMeta}>
               <span className={s.modal__metaChip}>
-                <ClockIcon />
+                <Clock size={14} />
                 {course.duration}
               </span>
               <span className={s.modal__metaChip}>
-                <LectureIcon />
+                <FileText size={14} />
                 {course.lectures} lectures
               </span>
               <span className={s.modal__priceChip}>
@@ -313,7 +249,7 @@ const CourseModal: React.FC<CourseModalProps> = ({ course, onClose, isVisible })
                   <ul className={s.timeline__topics}>
                     {mod.topics.map((topic, j) => (
                       <li key={j} className={s.timeline__topic}>
-                        <span className={s.timeline__topicCheck}><CheckIcon /></span>
+                        <span className={s.timeline__topicCheck}><Check size={14} /></span>
                         {topic}
                       </li>
                     ))}
@@ -328,7 +264,7 @@ const CourseModal: React.FC<CourseModalProps> = ({ course, onClose, isVisible })
             <button className={s.courses__viewBtn}>
               Enroll Now
               <span className={s.courses__viewBtnIcon}>
-                <ArrowIcon />
+                <ArrowUpRight size={14} />
               </span>
             </button>
           </div>
@@ -346,6 +282,7 @@ const CoursesSection: React.FC = () => {
   const [activeCategory, setActiveCategory] = useState('All Categories');
   const [modalCourse, setModalCourse] = useState<Course | null>(null);
   const [modalVisible, setModalVisible] = useState(false);
+  const { ref, ready } = useInView({ threshold: 0.1 });
 
   const openModal = useCallback((course: Course) => {
     setModalCourse(course);
@@ -361,16 +298,16 @@ const CoursesSection: React.FC = () => {
   }, []);
 
   return (
-    <section className={s.courses}>
+    <section className={s.courses} ref={ref as React.RefObject<HTMLElement>}>
       <div className={s.courses__inner}>
         {/* ─── Heading ─── */}
-        <h2 className={s.courses__heading}>
+        <h2 className={anim(ready, 'anim-slide-up', 'delay-0', s.courses__heading)}>
           Start Your English Journey{' '}
           <span className={s.courses__headingAccent}>Today!</span>
         </h2>
 
         {/* ─── Category Filters ─── */}
-        <div className={s.courses__filters}>
+        <div className={anim(ready, 'anim-fade-scale', 'delay-100', s.courses__filters)}>
           {categories.map((cat) => (
             <button
               key={cat.label}
@@ -387,7 +324,7 @@ const CoursesSection: React.FC = () => {
 
         {/* ─── Featured Course ─── */}
         <div
-          className={s.courses__featured}
+          className={anim(ready, 'anim-slide-up', 'delay-200', s.courses__featured)}
           onClick={() => openModal(featuredCourse)}
           style={{ cursor: 'pointer' }}
         >
@@ -410,11 +347,11 @@ const CoursesSection: React.FC = () => {
 
             <div className={s.courses__featuredMeta}>
               <span className={s.courses__metaItem}>
-                <ClockIcon />
+                <Clock size={14} />
                 {featuredCourse.duration}
               </span>
               <span className={s.courses__metaItem}>
-                <LectureIcon />
+                <FileText size={14} />
                 {featuredCourse.lectures} lectures
               </span>
             </div>
@@ -434,7 +371,7 @@ const CoursesSection: React.FC = () => {
               >
                 View Details
                 <span className={s.courses__viewBtnIcon}>
-                  <ArrowIcon />
+                  <ArrowUpRight size={14} />
                 </span>
               </button>
             </div>
@@ -443,10 +380,15 @@ const CoursesSection: React.FC = () => {
 
         {/* ─── Course Grid ─── */}
         <div className={s.courses__grid}>
-          {courses.map((course) => (
+          {courses.map((course, index) => (
             <div
               key={course.id}
-              className={s.courses__card}
+              className={anim(
+                ready,
+                'anim-fade-scale',
+                `delay-${400 + index * 100}`,
+                s.courses__card
+              )}
               onClick={() => openModal(course)}
             >
               <div className={s.courses__cardImage}>
@@ -462,11 +404,11 @@ const CoursesSection: React.FC = () => {
                 <h4 className={s.courses__cardTitle}>{course.title}</h4>
                 <div className={s.courses__cardMeta}>
                   <span className={s.courses__metaItem}>
-                    <ClockIcon />
+                    <Clock size={14} />
                     {course.duration}
                   </span>
                   <span className={s.courses__metaItem}>
-                    <LectureIcon />
+                    <FileText size={14} />
                     {course.lectures} lectures
                   </span>
                 </div>

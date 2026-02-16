@@ -1,32 +1,21 @@
 import React, { useState } from 'react';
+import { MonitorSmartphone, GraduationCap, BadgeDollarSign, Image } from 'lucide-react';
 import s from '../styles/WhyChooseUs.module.scss';
+import { useInView } from '../hooks/useInView';
 
-// ─── Icon components ─────────────────────────────────────────────────────────
+// ─── Animation helper ────────────────────────────────────────────────────────
 
-const FlexibleIcon: React.FC = () => (
-  <svg width="36" height="36" viewBox="0 0 36 36" fill="none" stroke="#C8E47C" strokeWidth="1.8">
-    <rect x="4" y="6" width="18" height="14" rx="2" />
-    <path d="M8 24h20a4 4 0 004-4V12" />
-    <path d="M10 12l3 3 5-6" strokeLinecap="round" strokeLinejoin="round" />
-  </svg>
-);
-
-const InstructorsIcon: React.FC = () => (
-  <svg width="36" height="36" viewBox="0 0 36 36" fill="none" stroke="#C8E47C" strokeWidth="1.8">
-    <circle cx="14" cy="10" r="4" />
-    <path d="M6 28c0-4.4 3.6-8 8-8s8 3.6 8 8" strokeLinecap="round" />
-    <circle cx="26" cy="12" r="3" opacity="0.6" />
-    <path d="M22 28c0-3.3 1.8-6 4-6s4 2.7 4 6" opacity="0.6" strokeLinecap="round" />
-  </svg>
-);
-
-const AffordableIcon: React.FC = () => (
-  <svg width="36" height="36" viewBox="0 0 36 36" fill="none" stroke="#C8E47C" strokeWidth="1.8">
-    <path d="M18 4L4 12v12l14 8 14-8V12L18 4z" />
-    <path d="M18 14v8M15 18h6" strokeLinecap="round" />
-    <path d="M4 12l14 8 14-8" opacity="0.4" />
-  </svg>
-);
+const anim = (
+  inView: boolean,
+  animClass: string,
+  delayClass: string,
+  ...extra: string[]
+): string => {
+  const base = extra.filter(Boolean).join(' ');
+  return inView
+    ? `${base} ${animClass} ${delayClass}`.trim()
+    : `${base} anim-hidden`.trim();
+};
 
 // ─── Card data ───────────────────────────────────────────────────────────────
 
@@ -41,7 +30,7 @@ interface FeatureCard {
 const features: FeatureCard[] = [
   {
     id: 1,
-    icon: <FlexibleIcon />,
+    icon: <MonitorSmartphone size={36} color="#C8E47C" />,
     title: 'Flexible, On-Demand Learning',
     description:
       'Access courses anytime, anywhere, on any device, and learn at your own pace.',
@@ -49,14 +38,14 @@ const features: FeatureCard[] = [
   },
   {
     id: 2,
-    icon: <InstructorsIcon />,
+    icon: <GraduationCap size={36} color="#C8E47C" />,
     title: 'Expert Instructors',
     description:
       'Learn from industry leaders and professionals who provide real-world knowledge to enhance your skills.',
   },
   {
     id: 3,
-    icon: <AffordableIcon />,
+    icon: <BadgeDollarSign size={36} color="#C8E47C" />,
     title: 'Affordable and Accessible Education',
     description:
       'Enjoy affordable, high-quality courses with no hidden fees & certificates to boost your career.',
@@ -67,11 +56,7 @@ const features: FeatureCard[] = [
 
 const CardImage: React.FC = () => (
   <div className={s.why__cardImage}>
-    <svg width="48" height="48" viewBox="0 0 48 48" fill="none" opacity="0.3">
-      <rect x="4" y="10" width="40" height="28" rx="4" stroke="currentColor" strokeWidth="1.5" />
-      <circle cx="17" cy="21" r="4" stroke="currentColor" strokeWidth="1.5" />
-      <path d="M4 34l10-8 8 5 10-9 12 12" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round" />
-    </svg>
+    <Image size={48} opacity={0.3} color="currentColor" />
   </div>
 );
 
@@ -81,27 +66,35 @@ const CardImage: React.FC = () => (
 
 const WhyChooseUs: React.FC = () => {
   const [activeId, setActiveId] = useState<number>(1);
+  const { ref, ready } = useInView({ threshold: 0.15 });
 
   return (
-    <section className={s.why}>
+    <section className={s.why} ref={ref as React.RefObject<HTMLElement>}>
       <div className={s.why__inner}>
         {/* Header */}
-        <h2 className={s.why__heading}>
+        <h2 className={anim(ready, 'anim-slide-up', 'delay-0', s.why__heading)}>
           Why choose <span className={s.why__headingAccent}>Your English Journey</span>
         </h2>
-        <p className={s.why__subtitle}>
+        <p className={anim(ready, 'anim-slide-up', 'delay-100', s.why__subtitle)}>
           We provide expert-designed courses, flexible learning, exceptional support,
           innovative tools, and a quality learning experience.
         </p>
 
         {/* Cards row */}
         <div className={s.why__cards}>
-          {features.map((feat) => {
+          {features.map((feat, index) => {
             const isActive = activeId === feat.id;
+            const cardDelay = `delay-${200 + index * 200}`;
             return (
               <div
                 key={feat.id}
-                className={`${s.why__card} ${isActive ? s['why__card--active'] : ''}`}
+                className={anim(
+                  ready,
+                  'anim-fade-scale',
+                  cardDelay,
+                  s.why__card,
+                  isActive ? s['why__card--active'] : ''
+                )}
                 onMouseEnter={() => setActiveId(feat.id)}
                 onClick={() => setActiveId(feat.id)}
               >

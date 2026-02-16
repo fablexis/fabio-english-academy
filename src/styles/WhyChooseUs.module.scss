@@ -2,6 +2,8 @@
 // WHY CHOOSE US – Expandable cards
 // ═══════════════════════════════════════════════════════════════════════════════
 
+@use "sass:color";
+
 $teal-primary: #185C60;
 $teal-dark: #124A4E;
 $teal-deeper: #0D3A3E;
@@ -107,9 +109,9 @@ $font-heading: 'Poppins', sans-serif;
     height: 100%;
     background: linear-gradient(
       135deg,
-      darken($teal-deeper, 3%) 0%,
+      color.adjust($teal-deeper, $lightness: -3%) 0%,
       $teal-dark 50%,
-      darken($teal-deeper, 5%) 100%
+      color.adjust($teal-deeper, $lightness: -5%) 100%
     );
     display: flex;
     align-items: center;
