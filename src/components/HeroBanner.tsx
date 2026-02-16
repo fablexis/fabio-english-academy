@@ -2,9 +2,6 @@ import React, { useState, useEffect } from 'react';
 import s from '../styles/HeroBanner.module.scss';
 import {
   BookStackLogo,
-  SearchIcon,
-  UserIcon,
-  CartIcon,
   SelfPacedIcon,
   OfflineContentIcon,
 } from './Icons';
@@ -69,18 +66,6 @@ const HeroBanner: React.FC = () => {
           ))}
         </div>
 
-        <div className={s.navbar__icons}>
-          <button className={s.navbar__iconBtn}>
-            <SearchIcon />
-          </button>
-          <button className={s.navbar__iconBtn}>
-            <UserIcon />
-          </button>
-          <button className={s.navbar__iconBtn}>
-            <CartIcon />
-            <span className={s.navbar__cartCount}>0</span>
-          </button>
-        </div>
       </nav>
 
       {/* ═══════ HERO SECTION ═══════ */}
