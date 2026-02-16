@@ -1,0 +1,57 @@
+// ═══════════════════════════════════════════════════════════════════════════════
+// FOOTER
+// ═══════════════════════════════════════════════════════════════════════════════
+
+$navy: #0F172A;
+$teal-primary: #185C60;
+$green-cta: #5CF890;
+$lime-accent: #C8E47C;
+
+.footer {
+  width: 100%;
+  background: $navy;
+  padding: 48px 32px 24px;
+  text-align: center;
+  font-family: inherit;
+
+  &__socials {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 24px;
+    margin-bottom: 28px;
+  }
+
+  &__socialLink {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1.5px solid rgba(255, 255, 255, 0.1);
+    color: rgba(255, 255, 255, 0.5);
+    transition: all 0.3s ease;
+    text-decoration: none;
+
+    &:hover {
+      background: rgba($lime-accent, 0.12);
+      border-color: rgba($lime-accent, 0.3);
+      color: $lime-accent;
+      transform: translateY(-3px);
+    }
+  }
+
+  &__divider {
+    width: 80px;
+    height: 1px;
+    background: rgba(255, 255, 255, 0.08);
+    margin: 0 auto 20px;
+  }
+
+  &__copy {
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.4);
+  }
+}

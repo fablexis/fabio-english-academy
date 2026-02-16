@@ -43,7 +43,10 @@ export function useInView({
   // Add delay before triggering animations (like HeroBanner pattern)
   useEffect(() => {
     if (!inView) {
-      if (!once) setReady(false);
+      if (!once) {
+        const timer = setTimeout(() => setReady(false), 0);
+        return () => clearTimeout(timer);
+      }
       return;
     }
 
