@@ -1,4 +1,4 @@
-# Your English Journey
+# Your English Buddy
 
 A modern, interactive English learning website built with React and TypeScript.
 

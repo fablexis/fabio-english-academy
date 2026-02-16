@@ -54,7 +54,7 @@ const HeroBanner: React.FC = () => {
       <nav className={anim(ready, 'anim-slide-down', 'delay-0', s.navbar)}>
         <div className={s.navbar__logo}>
           <BookStackLogo />
-          <span className={s.navbar__brand}>Your English Journey</span>
+          <span className={s.navbar__brand}>Your English Buddy</span>
         </div>
 
         <div className={s.navbar__links}>
@@ -94,13 +94,13 @@ const HeroBanner: React.FC = () => {
           <div className={s.hero__content}>
             <h1 className={anim(ready, 'anim-slide-up', 'delay-200', s.hero__heading)}>
               Welcome to{' '}
-              <span className={s.hero__headingAccent}>Your English Journey</span>
+              <span className={s.hero__headingAccent}>Your English Buddy</span>
               <br />
               Empowering Your Learning Path
             </h1>
 
             <p className={anim(ready, 'anim-slide-up', 'delay-400', s.hero__paragraph)}>
-              Your English Journey is dedicated to providing top-tier English education
+              Your English Buddy is dedicated to providing top-tier English education
               to learners worldwide. Our mission is to make high-quality learning
               accessible and engaging, with courses taught by expert instructors.
             </p>

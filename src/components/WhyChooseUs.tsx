@@ -73,7 +73,7 @@ const WhyChooseUs: React.FC = () => {
       <div className={s.why__inner}>
         {/* Header */}
         <h2 className={anim(ready, 'anim-slide-up', 'delay-0', s.why__heading)}>
-          Why choose <span className={s.why__headingAccent}>Your English Journey</span>
+          Why choose <span className={s.why__headingAccent}>Your English Buddy</span>
         </h2>
         <p className={anim(ready, 'anim-slide-up', 'delay-100', s.why__subtitle)}>
           We provide expert-designed courses, flexible learning, exceptional support,
