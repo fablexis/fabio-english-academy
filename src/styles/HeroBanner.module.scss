@@ -532,6 +532,130 @@ $shadow-badge-hover: 0 14px 44px rgba(24, 92, 96, 0.20);
   }
 }
 
+// ─── RESPONSIVE ───────────────────────────────────────────────────────────────
+
+// Tablet (768–1023px)
+@media (max-width: 1023px) {
+  .hero {
+    &__heading {
+      font-size: 2.4rem;
+    }
+
+    &__portrait {
+      width: 320px;
+      height: 420px;
+    }
+
+    &__floatWrapTop {
+      top: 70px;
+      left: 20px;
+    }
+
+    &__floatWrapBottom {
+      bottom: 60px;
+      right: -10px;
+    }
+  }
+}
+
+// Mobile (< 768px)
+@media (max-width: 767px) {
+  .topBar {
+    padding: 8px 16px;
+    flex-wrap: wrap;
+    gap: 6px;
+
+    &__left {
+      gap: 12px;
+    }
+  }
+
+  .hero {
+    min-height: unset;
+
+    &__inner {
+      flex-direction: column;
+      min-height: unset;
+      padding: 0 20px 40px;
+      padding-top: 0;
+    }
+
+    &__content {
+      width: 100%;
+      padding: 36px 0 0;
+      text-align: center;
+    }
+
+    &__heading {
+      font-size: 2rem;
+    }
+
+    &__paragraph {
+      max-width: 100%;
+      font-size: 0.92rem;
+    }
+
+    &__buttons {
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    &__visual {
+      width: 100%;
+      min-height: 280px;
+      justify-content: center;
+    }
+
+    &__glowCircle {
+      width: 280px;
+      height: 280px;
+      top: 10px;
+      right: 50%;
+      transform: translateX(50%);
+    }
+
+    &__softRing {
+      width: 220px;
+      height: 220px;
+      top: 30px;
+      right: 50%;
+      transform: translateX(50%);
+    }
+
+    &__portrait {
+      width: 240px;
+      height: 300px;
+    }
+
+    &__floatWrapTop {
+      top: 10px;
+      left: 10px;
+    }
+
+    &__floatWrapBottom {
+      bottom: 10px;
+      right: 0;
+    }
+
+    &__dotWrap,
+    &__dotWrap2,
+    &__dotWrap3,
+    &__blobWarm,
+    &__blobCool {
+      display: none;
+    }
+  }
+
+  .brands {
+    &__inner {
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 16px 28px;
+      padding: 20px 16px;
+    }
+  }
+}
+
 // ─── BRAND LOGOS BAR ──────────────────────────────────────────────────────────
 
 .brands {

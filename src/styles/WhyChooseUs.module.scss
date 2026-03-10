@@ -199,6 +199,55 @@ $font-heading: 'Poppins', sans-serif;
   }
 }
 
+// ─── Responsive ──────────────────────────────────────────────────────────────
+
+@media (max-width: 1023px) {
+  .why {
+    &__cards {
+      height: 360px;
+    }
+
+    &__heading {
+      font-size: 2rem;
+    }
+  }
+}
+
+@media (max-width: 767px) {
+  .why {
+    padding: 56px 0 64px;
+
+    &__inner {
+      padding: 0 20px;
+    }
+
+    &__heading {
+      font-size: 1.75rem;
+    }
+
+    &__cards {
+      flex-direction: column;
+      height: auto;
+      gap: 16px;
+    }
+
+    &__card {
+      flex: none !important;
+      height: 200px;
+
+      &--active {
+        height: 320px;
+      }
+    }
+
+    &__cardChip {
+      bottom: 16px;
+      left: 14px;
+      right: 14px;
+    }
+  }
+}
+
 // ─── Animations ──────────────────────────────────────────────────────────────
 
 @keyframes fadeImageIn {

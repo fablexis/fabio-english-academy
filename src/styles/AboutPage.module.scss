@@ -1,0 +1,337 @@
+// ═══════════════════════════════════════════════════════════════════════════════
+// ABOUT PAGE – Light theme (matching site palette), typewriter quote,
+//              glass-style team cards
+// ═══════════════════════════════════════════════════════════════════════════════
+
+@use "sass:color";
+
+$teal-primary: #185C60;
+$teal-dark: #124A4E;
+$teal-deeper: #0D3A3E;
+$teal-light: #D4EAEC;
+$teal-lightest: #EDF5F6;
+$lime-accent: #C8E47C;
+$lime-dark: #A8C45C;
+$navy: #0F172A;
+$text-secondary: #64748B;
+$text-muted: #94A3B8;
+$border-color: #E2E8F0;
+$font-heading: 'Poppins', sans-serif;
+
+// ─── Page wrapper ─────────────────────────────────────────────────────────────
+
+.page {
+  min-height: 100vh;
+  background: #F8FAFC;
+  display: flex;
+  flex-direction: column;
+}
+
+// ─── Main content area ────────────────────────────────────────────────────────
+
+.main {
+  flex: 1;
+  padding: 72px 0 96px;
+}
+
+.inner {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 0 32px;
+}
+
+// ─── Section header ───────────────────────────────────────────────────────────
+
+.header {
+  text-align: center;
+  margin-bottom: 64px;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: $teal-lightest;
+  border: 1px solid rgba($teal-primary, 0.18);
+  border-radius: 100px;
+  padding: 6px 16px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: $teal-primary;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin-bottom: 24px;
+
+  &__dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: $teal-primary;
+    flex-shrink: 0;
+  }
+}
+
+.heading {
+  font-family: $font-heading;
+  font-size: 3rem;
+  font-weight: 800;
+  color: $navy;
+  line-height: 1.15;
+  margin-bottom: 16px;
+
+  &Accent {
+    color: $teal-primary;
+    font-style: italic;
+  }
+}
+
+.subtitle {
+  font-size: 1rem;
+  line-height: 1.7;
+  color: $text-secondary;
+  max-width: 560px;
+  margin: 0 auto;
+}
+
+// ─── Inspiring quote / typewriter block ───────────────────────────────────────
+
+.quoteSection {
+  margin-bottom: 80px;
+}
+
+.quoteCard {
+  position: relative;
+  background: white;
+  border: 1px solid $border-color;
+  border-left: 4px solid $teal-primary;
+  border-radius: 0 20px 20px 0;
+  padding: 52px 56px;
+  overflow: hidden;
+  max-width: 900px;
+  margin: 0 auto;
+  box-shadow: 0 4px 24px rgba($teal-primary, 0.07),
+              0 1px 4px rgba(0, 0, 0, 0.04);
+
+  &::before {
+    content: '\201C';
+    position: absolute;
+    top: -20px;
+    left: 40px;
+    font-size: 9rem;
+    font-family: Georgia, serif;
+    color: rgba($teal-primary, 0.08);
+    line-height: 1;
+    pointer-events: none;
+    user-select: none;
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 220px;
+    height: 220px;
+    background: radial-gradient(circle, rgba($teal-light, 0.35) 0%, transparent 70%);
+    pointer-events: none;
+  }
+}
+
+.quoteText {
+  position: relative;
+  z-index: 2;
+  font-size: 1.2rem;
+  line-height: 1.85;
+  color: $navy;
+  font-style: italic;
+  font-weight: 400;
+  min-height: 4.5em;
+}
+
+.cursor {
+  display: inline-block;
+  width: 2px;
+  height: 1.1em;
+  background: $teal-primary;
+  margin-left: 2px;
+  vertical-align: text-bottom;
+  border-radius: 1px;
+  animation: blink 0.9s step-end infinite;
+
+  &--hidden {
+    opacity: 0;
+  }
+}
+
+.quoteAuthor {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-top: 28px;
+
+  &Line {
+    width: 32px;
+    height: 2px;
+    background: $teal-primary;
+    border-radius: 1px;
+  }
+
+  &Name {
+    font-family: $font-heading;
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: $teal-primary;
+    letter-spacing: 0.03em;
+  }
+
+  &Role {
+    font-size: 0.82rem;
+    color: $text-secondary;
+    margin-left: 4px;
+  }
+}
+
+// ─── Team heading ─────────────────────────────────────────────────────────────
+
+.teamHeading {
+  font-family: $font-heading;
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: $navy;
+  text-align: center;
+  margin-bottom: 40px;
+
+  span {
+    color: $teal-primary;
+    font-style: italic;
+  }
+}
+
+// ─── Team cards grid ──────────────────────────────────────────────────────────
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+
+  @media (max-width: 1024px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media (max-width: 600px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+// ─── Individual team card ─────────────────────────────────────────────────────
+
+.card {
+  position: relative;
+  border-radius: 20px;
+  overflow: hidden;
+  height: 420px;
+  cursor: default;
+  background: $teal-deeper;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  box-shadow: 0 8px 28px rgba($teal-deeper, 0.2),
+              0 2px 8px rgba(0, 0, 0, 0.08);
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+              box-shadow 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+
+  &:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 24px 56px rgba($teal-deeper, 0.3),
+                0 8px 20px rgba(0, 0, 0, 0.12);
+  }
+}
+
+.card__avatarWrap {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 52px;
+}
+
+.card__avatar {
+  width: 128px;
+  height: 128px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, $teal-primary 0%, $teal-light 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: $font-heading;
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: white;
+  letter-spacing: 0.02em;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+  position: relative;
+  z-index: 2;
+  border: 3px solid rgba(255, 255, 255, 0.18);
+}
+
+// Radial glow behind the avatar
+.card__glow {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 300px;
+  height: 300px;
+  background: radial-gradient(circle at 50% 35%, rgba($teal-light, 0.18) 0%, transparent 65%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+// Glass overlay at the bottom
+.card__overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 24px 24px 28px;
+  background: linear-gradient(
+    to top,
+    rgba($teal-deeper, 0.98) 0%,
+    rgba($teal-deeper, 0.88) 55%,
+    transparent 100%
+  );
+  backdrop-filter: blur(2px);
+  z-index: 5;
+}
+
+.card__name {
+  font-family: $font-heading;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: white;
+  margin-bottom: 4px;
+}
+
+.card__role {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: $lime-accent;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+
+.card__bio {
+  font-size: 0.8rem;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.55);
+}
+
+
+// ─── Keyframes ────────────────────────────────────────────────────────────────
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0; }
+}

@@ -319,6 +319,76 @@ $font-heading: 'Poppins', sans-serif;
   }
 }
 
+// ─── Responsive ──────────────────────────────────────────────────────────────
+
+@media (max-width: 1023px) {
+  .courses {
+    &__heading {
+      font-size: 2rem;
+    }
+
+    &__grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    &__featuredImage {
+      width: 40%;
+    }
+  }
+}
+
+@media (max-width: 767px) {
+  .courses {
+    padding: 56px 0;
+
+    &__inner {
+      padding: 0 20px;
+    }
+
+    &__heading {
+      font-size: 1.75rem;
+      margin-bottom: 28px;
+    }
+
+    &__filters {
+      gap: 8px;
+      margin-bottom: 32px;
+    }
+
+    &__filterBtn {
+      padding: 10px 18px;
+      font-size: 0.82rem;
+    }
+
+    &__featured {
+      flex-direction: column;
+    }
+
+    &__featuredImage {
+      width: 100%;
+      min-height: 200px;
+    }
+
+    &__featuredContent {
+      padding: 20px;
+    }
+
+    &__featuredTitle {
+      font-size: 1.25rem;
+    }
+
+    &__featuredBottom {
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    &__grid {
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+  }
+}
+
 // ─── Course Modal ──────────────────────────────────────────────────────────
 
 .modal {
@@ -532,6 +602,32 @@ $font-heading: 'Poppins', sans-serif;
     justify-content: center;
     padding-top: 12px;
     margin-top: 8px;
+  }
+}
+
+@media (max-width: 767px) {
+  .modal {
+    &__overlay {
+      padding: 0;
+      align-items: flex-end;
+    }
+
+    &__container {
+      border-radius: 20px 20px 0 0;
+      max-height: 88vh;
+    }
+
+    &__headerContent {
+      padding: 24px 20px 20px;
+    }
+
+    &__body {
+      padding: 24px 20px 20px;
+    }
+
+    &__title {
+      font-size: 1.35rem;
+    }
   }
 }
 

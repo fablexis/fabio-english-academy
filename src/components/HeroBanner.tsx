@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import s from '../styles/HeroBanner.module.scss';
 import {
-  BookStackLogo,
   SelfPacedIcon,
   OfflineContentIcon,
 } from './Icons';
+import Navbar from './Navbar';
 import characterImg from '../assets/character.png';
 
 // ─── Helper: build class string with animation ───────────────────────────────
@@ -21,18 +21,6 @@ const anim = (
     : `${base} anim-hidden`.trim();
 };
 
-// ─── Nav links config ────────────────────────────────────────────────────────
-
-const navLinks = [
-  { label: 'Home', active: true },
-  { label: 'About' },
-  { label: 'Blog' },
-  { label: 'Courses +' },
-  { label: 'Instructors' },
-  { label: 'Contact' },
-];
-
-
 // ═════════════════════════════════════════════════════════════════════════════
 // HERO BANNER COMPONENT
 // ═════════════════════════════════════════════════════════════════════════════
@@ -46,27 +34,9 @@ const HeroBanner: React.FC = () => {
   }, []);
 
   return (
-    <div className="w-full overflow-hidden">
+    <div className="w-full">
       {/* ═══════ NAVBAR ═══════ */}
-      <nav className={anim(ready, 'anim-slide-down', 'delay-0', s.navbar)}>
-        <div className={s.navbar__logo}>
-          <BookStackLogo />
-          <span className={s.navbar__brand}>Your English Buddy</span>
-        </div>
-
-        <div className={s.navbar__links}>
-          {navLinks.map((link) => (
-            <a
-              key={link.label}
-              href="#"
-              className={`${s.navbar__link} ${link.active ? s['navbar__link--active'] : ''}`}
-            >
-              {link.label}
-            </a>
-          ))}
-        </div>
-
-      </nav>
+      <Navbar />
 
       {/* ═══════ HERO SECTION ═══════ */}
       <section className={s.hero}>

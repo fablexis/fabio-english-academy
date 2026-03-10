@@ -237,6 +237,64 @@ $font-heading: 'Poppins', sans-serif;
   }
 }
 
+// ─── Responsive ──────────────────────────────────────────────────────────────
+
+@media (max-width: 1023px) {
+  .testimonials {
+    &__heading {
+      font-size: 2rem;
+    }
+
+    &__grid {
+      grid-template-columns: 1fr;
+    }
+
+    &__card--large {
+      height: auto;
+    }
+  }
+}
+
+@media (max-width: 767px) {
+  .testimonials {
+    padding: 56px 0 72px;
+
+    &__inner {
+      padding: 0 20px;
+    }
+
+    &__header {
+      margin-bottom: 36px;
+    }
+
+    &__heading {
+      font-size: 1.75rem;
+    }
+
+    &__grid {
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+
+    &__rightCol {
+      gap: 16px;
+    }
+
+    &__bottomRow {
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+
+    &__card {
+      padding: 24px;
+    }
+
+    &__statNumber {
+      font-size: 1.75rem;
+    }
+  }
+}
+
 // ─── Avatar ──────────────────────────────────────────────────────────────────
 
 .avatar {
