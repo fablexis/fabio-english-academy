@@ -260,15 +260,8 @@ $font-heading: 'Poppins', sans-serif;
   width: 128px;
   height: 128px;
   border-radius: 50%;
-  background: linear-gradient(135deg, $teal-primary 0%, $teal-light 100%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: $font-heading;
-  font-size: 2.2rem;
-  font-weight: 800;
-  color: white;
-  letter-spacing: 0.02em;
+  object-fit: cover;
+  object-position: center;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
   position: relative;
   z-index: 2;
@@ -328,6 +321,242 @@ $font-heading: 'Poppins', sans-serif;
   color: rgba(255, 255, 255, 0.55);
 }
 
+
+// ─── Card CTA link ────────────────────────────────────────────────────────────
+
+.card__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 12px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: $lime-accent;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  transition: gap 0.2s ease;
+
+  svg {
+    transition: transform 0.2s ease;
+  }
+}
+
+.card {
+  cursor: pointer;
+  outline: none;
+
+  &:focus-visible {
+    box-shadow: 0 0 0 3px rgba($lime-accent, 0.5);
+  }
+
+  &:hover .card__cta {
+    gap: 10px;
+
+    svg {
+      transform: translateX(3px);
+    }
+  }
+}
+
+// ─── Team Member Modal ────────────────────────────────────────────────────────
+
+.tm {
+  &__overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    background: rgba($navy, 0);
+    backdrop-filter: blur(0px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    pointer-events: none;
+    transition: background 0.35s ease, backdrop-filter 0.35s ease;
+
+    &--visible {
+      background: rgba($navy, 0.6);
+      backdrop-filter: blur(10px);
+      pointer-events: auto;
+    }
+  }
+
+  &__container {
+    position: relative;
+    display: flex;
+    width: 100%;
+    max-width: 1040px;
+    max-height: 90vh;
+    border-radius: 20px;
+    background: white;
+    border: 1px solid $border-color;
+    overflow: hidden;
+    box-shadow: 0 36px 90px rgba(15, 23, 42, 0.28),
+                0 6px 18px rgba(0, 0, 0, 0.1);
+    opacity: 0;
+    transform: scale(0.95) translateY(24px);
+    transition: opacity 0.38s cubic-bezier(0.22, 1, 0.36, 1),
+                transform 0.38s cubic-bezier(0.22, 1, 0.36, 1);
+
+    &--visible {
+      opacity: 1;
+      transform: scale(1) translateY(0);
+    }
+
+    @media (max-width: 680px) {
+      flex-direction: column;
+      max-height: 92vh;
+      overflow-y: auto;
+    }
+  }
+
+  // ── Close button ──
+
+  &__close {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    z-index: 30;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: 1px solid rgba(15, 23, 42, 0.15);
+    background: rgba(255, 255, 255, 0.96);
+    color: rgba(15, 23, 42, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+
+    &:hover {
+      background: white;
+      border-color: rgba($teal-primary, 0.42);
+      color: $teal-primary;
+      transform: scale(1.08);
+    }
+  }
+
+  // ── Left panel ──
+
+  &__left {
+    flex: 0 0 46%;
+    background: linear-gradient(160deg, $teal-lightest 0%, #F4FBFC 100%);
+    min-height: 470px;
+    border-right: 1px solid $border-color;
+
+    @media (max-width: 680px) {
+      flex: none;
+      min-height: 300px;
+      border-right: none;
+      border-bottom: 1px solid $border-color;
+    }
+  }
+
+  &__photo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+  }
+
+  &__highlights {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+
+  &__highlight {
+    flex: 1 1 170px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    background: $teal-lightest;
+    border: 1px solid rgba($teal-primary, 0.18);
+    border-radius: 10px;
+    padding: 10px 12px;
+  }
+
+  &__highlightLabel {
+    font-size: 0.68rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: rgba($teal-primary, 0.72);
+  }
+
+  &__highlightValue {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: $teal-deeper;
+  }
+
+  // ── Right panel ──
+
+  &__right {
+    flex: 1;
+    background: white;
+    padding: 38px 38px 34px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+
+    @media (max-width: 680px) {
+      padding: 32px 28px 36px;
+    }
+  }
+
+  &__rightEyebrow {
+    font-size: 0.66rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: $teal-primary;
+    margin-bottom: 8px;
+    max-width: max-content;
+    border: 1px solid rgba($teal-primary, 0.2);
+    border-radius: 999px;
+    padding: 6px 12px;
+    background: $teal-lightest;
+  }
+
+  &__rightHeading {
+    font-family: $font-heading;
+    font-size: 2rem;
+    font-weight: 800;
+    color: $navy;
+    margin-bottom: 8px;
+    line-height: 1.15;
+
+    span {
+      color: $teal-primary;
+      font-style: italic;
+    }
+  }
+
+  &__rightName {
+    font-size: 1.02rem;
+    color: $text-secondary;
+    margin-bottom: 18px;
+  }
+
+  &__bio {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    flex: 1;
+    margin-top: 6px;
+
+    p {
+      font-size: 0.94rem;
+      line-height: 1.65;
+      color: $text-secondary;
+    }
+  }
+}
 
 // ─── Keyframes ────────────────────────────────────────────────────────────────
 
