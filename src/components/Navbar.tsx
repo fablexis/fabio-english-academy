@@ -62,8 +62,15 @@ const Navbar: React.FC = () => {
       >
         Blog
       </NavLink>
-      <a href="#" className={s.navbar__link} onClick={() => setMenuOpen(false)}>Courses +</a>
-      <a href="#" className={s.navbar__link} onClick={() => setMenuOpen(false)}>Instructors</a>
+      <NavLink
+        to="/courses"
+        onClick={() => setMenuOpen(false)}
+        className={({ isActive }) =>
+          `${s.navbar__link} ${isActive ? s['navbar__link--active'] : ''}`
+        }
+      >
+        Courses
+      </NavLink>
       <a href="#" className={s.navbar__link} onClick={() => setMenuOpen(false)}>Contact</a>
     </>
   );

@@ -156,6 +156,12 @@ body {
   to { opacity: 1; }
 }
 
+@property --border-angle {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}
+
 // ═══════════════════════════════════════════════════════════════════════════════
 // ANIMATION UTILITY CLASSES
 // ═══════════════════════════════════════════════════════════════════════════════

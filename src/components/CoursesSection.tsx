@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import {
-  LayoutGrid, CaseSensitive, Mic, Briefcase, ClipboardList, UserRound,
   Clock, FileText, ArrowUpRight, X, Check, Image,
 } from 'lucide-react';
 import s from '../styles/CoursesSection.module.scss';
@@ -21,20 +20,6 @@ const anim = (
 };
 
 // ─── Data ────────────────────────────────────────────────────────────────────
-
-interface Category {
-  label: string;
-  icon: React.ReactNode;
-}
-
-const categories: Category[] = [
-  { label: 'All Categories', icon: <LayoutGrid size={20} /> },
-  { label: 'Grammar', icon: <CaseSensitive size={20} /> },
-  { label: 'Speaking', icon: <Mic size={20} /> },
-  { label: 'Business English', icon: <Briefcase size={20} /> },
-  { label: 'Exam Prep', icon: <ClipboardList size={20} /> },
-  { label: 'Kids & Teens', icon: <UserRound size={20} /> },
-];
 
 interface Module {
   week: string;
@@ -75,6 +60,7 @@ const featuredCourse: Course = {
 };
 
 const courses: Course[] = [
+  // Only the first two are shown in the grid (slice applied in the render)
   {
     id: 2,
     category: 'Grammar',
@@ -279,7 +265,6 @@ const CourseModal: React.FC<CourseModalProps> = ({ course, onClose, isVisible })
 // ═════════════════════════════════════════════════════════════════════════════
 
 const CoursesSection: React.FC = () => {
-  const [activeCategory, setActiveCategory] = useState('All Categories');
   const [modalCourse, setModalCourse] = useState<Course | null>(null);
   const [modalVisible, setModalVisible] = useState(false);
   const { ref, ready } = useInView({ threshold: 0.1 });
@@ -305,22 +290,6 @@ const CoursesSection: React.FC = () => {
           Start Your English Journey{' '}
           <span className={s.courses__headingAccent}>Today!</span>
         </h2>
-
-        {/* ─── Category Filters ─── */}
-        <div className={anim(ready, 'anim-fade-scale', 'delay-100', s.courses__filters)}>
-          {categories.map((cat) => (
-            <button
-              key={cat.label}
-              className={`${s.courses__filterBtn} ${
-                activeCategory === cat.label ? s['courses__filterBtn--active'] : ''
-              }`}
-              onClick={() => setActiveCategory(cat.label)}
-            >
-              <span className={s.courses__filterIcon}>{cat.icon}</span>
-              {cat.label}
-            </button>
-          ))}
-        </div>
 
         {/* ─── Featured Course ─── */}
         <div
@@ -380,7 +349,7 @@ const CoursesSection: React.FC = () => {
 
         {/* ─── Course Grid ─── */}
         <div className={s.courses__grid}>
-          {courses.map((course, index) => (
+          {courses.slice(0, 2).map((course, index) => (
             <div
               key={course.id}
               className={anim(
