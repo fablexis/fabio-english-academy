@@ -1,0 +1,569 @@
+@use "sass:color";
+
+@keyframes borderSnake {
+  to { --border-angle: 360deg; }
+}
+
+$teal-primary:  #185C60;
+$teal-dark:     #124A4E;
+$teal-deeper:   #0D3A3E;
+$teal-light:    #D4EAEC;
+$teal-lightest: #EDF5F6;
+$lime-accent:   #C8E47C;
+$lime-light:    #F0F7DC;
+$green-cta:     #5CF890;
+$navy:          #0F172A;
+$text-secondary:#64748B;
+$border-color:  #E2E8F0;
+$font-heading:  'Poppins', sans-serif;
+
+// ── Hero ──────────────────────────────────────────────────────────────────────
+
+.hero {
+  background: linear-gradient(145deg, $teal-lightest 0%, #F0F8F8 40%, #fff 100%);
+  padding: 72px 0 80px;
+
+  &__inner {
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: 0 32px;
+    display: grid;
+    grid-template-columns: 1fr 380px;
+    gap: 64px;
+    align-items: center;
+  }
+
+  &__kicker {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: $teal-primary;
+    margin-bottom: 16px;
+  }
+
+  &__title {
+    font-family: $font-heading;
+    font-size: 2.8rem;
+    font-weight: 800;
+    line-height: 1.15;
+    color: $navy;
+    margin-bottom: 18px;
+  }
+
+  &__titleAccent {
+    color: $teal-primary;
+  }
+
+  &__subtitle {
+    font-size: 0.98rem;
+    line-height: 1.8;
+    color: $text-secondary;
+    max-width: 520px;
+    margin-bottom: 32px;
+  }
+
+  &__actions {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex-wrap: wrap;
+  }
+
+  &__btnPrimary {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 28px;
+    border-radius: 50px;
+    background: $teal-primary;
+    color: #fff;
+    font-size: 0.88rem;
+    font-weight: 700;
+    text-decoration: none;
+    transition: background 0.2s ease, transform 0.2s ease;
+
+    &:hover {
+      background: $teal-dark;
+      transform: translateY(-1px);
+    }
+  }
+
+  &__btnIcon {
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(#fff, 0.2);
+  }
+
+  &__btnSecondary {
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: $teal-primary;
+    text-decoration: none;
+    border-bottom: 2px solid rgba($teal-primary, 0.25);
+    padding-bottom: 2px;
+    transition: border-color 0.2s ease;
+
+    &:hover { border-color: $teal-primary; }
+  }
+
+  // Level pills column
+  &__visual {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  &__levelPill {
+    position: relative;
+    background: #fff;
+    border: none;
+    border-radius: 16px;
+    padding: 18px 20px;
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    box-shadow: 0 2px 10px rgba($navy, 0.04);
+    transition: box-shadow 0.2s ease, transform 0.2s ease;
+
+    // Animated snake border
+    &::before {
+      content: '';
+      position: absolute;
+      inset: -2px;
+      border-radius: 18px;
+      background: conic-gradient(
+        from var(--border-angle),
+        #{$border-color} 0deg,
+        #{$border-color} 255deg,
+        #{$lime-accent}  275deg,
+        #{$teal-primary} 315deg,
+        #{$border-color} 335deg,
+        #{$border-color} 360deg
+      );
+      animation: borderSnake 3s linear infinite;
+      z-index: 0;
+    }
+
+    // White fill to restore card background
+    &::after {
+      content: '';
+      position: absolute;
+      inset: 1.5px;
+      border-radius: 14.5px;
+      background: #fff;
+      z-index: 1;
+    }
+
+    // Lift content above pseudo-elements
+    > * {
+      position: relative;
+      z-index: 2;
+    }
+
+    // Stagger each card so the snake appears to travel card → card → card
+    &:nth-child(2)::before { animation-delay: -1s; }
+    &:nth-child(3)::before { animation-delay: -2s; }
+
+    &:hover {
+      box-shadow: 0 8px 24px rgba($teal-primary, 0.1);
+      transform: translateX(4px);
+    }
+  }
+
+  &__levelLabel {
+    flex-shrink: 0;
+    font-family: $font-heading;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: $teal-deeper;
+    background: $lime-light;
+    border-radius: 8px;
+    padding: 6px 10px;
+    line-height: 1;
+    white-space: nowrap;
+  }
+
+  &__levelName {
+    font-family: $font-heading;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: $navy;
+    margin-bottom: 4px;
+  }
+
+  &__levelDesc {
+    font-size: 0.78rem;
+    line-height: 1.55;
+    color: $text-secondary;
+  }
+}
+
+// ── Stats strip ───────────────────────────────────────────────────────────────
+
+.stats {
+  background: $teal-deeper;
+  padding: 0;
+
+  &__inner {
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: 0 32px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  &__item {
+    padding: 32px 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    border-right: 1px solid rgba(#fff, 0.08);
+
+    &:last-child { border-right: none; }
+  }
+
+  &__value {
+    font-family: $font-heading;
+    font-size: 2.2rem;
+    font-weight: 800;
+    color: $lime-accent;
+    line-height: 1;
+  }
+
+  &__label {
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: rgba(#fff, 0.55);
+    text-align: center;
+  }
+}
+
+// ── What's included perks ────────────────────────────────────────────────────
+
+.perks {
+  background: #F3F4F6;
+  padding: 80px 0;
+
+  &__inner {
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: 0 32px;
+    text-align: center;
+  }
+
+  &__kicker {
+    display: inline-block;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: $teal-primary;
+    margin-bottom: 10px;
+  }
+
+  &__title {
+    font-family: $font-heading;
+    font-size: 2.2rem;
+    font-weight: 800;
+    line-height: 1.2;
+    color: $navy;
+    margin-bottom: 48px;
+  }
+
+  &__titleAccent {
+    color: $teal-primary;
+  }
+
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    text-align: left;
+    max-width: 860px;
+    margin: 0 auto;
+  }
+
+  &__card {
+    background: #fff;
+    border: 1.5px solid $border-color;
+    border-radius: 18px;
+    padding: 28px 26px;
+    position: relative;
+    transition: box-shadow 0.25s ease, transform 0.25s ease;
+
+    &:hover {
+      box-shadow: 0 10px 32px rgba($teal-primary, 0.1);
+      transform: translateY(-3px);
+    }
+
+    &--soon {
+      border-color: rgba($teal-primary, 0.25);
+      background: linear-gradient(135deg, #fff 0%, $teal-lightest 100%);
+    }
+  }
+
+  &__icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 14px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba($teal-primary, 0.08);
+    color: $teal-primary;
+    margin-bottom: 14px;
+  }
+
+  &__cardTitle {
+    font-family: $font-heading;
+    font-size: 1rem;
+    font-weight: 700;
+    color: $navy;
+    margin-bottom: 8px;
+  }
+
+  &__cardDesc {
+    font-size: 0.82rem;
+    line-height: 1.65;
+    color: $text-secondary;
+  }
+
+  &__badge {
+    display: inline-block;
+    margin-top: 14px;
+    padding: 4px 12px;
+    border-radius: 50px;
+    background: $lime-light;
+    color: $teal-deeper;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+}
+
+// ── CTA banner ────────────────────────────────────────────────────────────────
+
+.cta {
+  position: relative;
+  overflow: hidden;
+  background: radial-gradient(ellipse at 20% 50%, #1a6e73 0%, $teal-deeper 45%, #09272a 100%);
+  padding: 96px 0;
+
+  // Decorative glowing orbs
+  &__orb1,
+  &__orb2 {
+    position: absolute;
+    border-radius: 50%;
+    pointer-events: none;
+  }
+
+  &__orb1 {
+    width: 480px;
+    height: 480px;
+    top: -160px;
+    right: -100px;
+    background: radial-gradient(circle, rgba($lime-accent, 0.14) 0%, transparent 70%);
+  }
+
+  &__orb2 {
+    width: 320px;
+    height: 320px;
+    bottom: -120px;
+    left: -60px;
+    background: radial-gradient(circle, rgba($teal-primary, 0.35) 0%, transparent 70%);
+  }
+
+  &__inner {
+    position: relative;
+    z-index: 1;
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 0 32px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  &__badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 7px 16px;
+    border-radius: 50px;
+    background: rgba($lime-accent, 0.14);
+    border: 1px solid rgba($lime-accent, 0.3);
+    color: $lime-accent;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    margin-bottom: 24px;
+  }
+
+  &__title {
+    font-family: $font-heading;
+    font-size: 2.6rem;
+    font-weight: 800;
+    line-height: 1.2;
+    color: #fff;
+    margin-bottom: 18px;
+  }
+
+  &__titleAccent {
+    color: $lime-accent;
+  }
+
+  &__subtitle {
+    font-size: 1rem;
+    line-height: 1.8;
+    color: rgba(#fff, 0.65);
+    max-width: 520px;
+    margin-bottom: 40px;
+  }
+
+  &__actions {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-bottom: 28px;
+  }
+
+  &__btnPrimary {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 16px 30px;
+    border-radius: 50px;
+    background: $lime-accent;
+    color: $teal-deeper;
+    font-size: 0.92rem;
+    font-weight: 700;
+    text-decoration: none;
+    box-shadow: 0 8px 28px rgba($lime-accent, 0.35);
+    transition: background 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+
+    &:hover {
+      background: color.adjust($lime-accent, $lightness: -6%);
+      transform: translateY(-2px);
+      box-shadow: 0 12px 36px rgba($lime-accent, 0.45);
+    }
+  }
+
+  &__btnIcon {
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba($teal-deeper, 0.2);
+  }
+
+  &__btnSecondary {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 15px 26px;
+    border-radius: 50px;
+    border: 1.5px solid rgba(#fff, 0.2);
+    color: rgba(#fff, 0.85);
+    font-size: 0.92rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: border-color 0.2s ease, color 0.2s ease, background 0.2s ease;
+
+    &:hover {
+      border-color: rgba(#fff, 0.5);
+      color: #fff;
+      background: rgba(#fff, 0.06);
+    }
+  }
+
+  &__trust {
+    font-size: 0.78rem;
+    color: rgba(#fff, 0.38);
+    letter-spacing: 0.03em;
+  }
+}
+
+// ── Responsive ────────────────────────────────────────────────────────────────
+
+@media (max-width: 1023px) {
+  .hero {
+    &__inner {
+      grid-template-columns: 1fr;
+      gap: 40px;
+    }
+
+    &__title { font-size: 2.2rem; }
+
+    &__visual {
+      flex-direction: row;
+      flex-wrap: wrap;
+    }
+
+    &__levelPill {
+      flex: 1 1 200px;
+    }
+  }
+
+  .perks {
+    &__grid { grid-template-columns: repeat(2, 1fr); max-width: 100%; }
+    &__title { font-size: 1.8rem; }
+  }
+}
+
+@media (max-width: 767px) {
+  .hero {
+    padding: 48px 0 56px;
+
+    &__inner { padding: 0 20px; }
+    &__title { font-size: 1.8rem; }
+    &__visual { flex-direction: column; }
+    &__levelPill { flex: none; }
+  }
+
+  .stats {
+    &__inner { grid-template-columns: repeat(2, 1fr); }
+    &__item {
+      border-right: none;
+      border-bottom: 1px solid rgba(#fff, 0.08);
+      padding: 24px 16px;
+
+      &:nth-child(odd) { border-right: 1px solid rgba(#fff, 0.08); }
+      &:last-child { border-bottom: none; }
+      &:nth-last-child(2):nth-child(odd) { border-bottom: none; }
+    }
+  }
+
+  .perks {
+    padding: 56px 0;
+
+    &__inner { padding: 0 20px; }
+    &__title { font-size: 1.6rem; }
+    &__grid { grid-template-columns: 1fr; }
+  }
+
+  .cta {
+    padding: 64px 0;
+
+    &__inner { padding: 0 20px; }
+    &__title { font-size: 1.9rem; }
+    &__actions { flex-direction: column; align-items: stretch; }
+    &__btnPrimary,
+    &__btnSecondary { justify-content: center; }
+  }
+}
