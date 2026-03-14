@@ -1,0 +1,416 @@
+@use "sass:color";
+
+// ── Design-system tokens (mirrors global.scss) ──────────────────────────────
+$teal-primary:  #185C60;
+$teal-dark:     #124A4E;
+$teal-deeper:   #0D3A3E;
+$teal-light:    #D4EAEC;
+$teal-lightest: #EDF5F6;
+$lime-accent:   #C8E47C;
+$lime-light:    #F0F7DC;
+$navy:          #0F172A;
+$text-secondary:#64748B;
+$border-color:  #E2E8F0;
+$font-heading:  'Poppins', sans-serif;
+
+// ── Section ──────────────────────────────────────────────────────────────────
+
+.blog {
+  width: 100%;
+  padding: 80px 0;
+  background: #F3F4F6; // matches WhyChooseUs section for contrast
+
+  &__inner {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 32px;
+  }
+
+  // ── Header ───────────────────────────────────────────────────────────────
+
+  &__header {
+    text-align: center;
+    margin-bottom: 32px;
+  }
+
+  &__kicker {
+    display: inline-block;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: $teal-primary;
+    margin-bottom: 10px;
+  }
+
+  &__title {
+    font-family: $font-heading;
+    font-size: 2.5rem;
+    font-weight: 800;
+    line-height: 1.2;
+    color: $navy;
+    margin-bottom: 14px;
+  }
+
+  &__titleAccent {
+    color: $teal-primary;
+  }
+
+  &__subtitle {
+    max-width: 600px;
+    margin: 0 auto;
+    font-size: 0.92rem;
+    line-height: 1.75;
+    color: $text-secondary;
+  }
+
+  // ── Filters ──────────────────────────────────────────────────────────────
+
+  &__filters {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 36px;
+  }
+
+  &__filterBtn {
+    border: 1.5px solid $border-color;
+    background: #fff;
+    color: $navy;
+    border-radius: 999px;
+    padding: 10px 20px;
+    font-size: 0.82rem;
+    font-weight: 600;
+    line-height: 1;
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &:hover {
+      border-color: $teal-primary;
+      color: $teal-primary;
+    }
+
+    &:focus-visible {
+      outline: 3px solid rgba($teal-primary, 0.2);
+      outline-offset: 2px;
+    }
+
+    &--active {
+      background: $teal-primary;
+      border-color: $teal-primary;
+      color: #fff;
+    }
+  }
+
+  // ── Masonry grid (CSS columns — natural Pinterest stagger) ───────────────
+
+  &__grid {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    column-count: 4;
+    column-gap: 18px;
+  }
+
+  &__item {
+    display: inline-block; // required for column layout
+    width: 100%;
+    margin-bottom: 18px;
+    break-inside: avoid;
+  }
+
+  // ── Card base ─────────────────────────────────────────────────────────────
+
+  &__card {
+    border-radius: 20px;
+    overflow: hidden;
+    background: #fff;
+    border: 1.5px solid $border-color;
+    box-shadow: 0 2px 6px rgba($navy, 0.03);
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    display: flex;
+    flex-direction: column;
+
+    &:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 16px 40px rgba($teal-primary, 0.13);
+    }
+
+    // ── Variant: teal (lightest teal, design-system primary) ──
+    &--teal {
+      background: #fff;
+      border-color: $teal-light;
+
+      .blog__banner {
+        background: linear-gradient(135deg, $teal-lightest 0%, $teal-light 100%);
+      }
+
+      .blog__bannerIcon {
+        background: $teal-primary;
+        color: #fff;
+      }
+
+      .blog__icon {
+        background: rgba($teal-primary, 0.1);
+        color: $teal-primary;
+      }
+    }
+
+    // ── Variant: lime (lime-light from design system) ──
+    &--lime {
+      background: #fff;
+      border-color: color.adjust($lime-accent, $lightness: 15%);
+
+      .blog__banner {
+        background: linear-gradient(135deg, $lime-light 0%, color.adjust($lime-accent, $lightness: 10%) 100%);
+      }
+
+      .blog__bannerIcon {
+        background: $teal-deeper;
+        color: $lime-accent;
+      }
+
+      .blog__icon {
+        background: rgba($lime-accent, 0.3);
+        color: $teal-deeper;
+      }
+
+      .blog__badge {
+        background: rgba($lime-accent, 0.5);
+        color: $teal-deeper;
+      }
+    }
+
+    // ── Variant: dark (teal-deeper — creates striking contrast) ──
+    &--dark {
+      background: $teal-deeper;
+      border-color: $teal-dark;
+
+      .blog__banner {
+        background: linear-gradient(135deg, $teal-dark 0%, color.adjust($teal-deeper, $lightness: -4%) 100%);
+      }
+
+      .blog__bannerIcon {
+        background: rgba($lime-accent, 0.15);
+        color: $lime-accent;
+      }
+
+      .blog__icon {
+        background: rgba($lime-accent, 0.12);
+        color: $lime-accent;
+      }
+
+      .blog__badge {
+        background: rgba($lime-accent, 0.18);
+        color: $lime-accent;
+      }
+
+      .blog__cardTitle {
+        color: #fff;
+      }
+
+      .blog__cardExcerpt {
+        color: rgba(#fff, 0.6);
+      }
+
+      .blog__metaItem {
+        color: rgba(#fff, 0.5);
+      }
+
+      .blog__metaDot {
+        background: rgba(#fff, 0.2);
+      }
+
+      .blog__link {
+        color: $lime-accent;
+
+        &:hover {
+          color: color.adjust($lime-accent, $lightness: -10%);
+        }
+      }
+
+      .blog__linkIcon {
+        background: rgba($lime-accent, 0.18);
+      }
+    }
+
+    // ── Variant: plain (white, standard border) ──
+    &--plain {
+      background: #fff;
+
+      .blog__banner {
+        background: linear-gradient(135deg, #F8FAFC 0%, $border-color 100%);
+      }
+
+      .blog__bannerIcon {
+        background: $teal-primary;
+        color: #fff;
+      }
+
+      .blog__icon {
+        background: rgba($teal-primary, 0.08);
+        color: $teal-primary;
+      }
+    }
+  }
+
+  // ── Banner block (tall colored top — the key to height variation) ─────────
+
+  &__banner {
+    width: 100%;
+    height: 130px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  &__bannerIcon {
+    width: 52px;
+    height: 52px;
+    border-radius: 16px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  // ── Card body ─────────────────────────────────────────────────────────────
+
+  &__body {
+    padding: 16px 18px 18px;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+  }
+
+  &__cardTop {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 12px;
+  }
+
+  &__icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  &__badge {
+    border-radius: 999px;
+    padding: 4px 10px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: $teal-deeper;
+    background: rgba($lime-accent, 0.4);
+    margin-left: auto;
+  }
+
+  &__cardTitle {
+    font-family: $font-heading;
+    font-size: 1rem;
+    font-weight: 700;
+    line-height: 1.4;
+    color: $navy;
+    margin-bottom: 8px;
+  }
+
+  &__cardExcerpt {
+    color: $text-secondary;
+    font-size: 0.82rem;
+    line-height: 1.65;
+    margin-bottom: 14px;
+  }
+
+  &__meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: auto;
+    margin-bottom: 14px;
+  }
+
+  &__metaItem {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    color: color.adjust($text-secondary, $lightness: -8%);
+    font-size: 0.73rem;
+    font-weight: 600;
+  }
+
+  &__metaDot {
+    width: 3px;
+    height: 3px;
+    border-radius: 50%;
+    background: $border-color;
+  }
+
+  &__link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    width: fit-content;
+    text-decoration: none;
+    color: $teal-dark;
+    font-size: 0.8rem;
+    font-weight: 700;
+    transition: color 0.2s ease;
+
+    &:hover { color: $teal-deeper; }
+
+    &:focus-visible {
+      outline: 3px solid rgba($teal-primary, 0.2);
+      outline-offset: 3px;
+      border-radius: 6px;
+    }
+  }
+
+  &__linkIcon {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba($teal-primary, 0.1);
+  }
+}
+
+// ── Responsive ───────────────────────────────────────────────────────────────
+
+@media (max-width: 1200px) {
+  .blog {
+    &__grid { column-count: 3; }
+    &__title { font-size: 2rem; }
+  }
+}
+
+@media (max-width: 900px) {
+  .blog {
+    &__grid { column-count: 2; }
+  }
+}
+
+@media (max-width: 600px) {
+  .blog {
+    padding: 56px 0;
+
+    &__inner { padding: 0 20px; }
+    &__title { font-size: 1.7rem; }
+    &__subtitle { font-size: 0.88rem; }
+
+    &__grid {
+      column-count: 1;
+      column-gap: 0;
+    }
+
+    &__item { margin-bottom: 14px; }
+  }
+}
