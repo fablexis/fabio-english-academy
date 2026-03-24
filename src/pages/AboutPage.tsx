@@ -3,6 +3,34 @@ import s from '../styles/AboutPage.module.scss';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import { useInView } from '../hooks/useInView';
+import phraseImage from '../assets/phrase-image.jpg';
+import techHuman from '../assets/tech-human.jpg';
+
+// ─── Progressive blur image ───────────────────────────────────────────────────
+
+interface BlurImageProps {
+  src: string;
+  alt: string;
+  className?: string;
+}
+
+const BlurImage: React.FC<BlurImageProps> = ({ src, alt, className }) => {
+  const [loaded, setLoaded] = useState(false);
+
+  return (
+    <img
+      src={src}
+      alt={alt}
+      className={className}
+      onLoad={() => setLoaded(true)}
+      style={{
+        filter: loaded ? 'blur(0px)' : 'blur(16px)',
+        transform: loaded ? 'scale(1)' : 'scale(1.04)',
+        transition: 'filter 0.7s ease, transform 0.7s ease',
+      }}
+    />
+  );
+};
 
 // ─── Animation helper ────────────────────────────────────────────────────────
 
@@ -18,30 +46,6 @@ const anim = (
     : `${base} anim-hidden`.trim();
 };
 
-// ─── Typewriter hook ─────────────────────────────────────────────────────────
-
-function useTypewriter(text: string, speed = 28, active = false) {
-  const [charIndex, setCharIndex] = useState(0);
-
-  useEffect(() => {
-    if (!active) return;
-
-    const id = setInterval(() => {
-      setCharIndex((prev) => Math.min(prev + 1, text.length));
-    }, speed);
-
-    return () => {
-      clearInterval(id);
-      setCharIndex(0);
-    };
-  }, [active, text, speed]);
-
-  return {
-    displayedText: text.slice(0, charIndex),
-    isComplete: charIndex >= text.length && active,
-  };
-}
-
 // ─── Team data ────────────────────────────────────────────────────────────────
 
 interface TeamMember {
@@ -52,50 +56,113 @@ interface TeamMember {
   bio: string;
   fullBio: string;
   highlights: { label: string; value: string }[];
+  functions: string[];
 }
 
 const teamMembers: TeamMember[] = [
   {
     name: 'Fabio Pernía',
-    role: 'Founder & CEO',
+    role: 'Fundador y eterno enamorado del inglés',
     initials: 'FP',
     imageUrl: 'https://i.pravatar.cc/640?img=12',
-    bio: 'Fabio founded Your English Buddy with a vision to make English learning accessible and effective. He leads with passion and a commitment to student success.',
+    bio: 'Ama compartir lo que sabe de inglés y cuenta cómo este idioma transformó su vida. En él encontró mucho más que un idioma: una forma de sentirse más presente en el mundo.',
     fullBio:
-      'Fabio is a passionate English educator and entrepreneur who turned years of teaching experience into a thriving learning community. He started Your English Buddy to break down the barriers that prevent people from reaching fluency — combining proven methodology with genuine human connection.\n\nHis teaching philosophy centers on empathy: understanding that every learner comes with unique goals, fears, and strengths. Outside the classroom, Fabio is an avid reader, language enthusiast, and firm believer that learning never stops.',
+      'Fabio ama compartir lo que sabe de inglés con quienes lo rodean y contar cómo este idioma transformó su vida y la de su familia. Ha intentado aprender unos seis idiomas, pero su relación más estable, fiel y duradera ha sido con el inglés. En él encontró mucho más que un idioma: encontró una forma de sentirse más presente en el mundo.\n\nFabio vive en Argentina y, en su tiempo libre, disfruta de ver películas, tomar cerveza artesanal y compartir con su esposa, a quien considera su mayor inspiración y el mayor éxito de su vida.',
     highlights: [
-      { label: 'Experience', value: '10+ years teaching' },
-      { label: 'Students', value: '500+ taught' },
-      { label: 'Specialty', value: 'Business & Conversational English' },
+      { label: 'Rol', value: 'Fundador & CEO' },
+      { label: 'Especialidad', value: 'Inglés conversacional y laboral' },
+      { label: 'Idiomas', value: 'Español & Inglés' },
+    ],
+    functions: [
+      'Imparte todas las clases de inglés con paciencia, pasión y probablemente bastante café.',
+      'Intenta no estresarse cuando no aparecen ideas para TikTok.',
+      'Busca constantemente nuevas formas y recursos para que sus estudiantes se enamoren del inglés.',
+      'Crea la identidad visual de todos los recursos de la academia (guías, ebooks, etc.).',
+      'Sueña todos los días con hacer de Your English Buddy una comunidad donde aprender inglés se sienta como una herramienta de vida.',
+      'Encuentra maneras de que la academia crezca y pueda sostenerse en el tiempo.',
     ],
   },
   {
-    name: 'Andreína Gómez',
-    role: 'Project Manager',
-    initials: 'AG',
+    name: 'Andreina Luna',
+    role: 'Cofundadora y Responsable Creativa',
+    initials: 'AL',
     imageUrl: 'https://i.pravatar.cc/640?img=5',
-    bio: 'Andreína keeps every project on track, coordinating schedules, resources, and goals to ensure the best experience for students and instructors alike.',
+    bio: 'Después de muchos años intentando aprender inglés, decidió convertir sus propias necesidades como estudiante en ideas para hacerles el camino más claro y menos empedrado a otros.',
     fullBio:
-      'Andreína is the organizational backbone of Your English Buddy. With a background in education management and a meticulous eye for detail, she ensures that every course, workshop, and student interaction runs smoothly from start to finish.\n\nShe thrives on building systems that scale — making it possible for the team to focus on what matters most: delivering exceptional learning outcomes. When she\'s not planning the next big initiative, Andreína loves traveling and discovering new cultures.',
+      'Andreina tiene una conexión muy personal con esta academia, porque nació también desde su propia historia con el inglés: una historia de esfuerzo, frustración y superación. Después de muchos años intentando aprenderlo, decidió convertir las necesidades que ella tuvo como estudiante en ideas para hacerles el camino más claro y menos empedrado a otros.\n\nAndreina vive en Argentina y, en su tiempo libre, ama crear ideas de contenido… porque sí, ¡también es YouTuber y Podcaster!',
     highlights: [
-      { label: 'Background', value: 'Education Management' },
-      { label: 'Focus', value: 'Operations & Student Experience' },
-      { label: 'Languages', value: 'Spanish & English' },
+      { label: 'Background', value: 'Project Management' },
+      { label: 'Focus', value: 'Operations & Creative Direction' },
+      { label: 'Idiomas', value: 'Español & Inglés' },
+    ],
+    functions: [
+      'Idea el contenido que se publica en TikTok, incluso cuando la inspiración decide no colaborar.',
+      'Graba a Fabio para los videos y hace su mejor esfuerzo por no mandarlo todo "a la shit" tras la toma número 38.',
+      'Edita cada video y trata de no odiar CapCut después de las revisiones de Fabio.',
+      'Gestiona los pagos de los estudiantes.',
+      'Crea y actualiza las políticas de la academia a medida que Your English Buddy sigue creciendo.',
     ],
   },
   {
     name: 'Fabián Pernía',
-    role: 'Web & Mobile Developer',
-    initials: 'FP',
+    role: 'Socio Gerente y Desarrollador Full-Stack',
+    initials: 'FPn',
     imageUrl: 'https://i.pravatar.cc/640?img=13',
-    bio: 'Fabián builds and maintains the digital platforms that power Your English Buddy, crafting seamless experiences for learners everywhere.',
+    bio: 'Una mente lógica e inquieta apasionada por convertir ideas en herramientas digitales reales. El inglés ha sido clave en toda su carrera como programador.',
     fullBio:
-      'Fabián is the engineer who transforms ideas into polished digital products. He designs and develops the web and mobile platforms that connect students with their learning goals — focusing on performance, accessibility, and intuitive design at every step.\n\nWith a deep love for clean code and great UX, Fabián constantly explores the latest technologies to keep the platform modern and reliable. When not coding, he enjoys photography, music, and finding creative solutions to everyday problems.',
+      'Fabián es un inteligente nato con una mente lógica, inquieta y peligrosamente buena para resolver problemas. Es un apasionado del código bien escrito y de convertir ideas en herramientas digitales reales, como este sitio web. Su relación con el inglés también ha sido clave en su carrera como programador, ya que el idioma ha estado presente en gran parte de su crecimiento profesional.\n\nFabián vive en Colombia con su esposa, su hija y su American Bully, Bruno. En su tiempo libre, disfruta estudiar nuevas formas de usar la inteligencia artificial para simplificar su vida y la de otros.',
     highlights: [
+      { label: 'Rol', value: 'Socio Gerente & Dev' },
       { label: 'Stack', value: 'React, TypeScript, Node.js' },
-      { label: 'Platforms', value: 'Web & Mobile' },
-      { label: 'Focus', value: 'Performance & UX' },
+      { label: 'Focus', value: 'Productos digitales' },
     ],
+    functions: [
+      'Fue el primer gran creyente e inversionista de Your English Buddy.',
+      'Desarrolla y mantiene todos los productos digitales: sitio web, app móvil, automatizaciones y pasarelas de pago.',
+      'Genera ideas para llevar la visión de la academia al mundo digital.',
+      'Trabaja para que Your English Buddy sea una comunidad digital cada vez más útil, sólida y valiosa.',
+    ],
+  },
+];
+
+// ─── Pillars data ─────────────────────────────────────────────────────────────
+
+const pillars = [
+  {
+    title: 'No Miedo',
+    desc: 'Eliminamos la barrera del juicio. Aquí el error no es un fallo, es el material de construcción de tu fluidez. Un espacio seguro para soltarte.',
+    icon: (
+      <svg width="26" height="26" viewBox="0 0 26 26" fill="none" aria-hidden="true">
+        <circle cx="13" cy="13" r="9" stroke="currentColor" strokeWidth="1.7" />
+        <path d="M9 13.5C9 13.5 10.5 16 13 16s4-2.5 4-2.5" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" />
+        <circle cx="10" cy="10.5" r="1" fill="currentColor" />
+        <circle cx="16" cy="10.5" r="1" fill="currentColor" />
+      </svg>
+    ),
+  },
+  {
+    title: 'Confianza',
+    desc: 'Te dotamos de las herramientas precisas para que tu voz suene con autoridad, ya sea en una reunión de negocios o en una cena informal.',
+    icon: (
+      <svg width="26" height="26" viewBox="0 0 26 26" fill="none" aria-hidden="true">
+        <path d="M13 3L4 7v6.5C4 19 8.5 22.5 13 24c4.5-1.5 9-5 9-10.5V7L13 3Z" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" />
+        <path d="M9.5 13l2.5 2.5 5-5" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" />
+      </svg>
+    ),
+  },
+  {
+    title: 'Conexión',
+    desc: 'El inglés es solo el medio; el fin es la conexión humana. Aprende a transmitir no solo palabras, sino intenciones y emociones.',
+    icon: (
+      <svg width="26" height="26" viewBox="0 0 26 26" fill="none" aria-hidden="true">
+        <circle cx="8.5" cy="9" r="3" stroke="currentColor" strokeWidth="1.7" />
+        <circle cx="17.5" cy="9" r="3" stroke="currentColor" strokeWidth="1.7" />
+        <path d="M3 21c0-3 2.5-5 5-5h2" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" />
+        <path d="M16 16h2c2.5 0 5 2 5 5" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" />
+        <path d="M13 14v8" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" />
+        <circle cx="13" cy="12" r="2" stroke="currentColor" strokeWidth="1.7" />
+      </svg>
+    ),
   },
 ];
 
@@ -142,23 +209,20 @@ const TeamMemberModal: React.FC<TeamMemberModalProps> = ({ member, onClose, isVi
         className={`${s.tm__container} ${isVisible ? s['tm__container--visible'] : ''}`}
         onClick={(e) => e.stopPropagation()}
       >
-        {/* ── Close button ── */}
         <button className={s.tm__close} onClick={onClose} aria-label="Close">
           <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-            <path d="M1 1L17 17M17 1L1 17" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round"/>
+            <path d="M1 1L17 17M17 1L1 17" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" />
           </svg>
         </button>
 
-        {/* ── Left panel (photo) ── */}
         <div className={s.tm__left}>
-          <img className={s.tm__photo} src={member.imageUrl} alt={member.name} />
+          <BlurImage className={s.tm__photo} src={member.imageUrl} alt={member.name} />
         </div>
 
-        {/* ── Right panel (person info) ── */}
         <div className={s.tm__right}>
           <p className={s.tm__rightEyebrow}>{member.role}</p>
           <h3 className={s.tm__rightHeading}>
-            Meet <span>{firstName}</span>
+            Conoce a <span>{firstName}</span>
           </h3>
           <p className={s.tm__rightName}>{member.name}</p>
 
@@ -176,23 +240,31 @@ const TeamMemberModal: React.FC<TeamMemberModalProps> = ({ member, onClose, isVi
               <p key={i}>{para}</p>
             ))}
           </div>
+
+          {member.functions.length > 0 && (
+            <div className={s.tm__functionsWrap}>
+              <p className={s.tm__functionsTitle}>Rol dentro de la academia</p>
+              <ul className={s.tm__functions}>
+                {member.functions.map((fn, i) => (
+                  <li key={i} className={s.tm__functionItem}>{fn}</li>
+                ))}
+              </ul>
+            </div>
+          )}
         </div>
       </div>
     </div>
   );
 };
 
-// ─────────────────────────────────────────────────────────────────────────────
-
-const INSPIRING_TEXT =
-  '"One of my favorite activities in life is sharing what I know about English and seeing how people progress in their learning journey — because I was also there… and in fact, I\'m still there, since learning a language is a process that never ends."';
-
 // ═════════════════════════════════════════════════════════════════════════════
 // ABOUT PAGE
 // ═════════════════════════════════════════════════════════════════════════════
 
 const AboutPage: React.FC = () => {
-  const { ref: headerRef, ready: headerReady } = useInView({ threshold: 0.1 });
+  const { ref: heroRef, ready: heroReady } = useInView({ threshold: 0.1 });
+  const { ref: missionRef, ready: missionReady } = useInView({ threshold: 0.1 });
+  const { ref: pillarsRef, ready: pillarsReady } = useInView({ threshold: 0.1 });
   const { ref: quoteRef, ready: quoteReady } = useInView({ threshold: 0.2 });
   const { ref: gridRef, ready: gridReady } = useInView({ threshold: 0.1 });
 
@@ -211,114 +283,244 @@ const AboutPage: React.FC = () => {
     setTimeout(() => setActiveMember(null), 350);
   }, []);
 
-  const { displayedText, isComplete } = useTypewriter(
-    INSPIRING_TEXT,
-    22,
-    quoteReady
-  );
-
   return (
     <div className={s.page}>
       <Navbar />
 
       <main className={s.main}>
-        <div className={s.inner}>
 
-          {/* ─── Section header ─── */}
-          <div
-            className={s.header}
-            ref={headerRef as React.RefObject<HTMLDivElement>}
-          >
-            <h1 className={anim(headerReady, 'anim-slide-up', 'delay-100', s.heading)}>
-              Meet our{' '}
-              <span className={s.headingAccent}>team</span>
-            </h1>
-            <p className={anim(headerReady, 'anim-slide-up', 'delay-200', s.subtitle)}>
-              The people behind Your English Buddy who make it all possible.
-            </p>
-          </div>
-
-          {/* ─── Inspiring quote with typewriter ─── */}
-          <div
-            className={s.quoteSection}
-            ref={quoteRef as React.RefObject<HTMLDivElement>}
-          >
-            <div className={anim(quoteReady, 'anim-fade-scale', 'delay-0', s.quoteCard)}>
-              <p className={s.quoteText}>
-                {displayedText}
-                <span
-                  className={`${s.cursor} ${isComplete ? s['cursor--hidden'] : ''}`}
-                  aria-hidden="true"
-                />
+        {/* ─── Hero Section ─── */}
+        <section
+          className={s.heroSection}
+          ref={heroRef as React.RefObject<HTMLElement>}
+        >
+          <div className={s.heroInner}>
+            <div className={s.heroLeft}>
+              <h1 className={anim(heroReady, 'anim-slide-right', 'delay-0', s.heroTitle)}>
+                La maestría del inglés,{' '}
+                <span className={s.heroTitleItalic}>con alma humana.</span>
+              </h1>
+              <p className={anim(heroReady, 'anim-slide-up', 'delay-100', s.heroSubtitle)}>
+                Mucho más que una academia. Un santuario de aprendizaje donde la conexión
+                trasciende las reglas gramaticales para dar voz a tu verdadero yo.
               </p>
-              <div className={s.quoteAuthor}>
-                <span className={s.quoteAuthorLine} />
-                <span className={s.quoteAuthorName}>Fabio Pernía</span>
-                <span className={s.quoteAuthorRole}>· Founder & CEO</span>
+              <div className={anim(heroReady, 'anim-slide-up', 'delay-200', s.heroCtas)}>
+                <button className={s.heroCta}>
+                  Empieza mi viaje
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                    <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                </button>
+                <button className={s.heroCtaAlt}>Saber más</button>
+              </div>
+            </div>
+
+            <div className={anim(heroReady, 'anim-fade-scale', 'delay-100', s.heroRight)}>
+              <div className={s.heroImgWrap}>
+                <BlurImage
+                  className={s.heroImg}
+                  src={phraseImage}
+                  alt="Ambiente de aprendizaje de inglés"
+                />
+              </div>
+              <div className={s.heroFloatCard}>
+                <p className={s.heroFloatCardQuote}>
+                  "El lenguaje es la única cosa que vale la pena conocer incluso de manera pobre."
+                </p>
+                <p className={s.heroFloatCardCite}>Kató Lomb · Polyglot</p>
               </div>
             </div>
           </div>
+        </section>
 
-          {/* ─── Team cards ─── */}
-          <h2 className={anim(gridReady, 'anim-slide-up', 'delay-0', s.teamHeading)}>
-            The people behind the{' '}
-            <span>mission</span>
-          </h2>
+        {/* ─── Mission Section ─── */}
+        <section
+          className={s.missionSection}
+          ref={missionRef as React.RefObject<HTMLElement>}
+        >
+          <div className={s.missionInner}>
+            <div className={s.missionGrid}>
+              <div className={anim(missionReady, 'anim-fade-scale', 'delay-0', s.missionImgCol)}>
+                <div className={s.missionImgBg} />
+                <BlurImage
+                  className={s.missionImg}
+                  src={techHuman}
+                  alt="Conexión humana en el aprendizaje"
+                />
+              </div>
 
-          <div
-            className={s.grid}
-            ref={gridRef as React.RefObject<HTMLDivElement>}
-          >
-            {teamMembers.map((member, i) => (
-              <div
-                key={member.name}
-                className={anim(gridReady, 'anim-fade-scale', `delay-${(i + 1) * 100}`)}
-              >
-                <div
-                  className={s.card}
-                  onClick={() => openModal(member)}
-                  role="button"
-                  tabIndex={0}
-                  aria-label={`Learn more about ${member.name}`}
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter' || e.key === ' ') {
-                      e.preventDefault();
-                      openModal(member);
-                    }
-                  }}
-                >
-                  {/* Radial glow behind avatar */}
-                  <div className={s.card__glow} />
-
-                  {/* Avatar */}
-                  <div className={s.card__avatarWrap}>
-                    <img className={s.card__avatar} src={member.imageUrl} alt={member.name} />
-                  </div>
-
-                  {/* Glass overlay */}
-                  <div className={s.card__overlay}>
-                    <h3 className={s.card__name}>{member.name}</h3>
-                    <p className={s.card__role}>{member.role}</p>
-                    <p className={s.card__bio}>{member.bio}</p>
-                    <div className={s.card__cta}>
-                      <span>View profile</span>
-                      <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-                        <path d="M1 7h12M7 1l6 6-6 6" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
-                      </svg>
-                    </div>
-                  </div>
-
+              <div className={s.missionTextCol}>
+                <span className={anim(missionReady, 'anim-slide-up', 'delay-100', s.missionEyebrow)}>
+                  Nuestra Misión
+                </span>
+                <h2 className={anim(missionReady, 'anim-slide-up', 'delay-200', s.missionTitle)}>
+                  Humanizando el aprendizaje en la era digital.
+                </h2>
+                <div className={anim(missionReady, 'anim-slide-up', 'delay-300', s.missionTextBlock)}>
+                  <p>
+                    En un mundo saturado de aplicaciones automáticas y correcciones frías,
+                    nosotros elegimos el camino de la empatía. Creemos que aprender un idioma
+                    es, ante todo, un acto de vulnerabilidad y valentía.
+                  </p>
+                  <p>
+                    Nuestro enfoque no se basa en la repetición mecánica, sino en la
+                    construcción de un puente real entre tu cultura y el mundo anglosajón,
+                    guiado por personas que entienden que detrás de cada error hay un
+                    intento de conexión.
+                  </p>
+                  <p>
+                    Your English Buddy fue creada por personas que también estuvieron en ese
+                    lugar de duda, frustración e inseguridad. Porque aprender un idioma no
+                    debería sentirse como una presión constante, sino como una experiencia
+                    profundamente transformadora.
+                  </p>
                 </div>
               </div>
-            ))}
+            </div>
           </div>
+        </section>
 
+        {/* ─── Pillars Section ─── */}
+        <section
+          className={s.pillarsSection}
+          ref={pillarsRef as React.RefObject<HTMLElement>}
+        >
+          <div className={s.pillarsInner}>
+            {/* Header — split two-column */}
+            <div className={anim(pillarsReady, 'anim-slide-up', 'delay-0', s.pillarsHeader)}>
+              <div className={s.pillarsHeaderLeft}>
+                <span className={s.pillarsEyebrow}>Metodología de Vanguardia</span>
+                <h2 className={s.pillarsTitle}>
+                  Los tres pilares de{' '}
+                  <br />
+                  <span className={s.pillarsTitleItalic}>tu evolución personal.</span>
+                </h2>
+              </div>
+              <div className={s.pillarsHeaderRight}>
+                <div className={s.pillarsHeaderDivider} />
+                <p className={s.pillarsHeaderDesc}>
+                  Un enfoque tridimensional diseñado para transformar el conocimiento
+                  en expresión auténtica.
+                </p>
+              </div>
+            </div>
+
+            {/* Cards — asymmetric 4/5/3 bento */}
+            <div className={s.pillarsGrid}>
+
+              {/* Card 1 – No Miedo */}
+              <div className={anim(pillarsReady, 'anim-fade-scale', 'delay-100', s.pillarCard)}>
+                <span className={s.pillarBgNumber} aria-hidden="true">01</span>
+                <div className={s.pillarIconOrg1}>
+                  {pillars[0].icon}
+                </div>
+                <h3 className={s.pillarCardTitle}>
+                  No <span className={s.pillarCardTitleItalic}>Miedo</span>
+                </h3>
+                <p className={s.pillarDesc}>{pillars[0].desc}</p>
+              </div>
+
+              {/* Card 2 – Confianza (accent) */}
+              <div className={anim(pillarsReady, 'anim-fade-scale', 'delay-200', `${s.pillarCard} ${s.pillarCard__accent}`)}>
+                <span className={`${s.pillarBgNumber} ${s.pillarBgNumber__accent}`} aria-hidden="true">02</span>
+                <div className={s.pillarIconOrg2}>
+                  {pillars[1].icon}
+                </div>
+                <h3 className={`${s.pillarCardTitle} ${s.pillarCardTitle__accent}`}>
+                  La <span className={s.pillarCardTitleItalic}>Confianza</span>
+                </h3>
+                <p className={`${s.pillarDesc} ${s.pillarDesc__accent}`}>{pillars[1].desc}</p>
+              </div>
+
+              {/* Card 3 – Conexión */}
+              <div className={anim(pillarsReady, 'anim-fade-scale', 'delay-300', `${s.pillarCard} ${s.pillarCard__light}`)}>
+                <span className={s.pillarBgNumber} aria-hidden="true">03</span>
+                <div className={s.pillarIconOrg3}>
+                  {pillars[2].icon}
+                </div>
+                <h3 className={s.pillarCardTitle}>
+                  Conexión <br />
+                  <span className={s.pillarCardTitleItalic}>Humana</span>
+                </h3>
+                <p className={s.pillarDesc}>{pillars[2].desc}</p>
+              </div>
+
+            </div>
+          </div>
+        </section>
+
+        {/* ─── Quote Section ─── */}
+        <section
+          className={s.quoteSection}
+          ref={quoteRef as React.RefObject<HTMLElement>}
+        >
+          <div className={anim(quoteReady, 'anim-fade-scale', 'delay-0', s.quoteWrapper)}>
+            <span className={s.quoteIcon} aria-hidden="true">"</span>
+            <blockquote className={s.quoteBlockquote}>
+              Language is the only thing{' '}
+              <span className={s.quoteHighlight}>worth knowing</span>{' '}
+              even poorly.
+            </blockquote>
+            <cite className={s.quoteCite}>— Kató Lomb, Polyglot Mastery</cite>
+          </div>
+        </section>
+
+        {/* ─── Team section ─── */}
+        <div className={s.teamSection}>
+          <div className={s.inner}>
+            <h2 className={anim(gridReady, 'anim-slide-up', 'delay-0', s.teamHeading)}>
+              Las grandes mentes detrás de{' '}
+              <span>Your English Buddy</span>
+            </h2>
+
+            <div
+              className={s.grid}
+              ref={gridRef as React.RefObject<HTMLDivElement>}
+            >
+              {teamMembers.map((member, i) => (
+                <div
+                  key={member.name}
+                  className={anim(gridReady, 'anim-fade-scale', `delay-${(i + 1) * 100}`)}
+                >
+                  <div
+                    className={s.card}
+                    onClick={() => openModal(member)}
+                    role="button"
+                    tabIndex={0}
+                    aria-label={`Conocer más sobre ${member.name}`}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        openModal(member);
+                      }
+                    }}
+                  >
+                    <div className={s.card__glow} />
+                    <div className={s.card__avatarWrap}>
+                      <BlurImage className={s.card__avatar} src={member.imageUrl} alt={member.name} />
+                    </div>
+                    <div className={s.card__overlay}>
+                      <h3 className={s.card__name}>{member.name}</h3>
+                      <p className={s.card__role}>{member.role}</p>
+                      <p className={s.card__bio}>{member.bio}</p>
+                      <div className={s.card__cta}>
+                        <span>Ver perfil</span>
+                        <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                          <path d="M1 7h12M7 1l6 6-6 6" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+                        </svg>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
+
       </main>
 
       <Footer />
 
-      {/* ─── Team member modal ─── */}
       {activeMember && (
         <TeamMemberModal
           member={activeMember}

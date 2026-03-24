@@ -1,6 +1,5 @@
 // ═══════════════════════════════════════════════════════════════════════════════
-// ABOUT PAGE – Light theme (matching site palette), typewriter quote,
-//              glass-style team cards
+// ABOUT PAGE – Hero · Mission · Pillars · Quote · Team
 // ═══════════════════════════════════════════════════════════════════════════════
 
 @use "sass:color";
@@ -27,11 +26,8 @@ $font-heading: 'Poppins', sans-serif;
   flex-direction: column;
 }
 
-// ─── Main content area ────────────────────────────────────────────────────────
-
 .main {
   flex: 1;
-  padding: 72px 0 96px;
 }
 
 .inner {
@@ -40,157 +36,561 @@ $font-heading: 'Poppins', sans-serif;
   padding: 0 32px;
 }
 
-// ─── Section header ───────────────────────────────────────────────────────────
+// ─── Hero Section ─────────────────────────────────────────────────────────────
 
-.header {
-  text-align: center;
-  margin-bottom: 64px;
-}
+.heroSection {
+  padding: 72px 0 96px;
 
-.badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  background: $teal-lightest;
-  border: 1px solid rgba($teal-primary, 0.18);
-  border-radius: 100px;
-  padding: 6px 16px;
-  font-size: 0.78rem;
-  font-weight: 600;
-  color: $teal-primary;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  margin-bottom: 24px;
-
-  &__dot {
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background: $teal-primary;
-    flex-shrink: 0;
+  @media (max-width: 767px) {
+    padding: 48px 0 64px;
   }
 }
 
-.heading {
+.heroInner {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 0 32px;
+  display: grid;
+  grid-template-columns: 7fr 5fr;
+  gap: 72px;
+  align-items: center;
+
+  @media (max-width: 1024px) {
+    grid-template-columns: 1fr;
+    gap: 48px;
+  }
+}
+
+.heroLeft {
+  // intentionally blank
+}
+
+.heroTitle {
   font-family: $font-heading;
-  font-size: 3rem;
+  font-size: clamp(2.6rem, 4.5vw, 5rem);
   font-weight: 800;
   color: $navy;
-  line-height: 1.15;
-  margin-bottom: 16px;
+  line-height: 1.08;
+  margin-bottom: 24px;
+}
 
-  &Accent {
-    color: $teal-primary;
-    font-style: italic;
+.heroTitleItalic {
+  font-style: italic;
+  font-weight: 300;
+  color: $teal-primary;
+}
+
+.heroSubtitle {
+  font-size: 1.1rem;
+  line-height: 1.8;
+  color: $text-secondary;
+  max-width: 520px;
+  margin-bottom: 40px;
+}
+
+.heroCtas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+}
+
+.heroCta {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: $teal-primary;
+  color: white;
+  border: none;
+  padding: 14px 28px;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 8px 24px rgba($teal-primary, 0.25);
+
+  &:hover {
+    transform: scale(0.98);
+    box-shadow: 0 14px 32px rgba($teal-primary, 0.32);
   }
 }
 
-.subtitle {
+.heroCtaAlt {
+  display: inline-flex;
+  align-items: center;
+  background: $teal-lightest;
+  color: $teal-primary;
+  border: 1px solid rgba($teal-primary, 0.22);
+  padding: 14px 28px;
+  border-radius: 8px;
   font-size: 1rem;
-  line-height: 1.7;
-  color: $text-secondary;
-  max-width: 560px;
-  margin: 0 auto;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s ease, border-color 0.2s ease;
+
+  &:hover {
+    background: $teal-light;
+    border-color: rgba($teal-primary, 0.35);
+  }
 }
 
-// ─── Inspiring quote / typewriter block ───────────────────────────────────────
-
-.quoteSection {
-  margin-bottom: 80px;
-}
-
-.quoteCard {
+.heroRight {
   position: relative;
+  padding-bottom: 48px; // space for float card
+
+  @media (max-width: 1024px) {
+    padding-bottom: 0;
+  }
+}
+
+.heroImgWrap {
+  aspect-ratio: 4 / 5;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 24px 64px rgba($teal-deeper, 0.22);
+  transform: rotate(2deg);
+  transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+
+  &:hover {
+    transform: rotate(0deg);
+  }
+}
+
+.heroImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.heroFloatCard {
+  position: absolute;
+  bottom: 0;
+  left: -36px;
   background: white;
   border: 1px solid $border-color;
-  border-left: 4px solid $teal-primary;
-  border-radius: 0 20px 20px 0;
-  padding: 52px 56px;
-  overflow: hidden;
-  max-width: 900px;
-  margin: 0 auto;
-  box-shadow: 0 4px 24px rgba($teal-primary, 0.07),
-              0 1px 4px rgba(0, 0, 0, 0.04);
+  border-radius: 16px;
+  padding: 22px 26px;
+  max-width: 290px;
+  box-shadow: 0 16px 48px rgba($navy, 0.1);
 
-  &::before {
-    content: '\201C';
-    position: absolute;
-    top: -20px;
-    left: 40px;
-    font-size: 9rem;
-    font-family: Georgia, serif;
-    color: rgba($teal-primary, 0.08);
-    line-height: 1;
-    pointer-events: none;
-    user-select: none;
+  @media (max-width: 1200px) {
+    left: -16px;
+    max-width: 260px;
   }
 
-  &::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    right: 0;
-    width: 220px;
-    height: 220px;
-    background: radial-gradient(circle, rgba($teal-light, 0.35) 0%, transparent 70%);
-    pointer-events: none;
+  @media (max-width: 1024px) {
+    display: none;
   }
 }
 
-.quoteText {
-  position: relative;
-  z-index: 2;
-  font-size: 1.2rem;
-  line-height: 1.85;
-  color: $navy;
+.heroFloatCardQuote {
+  font-family: Georgia, serif;
   font-style: italic;
-  font-weight: 400;
-  min-height: 4.5em;
+  font-size: 0.88rem;
+  line-height: 1.65;
+  color: $teal-primary;
+  margin-bottom: 12px;
 }
 
-.cursor {
-  display: inline-block;
-  width: 2px;
-  height: 1.1em;
-  background: $teal-primary;
-  margin-left: 2px;
-  vertical-align: text-bottom;
-  border-radius: 1px;
-  animation: blink 0.9s step-end infinite;
+.heroFloatCardCite {
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: $text-muted;
+}
 
-  &--hidden {
-    opacity: 0;
+// ─── Mission Section ──────────────────────────────────────────────────────────
+
+.missionSection {
+  background: $teal-lightest;
+  padding: 96px 0;
+  overflow: hidden;
+}
+
+.missionInner {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 0 32px;
+}
+
+.missionGrid {
+  display: grid;
+  grid-template-columns: 4fr 5fr;
+  gap: 88px;
+  align-items: center;
+
+  @media (max-width: 1024px) {
+    grid-template-columns: 1fr;
+    gap: 40px;
   }
 }
 
-.quoteAuthor {
+.missionImgCol {
   position: relative;
-  z-index: 2;
+  group: image;
+}
+
+.missionImgBg {
+  position: absolute;
+  top: -48px;
+  left: -48px;
+  width: calc(100% + 96px);
+  height: calc(100% + 96px);
+  background: radial-gradient(circle, rgba($teal-primary, 0.06) 0%, transparent 65%);
+  border-radius: 50%;
+  pointer-events: none;
+  transition: background 0.4s ease;
+}
+
+.missionImg {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: cover;
+  border-radius: 20px;
+  box-shadow: 0 20px 56px rgba($teal-deeper, 0.16);
+  display: block;
+}
+
+.missionTextCol {
+  // intentionally blank
+}
+
+.missionEyebrow {
+  display: block;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: $text-secondary;
+  margin-bottom: 18px;
+}
+
+.missionTitle {
+  font-family: $font-heading;
+  font-size: clamp(1.8rem, 2.4vw, 2.6rem);
+  font-weight: 800;
+  color: $navy;
+  line-height: 1.18;
+  margin-bottom: 28px;
+}
+
+.missionTextBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+
+  p {
+    font-size: 1rem;
+    line-height: 1.82;
+    color: $text-secondary;
+  }
+}
+
+// ─── Pillars Section ──────────────────────────────────────────────────────────
+
+.pillarsSection {
+  padding: 112px 0;
+  background: #F8FAFC;
+  overflow: hidden;
+}
+
+.pillarsInner {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 0 32px;
+}
+
+// ── Split header ──
+
+.pillarsHeader {
+  display: grid;
+  grid-template-columns: 8fr 4fr;
+  gap: 48px;
+  align-items: flex-end;
+  margin-bottom: 64px;
+
+  @media (max-width: 900px) {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+}
+
+.pillarsHeaderLeft {
+  // intentionally blank
+}
+
+.pillarsEyebrow {
+  display: block;
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.28em;
+  color: $teal-primary;
+  margin-bottom: 16px;
+}
+
+.pillarsTitle {
+  font-family: $font-heading;
+  font-size: clamp(2.2rem, 4vw, 3.8rem);
+  font-weight: 800;
+  color: $navy;
+  line-height: 1.1;
+}
+
+.pillarsTitleItalic {
+  font-weight: 300;
+  font-style: italic;
+  color: $teal-primary;
+}
+
+.pillarsHeaderRight {
+  @media (max-width: 900px) {
+    display: none;
+  }
+}
+
+.pillarsHeaderDivider {
+  width: 100%;
+  height: 1px;
+  background: rgba($border-color, 0.6);
+  margin-bottom: 24px;
+}
+
+.pillarsHeaderDesc {
+  font-size: 1rem;
+  line-height: 1.75;
+  color: $text-secondary;
+  text-align: right;
+}
+
+// ── Asymmetric bento grid ──
+
+.pillarsGrid {
+  display: grid;
+  grid-template-columns: 4fr 5fr 3fr;
+  gap: 20px;
+  align-items: stretch;
+
+  @media (max-width: 900px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+// ── Base card ──
+
+.pillarCard {
+  position: relative;
+  background: #F0F4F5;
+  border: 1px solid rgba($border-color, 0.5);
+  border-radius: 40px;
+  padding: 48px 40px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+              box-shadow 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+
+  &:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 24px 64px rgba($teal-deeper, 0.1);
+  }
+
+  // ── Accent variant (card 2) ──
+  &__accent {
+    background: $teal-deeper;
+    border-color: rgba(255, 255, 255, 0.08);
+    box-shadow: 0 24px 56px rgba($teal-deeper, 0.25);
+
+    &:hover {
+      box-shadow: 0 32px 80px rgba($teal-deeper, 0.35);
+    }
+  }
+
+  // ── Light variant (card 3) ──
+  &__light {
+    background: rgba(#E5E2DE, 0.3);
+    border-color: rgba($teal-primary, 0.12);
+  }
+}
+
+// ── Watermark number ──
+
+.pillarBgNumber {
+  position: absolute;
+  right: -8px;
+  top: -24px;
+  font-family: $font-heading;
+  font-size: 10rem;
+  font-weight: 800;
+  font-style: italic;
+  color: rgba($teal-primary, 0.05);
+  line-height: 1;
+  pointer-events: none;
+  user-select: none;
+
+  &__accent {
+    color: rgba(255, 255, 255, 0.05);
+    bottom: -24px;
+    top: auto;
+    right: -8px;
+    font-size: 11rem;
+  }
+}
+
+// ── Organic icon containers ──
+
+%pillarIconBase {
+  width: 72px;
+  height: 72px;
   display: flex;
   align-items: center;
-  gap: 14px;
-  margin-top: 28px;
+  justify-content: center;
+  margin-bottom: 40px;
+  position: relative;
+  z-index: 1;
+  color: $teal-primary;
+  transition: transform 0.5s ease, background 0.4s ease, color 0.4s ease;
+}
 
-  &Line {
-    width: 32px;
-    height: 2px;
+.pillarIconOrg1 {
+  @extend %pillarIconBase;
+  background: rgba($teal-primary, 0.1);
+  border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+
+  .pillarCard:hover & {
     background: $teal-primary;
-    border-radius: 1px;
+    color: white;
+    transform: rotate(12deg);
   }
+}
 
-  &Name {
-    font-family: $font-heading;
-    font-size: 0.9rem;
-    font-weight: 700;
-    color: $teal-primary;
-    letter-spacing: 0.03em;
-  }
+.pillarIconOrg2 {
+  @extend %pillarIconBase;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 30% 70% 70% 30% / 50% 60% 40% 50%;
+  color: white;
+  backdrop-filter: blur(8px);
 
-  &Role {
-    font-size: 0.82rem;
-    color: $text-secondary;
-    margin-left: 4px;
+  .pillarCard__accent:hover & {
+    background: $lime-accent;
+    color: $teal-deeper;
+    transform: scale(1.1);
   }
+}
+
+.pillarIconOrg3 {
+  @extend %pillarIconBase;
+  width: 60px;
+  height: 60px;
+  background: rgba($teal-primary, 0.08);
+  border-radius: 50% 50% 30% 70% / 50% 50% 70% 30%;
+  margin-bottom: 32px;
+
+  .pillarCard:hover & {
+    background: $teal-primary;
+    color: white;
+    transform: scale(1.1);
+  }
+}
+
+// ── Card text ──
+
+.pillarCardTitle {
+  font-family: $font-heading;
+  font-size: clamp(1.8rem, 2.2vw, 2.4rem);
+  font-weight: 800;
+  color: $navy;
+  margin-bottom: 20px;
+  line-height: 1.1;
+  position: relative;
+  z-index: 1;
+
+  &__accent {
+    font-size: clamp(2rem, 2.8vw, 3rem);
+    color: white;
+  }
+}
+
+.pillarCardTitleItalic {
+  font-weight: 300;
+  font-style: italic;
+}
+
+.pillarDesc {
+  font-size: 0.95rem;
+  line-height: 1.8;
+  color: $text-secondary;
+  position: relative;
+  z-index: 1;
+
+  &__accent {
+    color: rgba(#9fcee0, 0.85);
+    font-size: 1.05rem;
+  }
+}
+
+// ─── Quote Section ────────────────────────────────────────────────────────────
+
+.quoteSection {
+  padding: 120px 0;
+  background: $teal-deeper;
+  overflow: hidden;
+  position: relative;
+}
+
+.quoteWrapper {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 0 32px;
+  text-align: center;
+  position: relative;
+  z-index: 1;
+}
+
+.quoteIcon {
+  display: block;
+  font-family: Georgia, serif;
+  font-size: 7rem;
+  line-height: 0.8;
+  color: $teal-light;
+  opacity: 0.3;
+  margin-bottom: 20px;
+  user-select: none;
+}
+
+.quoteBlockquote {
+  font-family: $font-heading;
+  font-size: clamp(1.6rem, 3vw, 3.2rem);
+  font-weight: 700;
+  color: white;
+  line-height: 1.32;
+  margin: 0 0 32px;
+}
+
+.quoteHighlight {
+  font-style: italic;
+  color: $lime-accent;
+}
+
+.quoteCite {
+  display: block;
+  font-size: 0.76rem;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba($teal-light, 0.55);
+  font-style: normal;
+}
+
+// ─── Team section wrapper ─────────────────────────────────────────────────────
+
+.teamSection {
+  padding: 96px 0 96px;
 }
 
 // ─── Team heading ─────────────────────────────────────────────────────────────
@@ -268,7 +668,6 @@ $font-heading: 'Poppins', sans-serif;
   border: 3px solid rgba(255, 255, 255, 0.18);
 }
 
-// Radial glow behind the avatar
 .card__glow {
   position: absolute;
   top: 0;
@@ -281,7 +680,6 @@ $font-heading: 'Poppins', sans-serif;
   z-index: 1;
 }
 
-// Glass overlay at the bottom
 .card__overlay {
   position: absolute;
   bottom: 0;
@@ -320,9 +718,6 @@ $font-heading: 'Poppins', sans-serif;
   line-height: 1.6;
   color: rgba(255, 255, 255, 0.55);
 }
-
-
-// ─── Card CTA link ────────────────────────────────────────────────────────────
 
 .card__cta {
   display: inline-flex;
@@ -410,8 +805,6 @@ $font-heading: 'Poppins', sans-serif;
     }
   }
 
-  // ── Close button ──
-
   &__close {
     position: absolute;
     top: 14px;
@@ -436,8 +829,6 @@ $font-heading: 'Poppins', sans-serif;
       transform: scale(1.08);
     }
   }
-
-  // ── Left panel ──
 
   &__left {
     flex: 0 0 46%;
@@ -493,8 +884,6 @@ $font-heading: 'Poppins', sans-serif;
     font-weight: 600;
     color: $teal-deeper;
   }
-
-  // ── Right panel ──
 
   &__right {
     flex: 1;
@@ -556,11 +945,44 @@ $font-heading: 'Poppins', sans-serif;
       color: $text-secondary;
     }
   }
-}
 
-// ─── Keyframes ────────────────────────────────────────────────────────────────
+  &__functionsWrap {
+    margin-top: 20px;
+    padding-top: 18px;
+    border-top: 1px solid $border-color;
+  }
 
-@keyframes blink {
-  0%, 100% { opacity: 1; }
-  50%       { opacity: 0; }
+  &__functionsTitle {
+    font-size: 0.68rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: rgba($teal-primary, 0.72);
+    margin-bottom: 10px;
+  }
+
+  &__functions {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  &__functionItem {
+    font-size: 0.86rem;
+    line-height: 1.55;
+    color: $text-secondary;
+    padding-left: 16px;
+    position: relative;
+
+    &::before {
+      content: '→';
+      position: absolute;
+      left: 0;
+      color: $teal-primary;
+      font-size: 0.75rem;
+    }
+  }
 }
