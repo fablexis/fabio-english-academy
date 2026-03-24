@@ -24,31 +24,52 @@ interface FeatureCard {
   icon: React.ReactNode;
   title: string;
   description: string;
-  image?: boolean; // which card shows the image when expanded
+  hoverItems?: string[];
+  image?: boolean;
 }
 
 const features: FeatureCard[] = [
   {
     id: 1,
     icon: <MonitorSmartphone size={36} color="#C8E47C" />,
-    title: 'Flexible, On-Demand Learning',
-    description:
-      'Access courses anytime, anywhere, on any device, and learn at your own pace.',
+    title: 'Clases en línea y personalizadas.',
+    description: 'Aprende en línea con clases dinámicas y personalizadas.',
+    hoverItems: [
+      'Clases en vivo a través de Zoom.',
+      'Adaptadas a tu nivel, tus objetivos y tu ritmo de aprendizaje.',
+      'Accede desde cualquier lugar, en cualquier momento y desde cualquier dispositivo.',
+      'Aprende de forma práctica, cómoda y enfocada en tus necesidades reales.',
+      'Tus 8 clases incluyen una sesión adicional de 40 minutos sin costo extra.',
+      'Esa sesión está dedicada exclusivamente a resolver dudas de gramática y vocabulario.',
+    ],
     image: true,
   },
   {
     id: 2,
     icon: <GraduationCap size={36} color="#C8E47C" />,
-    title: 'Expert Instructors',
-    description:
-      'Learn from industry leaders and professionals who provide real-world knowledge to enhance your skills.',
+    title: 'Material de apoyo a tu disposición.',
+    description: 'Accede a guías y recursos para seguir practicando fuera de clase.',
+    hoverItems: [
+      'Tendrás acceso a guías, materiales y recursos de apoyo.',
+      'Todo está pensado para reforzar lo aprendido en cada sesión.',
+      'Podrás repasar y practicar fuera del horario de clases.',
+      'Te ayudará a ganar más seguridad y claridad con el inglés.',
+      'Mantendrás un progreso más constante, organizado y estructurado.',
+    ],
   },
   {
     id: 3,
     icon: <BadgeDollarSign size={36} color="#C8E47C" />,
-    title: 'Affordable and Accessible Education',
-    description:
-      'Enjoy affordable, high-quality courses with no hidden fees & certificates to boost your career.',
+    title: 'Forma parte de una comunidad activa.',
+    description: 'Forma parte de un espacio donde seguirás en contacto con el inglés cada día.',
+    hoverItems: [
+      'Tendrás acceso a una comunidad de WhatsApp exclusiva para estudiantes.',
+      'Comparto tips, ejercicios, explicaciones y material extra de apoyo.',
+      'También recibirás información sobre fechas de clubes de conversación.',
+      'Formarás parte de un grupo especialmente diseñado para practicar tu writing.',
+      'Es un espacio dinámico, cercano y hasta divertido, donde incluso compartimos memes.',
+      'Así, el inglés se convierte en parte de tu rutina diaria.',
+    ],
   },
 ];
 
@@ -73,11 +94,12 @@ const WhyChooseUs: React.FC = () => {
       <div className={s.why__inner}>
         {/* Header */}
         <h2 className={anim(ready, 'anim-slide-up', 'delay-0', s.why__heading)}>
-          Why choose <span className={s.why__headingAccent}>Your English Buddy</span>
+          ¿Por qué elegir <span className={s.why__headingAccent}>Your English Buddy</span>?
         </h2>
         <p className={anim(ready, 'anim-slide-up', 'delay-100', s.why__subtitle)}>
-          We provide expert-designed courses, flexible learning, exceptional support,
-          innovative tools, and a quality learning experience.
+          Aprenderás a desenvolverte con frases y estructuras que muchas academias y libros
+          tradicionales no suelen enseñar, convirtiendo tu inglés en un espacio seguro desde
+          el cual puedas expresarte y proyectarte con confianza en todos los ámbitos de tu vida.
         </p>
 
         {/* Cards row */}
@@ -113,7 +135,15 @@ const WhyChooseUs: React.FC = () => {
                       <span className={s.why__cardChipIcon}>{feat.icon}</span>
                       <div>
                         <h3 className={s.why__cardChipTitle}>{feat.title}</h3>
-                        <p className={s.why__cardChipDesc}>{feat.description}</p>
+                        {feat.hoverItems ? (
+                          <ul className={s.why__cardChipList}>
+                            {feat.hoverItems.map((item, i) => (
+                              <li key={i} className={s.why__cardChipListItem}>{item}</li>
+                            ))}
+                          </ul>
+                        ) : (
+                          <p className={s.why__cardChipDesc}>{feat.description}</p>
+                        )}
                       </div>
                     </div>
                   ) : (

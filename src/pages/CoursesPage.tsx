@@ -17,33 +17,33 @@ import s from '../styles/CoursesPage.module.scss';
 const perks = [
   {
     icon: <UserRound size={26} />,
-    title: 'Personalized Classes',
-    desc: 'Every lesson is tailored to your goals, level, and learning style — no cookie-cutter curriculum.',
+    title: 'Clases personalizadas',
+    desc: 'Cada clase está adaptada a tus objetivos, nivel y estilo de aprendizaje, sin un programa genérico.',
   },
   {
     icon: <BookOpen size={26} />,
-    title: 'Special Study Material',
-    desc: 'Custom-made resources adapted specifically for you, so you study smarter, not harder.',
+    title: 'Material de estudio especial',
+    desc: 'Recursos hechos a medida y adaptados especialmente para ti, para que estudies de forma más inteligente.',
   },
   {
     icon: <MessageCircle size={26} />,
-    title: 'Community Access',
-    desc: 'Join exclusive WhatsApp groups where I share daily tips, vocabulary, and real-life expressions.',
+    title: 'Acceso a la comunidad',
+    desc: 'Únete a grupos exclusivos de WhatsApp donde comparto tips diarios, vocabulario y expresiones reales.',
   },
   {
     icon: <Smartphone size={26} />,
-    title: 'Mobile App — Coming Soon',
-    desc: 'We\'re building a dedicated app for iOS & Android so you can practice and learn anywhere, anytime.',
-    badge: 'Coming Soon',
+    title: 'App móvil — Próximamente',
+    desc: 'Estamos desarrollando una app para iOS y Android para que puedas practicar y aprender desde cualquier lugar.',
+    badge: 'Próximamente',
   },
 ];
 
 // ── Levels guide ─────────────────────────────────────────────────────────────
 
 const levels = [
-  { label: 'A1 – A2', name: 'Beginner', desc: 'No prior English needed. Build your foundation from day one.' },
-  { label: 'B1 – B2', name: 'Intermediate', desc: 'You understand basics and want to speak with real confidence.' },
-  { label: 'C1 – C2', name: 'Advanced', desc: 'Polish your fluency, master nuance, and prepare for top-tier exams.' },
+  { label: 'A1 – A2', name: 'Principiante', desc: 'Sin experiencia previa. Construye tus bases desde el primer día.' },
+  { label: 'B1 – B2', name: 'Intermedio', desc: 'Entiendes lo básico y quieres hablar con verdadera confianza.' },
+  { label: 'C1 – C2', name: 'Avanzado', desc: 'Perfecciona tu fluidez, domina los matices y prepárate para exámenes de alto nivel.' },
 ];
 
 // ═════════════════════════════════════════════════════════════════════════════
@@ -59,13 +59,14 @@ const CoursesPage: React.FC = () => {
           <div className={s.hero__inner}>
             <div className={s.hero__content}>
               <h1 id="courses-hero-title" className={s.hero__title}>
-                Find the course that fits{' '}
-                <span className={s.hero__titleAccent}>your English goal</span>
+                Encuentra el curso ideal para{' '}
+                <span className={s.hero__titleAccent}>tu camino con el inglés</span>
               </h1>
               <p className={s.hero__subtitle}>
-                From everyday conversation to professional business English and
-                exam preparation — structured courses taught by experts, designed
-                to get you results fast.
+                Desde conversaciones cotidianas hasta situaciones profesionales,
+                nuestros cursos están diseñados para ofrecerte una experiencia
+                práctica, personalizada y enfocada en ayudarte a comunicarte con
+                más claridad, seguridad y confianza.
               </p>
             </div>
 
@@ -92,10 +93,10 @@ const CoursesPage: React.FC = () => {
         {/* ── What's included ──────────────────────────────────────────────── */}
         <section className={s.perks} aria-labelledby="perks-title">
           <div className={s.perks__inner}>
-            <p className={s.perks__kicker}>Every course includes</p>
+            <p className={s.perks__kicker}>Cada curso incluye</p>
             <h2 id="perks-title" className={s.perks__title}>
-              Everything you need to{' '}
-              <span className={s.perks__titleAccent}>succeed</span>
+              Todo lo que necesitas para{' '}
+              <span className={s.perks__titleAccent}>lograrlo</span>
             </h2>
             <div className={s.perks__grid}>
               {perks.map((perk) => (
@@ -119,20 +120,20 @@ const CoursesPage: React.FC = () => {
           <div className={s.cta__inner}>
             <span className={s.cta__badge} aria-hidden="true">
               <CalendarCheck size={15} />
-              15-minute diagnostic call
+              Llamada diagnóstica de 15 minutos
             </span>
             <h2 id="cta-title" className={s.cta__title}>
-              Ready to start speaking English<br />
-              <span className={s.cta__titleAccent}>with confidence?</span>
+              ¿Listo para empezar a hablar inglés<br />
+              <span className={s.cta__titleAccent}>con confianza?</span>
             </h2>
             <p className={s.cta__subtitle}>
-              I'll assess your level, understand your goals, and tell you exactly
-              which course fits you best.
+              Evaluaré tu nivel, entenderé tus objetivos y te diré exactamente
+              qué curso se adapta mejor a ti.
             </p>
             <div className={s.cta__actions}>
               <a href="mailto:hello@yourenglishbuddy.com" className={s.cta__btnPrimary}>
                 <CalendarCheck size={17} />
-                Book your free call
+                Reserva tu llamada gratuita
                 <span className={s.cta__btnIcon}>
                   <ArrowUpRight size={14} />
                 </span>
@@ -144,11 +145,11 @@ const CoursesPage: React.FC = () => {
                 className={s.cta__btnSecondary}
               >
                 <MessageCircle size={17} />
-                Chat on WhatsApp
+                Escríbenos por WhatsApp
               </a>
             </div>
             <p className={s.cta__trust}>
-              No commitment &nbsp;·&nbsp; Results in weeks
+              Sin compromiso &nbsp;·&nbsp; Resultados en semanas
             </p>
           </div>
         </section>

@@ -48,21 +48,20 @@ const HeroBanner: React.FC = () => {
           {/* ─── Left Content ─── */}
           <div className={s.hero__content}>
             <h1 className={anim(ready, 'anim-slide-up', 'delay-200', s.hero__heading)}>
-              Welcome to{' '}
+              Bienvenido a{' '}
               <span className={s.hero__headingAccent}>Your English Buddy</span>
-              <br />
-              Empowering Your Learning Path
             </h1>
 
             <p className={anim(ready, 'anim-slide-up', 'delay-400', s.hero__paragraph)}>
-              Your English Buddy is dedicated to providing top-tier English education
-              to learners worldwide. Our mission is to make high-quality learning
-              accessible and engaging, with courses taught by expert instructors.
+              En Your English Buddy ayudamos a personas hispanohablantes a mejorar su
+              inglés con explicaciones simples, acompañamiento real y clases pensadas
+              para la vida diaria. Nuestro propósito es que ganes confianza al hablar,
+              entender, escribir y usar el inglés en situaciones reales.
             </p>
 
             <div className={anim(ready, 'anim-slide-up', 'delay-600', s.hero__buttons)}>
-              <button className={s.hero__btnPrimary}>Contact Now</button>
-              <button className={s.hero__btnSecondary}>Start Learning</button>
+              <button className={s.hero__btnPrimary}>Contáctanos</button>
+              <button className={s.hero__btnSecondary}>¡Empieza hoy!</button>
             </div>
           </div>
 

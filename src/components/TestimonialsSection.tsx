@@ -51,23 +51,19 @@ interface Testimonial {
 const staticCards: Testimonial[] = [
   {
     id: 1,
-    stat: '95%',
-    statLabel: 'Improvement in fluency',
     quote:
-      '"I went from barely ordering coffee in English to giving full presentations at work. The personalized approach and patient instructors made all the difference. I improved my fluency in just three months!"',
-    name: 'María García',
-    role: 'Marketing Manager, Bogotá',
-    initials: 'MG',
+      '"Antes me daba vergüenza hablar inglés, incluso con algunos profesores, porque sentía que me estaban juzgando. En Your English Buddy aprendí desde el primer día una frase que me cambió por completo la mentalidad: speak first and fix later. Gracias a eso, empecé a soltarme, gané confianza al hablar y comencé a ver el inglés más cercano y divertido. Hoy siento que me enamoré de un idioma que antes odiaba."',
+    name: 'Yodarvis Medina',
+    role: 'Indianapolis, Estados Unidos',
+    initials: 'YM',
   },
   {
     id: 2,
-    stat: '3X',
-    statLabel: 'Faster learning progress',
     quote:
-      '"The teaching methodology is outstanding. Every class felt tailored to my needs, and the offline content let me practice anytime. My IELTS score jumped from 5.5 to 7.5!"',
-    name: 'Carlos Mendoza',
-    role: 'Software Engineer, Lima',
-    initials: 'CM',
+      '"Your English Buddy me ha ayudado a organizar mejor mi aprendizaje. Hoy entiendo y uso expresiones como circle back, jump on a call y revisit, que realmente se utilizan en el entorno laboral. Gracias a eso, me siento mucho más segura en mi trabajo remoto, he dejado atrás el pánico y ahora tengo más confianza en mis reuniones y al redactar correos."',
+    name: 'Francis Jiménez',
+    role: 'Florida, Estados Unidos',
+    initials: 'FJ',
   },
 ];
 
@@ -77,26 +73,10 @@ const rotatingSlotA: Testimonial[] = [
   {
     id: 10,
     quote:
-      '"My kids love the classes! The instructors make learning fun and engaging. Their confidence speaking English has grown tremendously."',
-    name: 'Ana Rodríguez',
-    role: 'Parent, México City',
-    initials: 'AR',
-  },
-  {
-    id: 11,
-    quote:
-      '"The speaking practice sessions are incredible. I used to freeze in conversations, now I feel natural and confident communicating in English."',
-    name: 'Pedro Salazar',
-    role: 'Architect, Medellín',
-    initials: 'PS',
-  },
-  {
-    id: 12,
-    quote:
-      '"Their exam prep course was a game-changer. The structured approach and practice tests gave me the confidence to ace my TOEFL exam."',
-    name: 'Valentina Torres',
-    role: 'Student, Buenos Aires',
-    initials: 'VT',
+      '"En Your English Buddy encontré clases dinámicas y cero aburridas. Hoy puedo usar con amigos nativos frases como feeling like some beers?, are you up for that?, fancy a coffee? o let\'s grab a bite, lo que me ha permitido ampliar mi círculo social y sentirme más integrada a la cultura americana."',
+    name: 'Antonieta Gómez',
+    role: 'Virginia, Estados Unidos',
+    initials: 'AG',
   },
 ];
 
@@ -104,26 +84,10 @@ const rotatingSlotB: Testimonial[] = [
   {
     id: 20,
     quote:
-      '"The business English program transformed how I communicate with international clients. Professional, practical, and results-driven."',
-    name: 'Luis Fernández',
-    role: 'CEO, Santiago',
-    initials: 'LF',
-  },
-  {
-    id: 21,
-    quote:
-      '"I needed English for my new job abroad. In 4 months, I went from intermediate to advanced. The personalized plan was exactly what I needed."',
-    name: 'Camila Restrepo',
-    role: 'Data Analyst, São Paulo',
-    initials: 'CR',
-  },
-  {
-    id: 22,
-    quote:
-      '"What I love most is the flexibility. The 24/7 offline content means I can learn during my commute. My progress has been incredible."',
-    name: 'Diego Morales',
-    role: 'Entrepreneur, Quito',
-    initials: 'DM',
+      '"Your English Buddy me ha ayudado a organizar mejor mi aprendizaje. Hoy entiendo y uso expresiones como circle back, jump on a call y revisit, que realmente se utilizan en el entorno laboral. Gracias a eso, me siento mucho más segura en mi trabajo remoto, he dejado atrás el pánico y ahora tengo más confianza en mis reuniones y al redactar correos."',
+    name: 'Coromoto Godoy',
+    role: 'Texas, Estados Unidos',
+    initials: 'CG',
   },
 ];
 
@@ -188,18 +152,18 @@ const TestimonialsSection: React.FC = () => {
         <div className={s.testimonials__header}>
           <span className={anim(ready, 'anim-slide-down', 'delay-0', s.testimonials__badge)}>
             <span className={s.testimonials__badgeBracket}>&#x2E22;</span>
-            Student Reviews
+            Reseñas de estudiantes
             <span className={s.testimonials__badgeBracket}>&#x2E23;</span>
           </span>
           <h2 className={anim(ready, 'anim-slide-up', 'delay-100', s.testimonials__heading)}>
-            Results that speak volumes
+            Resultados que hablan por sí solos
             <br />
             <span className={s.testimonials__headingAccent}>
-              Read success stories
+              Historias de éxito reales
             </span>
           </h2>
           <p className={anim(ready, 'anim-slide-up', 'delay-200', s.testimonials__subtitle)}>
-            Find out how our students are transforming their English skills.
+            Descubre cómo Your English Buddy ha acompañado a personas como tú a llevar su inglés a otro nivel.
           </p>
         </div>
 
@@ -215,14 +179,6 @@ const TestimonialsSection: React.FC = () => {
               s['testimonials__card--large']
             )}
           >
-            <div className={s.testimonials__stat}>
-              <span className={s.testimonials__statNumber}>
-                {staticCards[0].stat}
-              </span>
-              <span className={s.testimonials__statLabel}>
-                {staticCards[0].statLabel}
-              </span>
-            </div>
             <QuoteIcon />
             <p className={s.testimonials__quote}>{staticCards[0].quote}</p>
             <div className={s.testimonials__author}>
@@ -240,7 +196,7 @@ const TestimonialsSection: React.FC = () => {
 
           {/* Right column */}
           <div className={s.testimonials__rightCol}>
-            {/* Card 2 — Top right (static, with stat) */}
+            {/* Card 2 — Top right (static) */}
             <div
               className={anim(
                 ready,
@@ -250,14 +206,6 @@ const TestimonialsSection: React.FC = () => {
                 s['testimonials__card--topRight']
               )}
             >
-              <div className={s.testimonials__statInline}>
-                <span className={s.testimonials__statNumber}>
-                  {staticCards[1].stat}
-                </span>
-                <span className={s.testimonials__statLabel}>
-                  {staticCards[1].statLabel}
-                </span>
-              </div>
               <QuoteIcon />
               <p className={s.testimonials__quote}>{staticCards[1].quote}</p>
               <div className={s.testimonials__author}>

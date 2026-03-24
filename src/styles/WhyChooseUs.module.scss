@@ -197,6 +197,31 @@ $font-heading: 'Poppins', sans-serif;
     line-height: 1.6;
     color: rgba($teal-deeper, 0.7);
   }
+
+  &__cardChipList {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  &__cardChipListItem {
+    font-size: 0.75rem;
+    line-height: 1.55;
+    color: rgba($teal-deeper, 0.8);
+    padding-left: 14px;
+    position: relative;
+
+    &::before {
+      content: '·';
+      position: absolute;
+      left: 0;
+      color: $teal-deeper;
+      font-weight: 700;
+    }
+  }
 }
 
 // ─── Responsive ──────────────────────────────────────────────────────────────

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import s from '../styles/NewsletterSection.module.scss';
 import { useInView } from '../hooks/useInView';
 
@@ -91,14 +91,7 @@ const EnvelopeDecoration: React.FC<{ ready: boolean }> = ({ ready }) => (
 // ═════════════════════════════════════════════════════════════════════════════
 
 const NewsletterSection: React.FC = () => {
-  const [email, setEmail] = useState('');
   const { ref, ready } = useInView({ threshold: 0.15 });
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    // placeholder action
-    setEmail('');
-  };
 
   return (
     <section className={s.newsletter} ref={ref as React.RefObject<HTMLElement>}>
@@ -106,37 +99,30 @@ const NewsletterSection: React.FC = () => {
         {/* Left content */}
         <div className={s.newsletter__content}>
           <h2 className={anim(ready, 'anim-slide-up', 'delay-0', s.newsletter__heading)}>
-            Exclusive Learning Tips:
+            Conversemos y encuentra
             <br />
-            Improve Faster, Smarter,
+            la modalidad ideal
             <br />
-            and More Confidently!
+            para ti.
           </h2>
 
           <p className={anim(ready, 'anim-slide-up', 'delay-100', s.newsletter__subtitle)}>
-            Welcome to our newsletter, where we bring you the latest lessons,
-            exclusive learning resources, and expert tips to accelerate your
-            English journey.
+            Si quieres mejorar tu inglés de forma práctica, clara y personalizada,
+            estamos aquí para ayudarte. Escríbenos directamente por WhatsApp y te
+            orientamos según tu nivel, tus objetivos y la modalidad que mejor se
+            adapte a ti.
           </p>
 
-          <form className={anim(ready, 'anim-slide-up', 'delay-200', s.newsletter__form)} onSubmit={handleSubmit}>
-            <input
-              type="email"
-              placeholder="name@email.com"
-              className={s.newsletter__input}
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
-            <button type="submit" className={s.newsletter__btn}>
-              Subscribe Now →
-            </button>
-          </form>
-
-          <p className={anim(ready, 'anim-fade-in', 'delay-400', s.newsletter__disclaimer)}>
-            "Your information will never be shared with third parties, and you
-            can unsubscribe from our updates at any time."
-          </p>
+          <div className={anim(ready, 'anim-slide-up', 'delay-200', s.newsletter__form)}>
+            <a
+              href="https://wa.me/message/your-number"
+              target="_blank"
+              rel="noopener noreferrer"
+              className={s.newsletter__btn}
+            >
+              Escríbenos por WhatsApp →
+            </a>
+          </div>
         </div>
 
         {/* Right decoration */}

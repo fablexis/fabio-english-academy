@@ -43,19 +43,19 @@ interface Course {
 const featuredCourse: Course = {
   id: 1,
   category: 'Speaking',
-  title: 'Conversational English Mastery',
+  title: 'Domina el inglés conversacional',
   description:
-    'This course provides an in-depth approach to building confidence in everyday conversations, presentations, and professional English communication.',
-  duration: '4 weeks',
+    'Este curso ofrece un enfoque profundo para ganar confianza en conversaciones cotidianas, presentaciones y comunicación profesional en inglés.',
+  duration: '4 semanas',
   lectures: 28,
   price: 89.0,
   popular: true,
   image: '',
   modules: [
-    { week: 'Week 1', title: 'Foundations of Fluency', topics: ['Breaking the silence barrier', 'Everyday greetings & small talk', 'Building a conversation toolkit'] },
-    { week: 'Week 2', title: 'Pronunciation & Intonation', topics: ['Vowel & consonant clarity drills', 'Stress patterns in sentences', 'Natural rhythm & linking sounds'] },
-    { week: 'Week 3', title: 'Real-World Conversations', topics: ['Ordering, shopping & travel dialogues', 'Expressing opinions & emotions', 'Handling misunderstandings gracefully'] },
-    { week: 'Week 4', title: 'Professional & Presentation Skills', topics: ['Structuring a short speech', 'Persuasive language techniques', 'Final live conversation assessment'] },
+    { week: 'Semana 1', title: 'Fundamentos de la fluidez', topics: ['Romper la barrera del silencio', 'Saludos cotidianos y conversación informal', 'Construir un kit de conversación'] },
+    { week: 'Semana 2', title: 'Pronunciación y entonación', topics: ['Ejercicios de claridad en vocales y consonantes', 'Patrones de énfasis en oraciones', 'Ritmo natural y enlace de sonidos'] },
+    { week: 'Semana 3', title: 'Conversaciones del mundo real', topics: ['Diálogos de pedidos, compras y viajes', 'Expresar opiniones y emociones', 'Manejar malentendidos con elegancia'] },
+    { week: 'Semana 4', title: 'Habilidades profesionales y de presentación', topics: ['Estructurar un discurso corto', 'Técnicas de lenguaje persuasivo', 'Evaluación final de conversación en vivo'] },
   ],
 };
 
@@ -64,58 +64,58 @@ const courses: Course[] = [
   {
     id: 2,
     category: 'Grammar',
-    title: 'Advanced Grammar & Writing',
+    title: 'Gramática avanzada y escritura',
     description:
-      'Master the foundations of English grammar and develop polished writing skills through structured lessons, practical exercises, and expert feedback.',
-    duration: '6 weeks',
+      'Domina los fundamentos de la gramática inglesa y desarrolla habilidades de escritura sólidas con lecciones estructuradas, ejercicios prácticos y retroalimentación experta.',
+    duration: '6 semanas',
     lectures: 32,
     price: 79.0,
     popular: true,
     image: '',
     modules: [
-      { week: 'Week 1', title: 'Sentence Structure Foundations', topics: ['Parts of speech review', 'Clause types & sentence patterns', 'Subject-verb agreement mastery'] },
-      { week: 'Week 2', title: 'Tenses & Verb Forms', topics: ['Perfect vs. continuous tenses', 'Conditional structures', 'Modal verbs for nuance'] },
-      { week: 'Week 3', title: 'Punctuation & Style', topics: ['Advanced comma rules', 'Semicolons, colons & dashes', 'Parallel structure in writing'] },
-      { week: 'Week 4', title: 'Complex Sentences', topics: ['Relative clauses', 'Reported speech', 'Inversion & emphasis techniques'] },
-      { week: 'Week 5', title: 'Essay & Paragraph Writing', topics: ['Thesis development', 'Coherence & cohesion', 'Formal vs. informal register'] },
-      { week: 'Week 6', title: 'Editing & Proofreading', topics: ['Common error patterns', 'Self-editing strategies', 'Final portfolio submission'] },
+      { week: 'Semana 1', title: 'Fundamentos de la estructura oracional', topics: ['Revisión de partes del discurso', 'Tipos de cláusulas y patrones oracionales', 'Concordancia sujeto-verbo'] },
+      { week: 'Semana 2', title: 'Tiempos verbales y formas', topics: ['Tiempos perfectos vs. continuos', 'Estructuras condicionales', 'Verbos modales para matices'] },
+      { week: 'Semana 3', title: 'Puntuación y estilo', topics: ['Reglas avanzadas de la coma', 'Punto y coma, dos puntos y guiones', 'Estructura paralela en la escritura'] },
+      { week: 'Semana 4', title: 'Oraciones complejas', topics: ['Cláusulas relativas', 'Estilo indirecto', 'Inversión y técnicas de énfasis'] },
+      { week: 'Semana 5', title: 'Redacción de ensayos y párrafos', topics: ['Desarrollo de tesis', 'Coherencia y cohesión', 'Registro formal vs. informal'] },
+      { week: 'Semana 6', title: 'Edición y corrección', topics: ['Patrones de errores comunes', 'Estrategias de auto-edición', 'Entrega final del portafolio'] },
     ],
   },
   {
     id: 3,
     category: 'Business English',
-    title: 'Business English Essentials',
+    title: 'Inglés de negocios esencial',
     description:
-      'Build professional communication skills for meetings, emails, presentations, and negotiations in global business environments.',
-    duration: '5 weeks',
+      'Desarrolla habilidades de comunicación profesional para reuniones, correos, presentaciones y negociaciones en entornos de negocios internacionales.',
+    duration: '5 semanas',
     lectures: 24,
     price: 99.0,
     image: '',
     modules: [
-      { week: 'Week 1', title: 'Professional Email & Correspondence', topics: ['Formal email templates', 'Tone & register in business', 'Follow-up & escalation emails'] },
-      { week: 'Week 2', title: 'Meetings & Conference Calls', topics: ['Leading & participating in meetings', 'Agreeing, disagreeing & negotiating', 'Minute-taking vocabulary'] },
-      { week: 'Week 3', title: 'Presentations & Public Speaking', topics: ['Structuring a business presentation', 'Visual aid language', 'Handling Q&A sessions'] },
-      { week: 'Week 4', title: 'Negotiation & Persuasion', topics: ['Diplomatic language patterns', 'Making proposals & counteroffers', 'Cross-cultural communication'] },
-      { week: 'Week 5', title: 'Reports & Professional Documents', topics: ['Executive summary writing', 'Data description language', 'Final business simulation project'] },
+      { week: 'Semana 1', title: 'Correo profesional y correspondencia', topics: ['Plantillas de correo formal', 'Tono y registro en los negocios', 'Correos de seguimiento y escalación'] },
+      { week: 'Semana 2', title: 'Reuniones y llamadas de conferencia', topics: ['Liderar y participar en reuniones', 'Estar de acuerdo, disentir y negociar', 'Vocabulario para toma de actas'] },
+      { week: 'Semana 3', title: 'Presentaciones y oratoria', topics: ['Estructurar una presentación de negocios', 'Lenguaje para apoyos visuales', 'Manejo de sesiones de preguntas'] },
+      { week: 'Semana 4', title: 'Negociación y persuasión', topics: ['Patrones de lenguaje diplomático', 'Hacer propuestas y contraofertas', 'Comunicación intercultural'] },
+      { week: 'Semana 5', title: 'Informes y documentos profesionales', topics: ['Redacción de resumen ejecutivo', 'Lenguaje para descripción de datos', 'Proyecto final de simulación de negocios'] },
     ],
   },
   {
     id: 4,
     category: 'Exam Prep',
-    title: 'IELTS & TOEFL Preparation',
+    title: 'Preparación IELTS & TOEFL',
     description:
-      'Comprehensive preparation for international English proficiency exams with practice tests, strategies, and personalized study plans.',
-    duration: '8 weeks',
+      'Preparación integral para exámenes internacionales de inglés con pruebas prácticas, estrategias y planes de estudio personalizados.',
+    duration: '8 semanas',
     lectures: 40,
     price: 129.0,
     popular: true,
     image: '',
     modules: [
-      { week: 'Week 1–2', title: 'Listening Strategies', topics: ['Note-taking techniques', 'Predicting answers', 'Accent familiarization drills'] },
-      { week: 'Week 3–4', title: 'Reading Comprehension', topics: ['Skimming & scanning methods', 'True/False/Not Given mastery', 'Academic reading speed drills'] },
-      { week: 'Week 5–6', title: 'Writing Tasks', topics: ['Task 1: Data description (IELTS)', 'Task 2: Argumentative essays', 'Integrated writing (TOEFL)'] },
-      { week: 'Week 7', title: 'Speaking Practice', topics: ['Part 1, 2 & 3 frameworks (IELTS)', 'Independent & integrated tasks (TOEFL)', 'Fluency & pronunciation coaching'] },
-      { week: 'Week 8', title: 'Full Mock Exams & Review', topics: ['Timed full-length practice tests', 'Score analysis & weak-area targeting', 'Final strategies & exam-day tips'] },
+      { week: 'Semanas 1–2', title: 'Estrategias de comprensión auditiva', topics: ['Técnicas de toma de notas', 'Predecir respuestas', 'Ejercicios de familiarización con acentos'] },
+      { week: 'Semanas 3–4', title: 'Comprensión lectora', topics: ['Métodos de lectura rápida y scanning', 'Dominio de Verdadero/Falso/No mencionado', 'Ejercicios de velocidad de lectura académica'] },
+      { week: 'Semanas 5–6', title: 'Tareas de escritura', topics: ['Tarea 1: Descripción de datos (IELTS)', 'Tarea 2: Ensayos argumentativos', 'Escritura integrada (TOEFL)'] },
+      { week: 'Semana 7', title: 'Práctica de expresión oral', topics: ['Partes 1, 2 y 3 (IELTS)', 'Tareas independientes e integradas (TOEFL)', 'Coaching de fluidez y pronunciación'] },
+      { week: 'Semana 8', title: 'Exámenes simulacro y revisión', topics: ['Pruebas completas cronometradas', 'Análisis de puntaje y áreas débiles', 'Estrategias finales y consejos para el examen'] },
     ],
   },
 ];
@@ -191,6 +191,7 @@ const CourseModal: React.FC<CourseModalProps> = ({ course, onClose, isVisible })
                   Popular
                 </span>
               )}
+
             </div>
             <h3 className={s.modal__title}>{course.title}</h3>
             <p className={s.modal__desc}>{course.description}</p>
@@ -201,7 +202,7 @@ const CourseModal: React.FC<CourseModalProps> = ({ course, onClose, isVisible })
               </span>
               <span className={s.modal__metaChip}>
                 <FileText size={14} />
-                {course.lectures} lectures
+                {course.lectures} clases
               </span>
               <span className={s.modal__priceChip}>
                 ${course.price.toFixed(2)}
@@ -212,7 +213,7 @@ const CourseModal: React.FC<CourseModalProps> = ({ course, onClose, isVisible })
 
         {/* ── Scrollable body with timeline ── */}
         <div className={s.modal__body}>
-          <h4 className={s.modal__sectionTitle}>Course Roadmap</h4>
+          <h4 className={s.modal__sectionTitle}>Programa del curso</h4>
 
           <div className={s.timeline}>
             {modules.map((mod, i) => (
@@ -248,7 +249,7 @@ const CourseModal: React.FC<CourseModalProps> = ({ course, onClose, isVisible })
           {/* ── Bottom CTA ── */}
           <div className={s.modal__cta}>
             <button className={s.courses__viewBtn}>
-              Enroll Now
+              Inscribirme ahora
               <span className={s.courses__viewBtnIcon}>
                 <ArrowUpRight size={14} />
               </span>
@@ -287,8 +288,8 @@ const CoursesSection: React.FC = () => {
       <div className={s.courses__inner}>
         {/* ─── Heading ─── */}
         <h2 className={anim(ready, 'anim-slide-up', 'delay-0', s.courses__heading)}>
-          Start Your English Journey{' '}
-          <span className={s.courses__headingAccent}>Today!</span>
+          Comienza Tu{' '}
+          <span className={s.courses__headingAccent}>English Journey Today!</span>
         </h2>
 
         {/* ─── Featured Course ─── */}
@@ -321,7 +322,7 @@ const CoursesSection: React.FC = () => {
               </span>
               <span className={s.courses__metaItem}>
                 <FileText size={14} />
-                {featuredCourse.lectures} lectures
+                {featuredCourse.lectures} clases
               </span>
             </div>
 
@@ -338,7 +339,7 @@ const CoursesSection: React.FC = () => {
                   openModal(featuredCourse);
                 }}
               >
-                View Details
+                Ver detalles
                 <span className={s.courses__viewBtnIcon}>
                   <ArrowUpRight size={14} />
                 </span>
@@ -378,7 +379,7 @@ const CoursesSection: React.FC = () => {
                   </span>
                   <span className={s.courses__metaItem}>
                     <FileText size={14} />
-                    {course.lectures} lectures
+                    {course.lectures} clases
                   </span>
                 </div>
               </div>
