@@ -1,17 +1,6 @@
-import React, { useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
-import {
-  Activity,
-  ArrowUpRight,
-  BriefcaseBusiness,
-  Clock3,
-  GraduationCap,
-  Landmark,
-  Palette,
-  ShieldCheck,
-  Sparkles,
-  TrendingUp,
-} from 'lucide-react';
+import { ArrowUpRight, Clock3 } from 'lucide-react';
 import s from '../styles/BlogSection.module.scss';
 import { useInView } from '../hooks/useInView';
 import { blogPosts } from '../data/blogPosts';
@@ -26,17 +15,6 @@ const anim = (
   return inView
     ? `${base} ${animClass} ${delayClass}`.trim()
     : `${base} anim-hidden`.trim();
-};
-
-const iconByCategory: Record<string, React.ReactNode> = {
-  Healthcare: <Activity size={24} />,
-  Cases: <Sparkles size={24} />,
-  Development: <TrendingUp size={24} />,
-  Insurance: <ShieldCheck size={24} />,
-  Tourism: <Landmark size={24} />,
-  Design: <Palette size={24} />,
-  'E-learning': <GraduationCap size={24} />,
-  Business: <BriefcaseBusiness size={24} />,
 };
 
 const categories = ['All', ...new Set(blogPosts.map((p) => p.category))];
@@ -61,9 +39,6 @@ const BlogSection: React.FC = () => {
     >
       <div className={s.blog__inner}>
         <div className={s.blog__header}>
-          <p className={anim(ready, 'anim-slide-up', 'delay-0', s.blog__kicker)}>
-            Blog
-          </p>
           <h2
             id="blog-section-title"
             className={anim(ready, 'anim-slide-up', 'delay-100', s.blog__title)}
@@ -106,49 +81,42 @@ const BlogSection: React.FC = () => {
                 s.blog__item
               )}
             >
-              <article
-                className={`${s.blog__card} ${s[`blog__card--${post.variant}`]}`}
-              >
-                {post.hasBanner && (
-                  <div className={s.blog__banner} aria-hidden="true">
-                    <span className={s.blog__bannerIcon}>
-                      {iconByCategory[post.category]}
-                    </span>
-                  </div>
-                )}
+              <article className={s.blog__card}>
+                <div className={s.blog__imageWrap}>
+                  <img
+                    className={s.blog__image}
+                    src={post.image}
+                    alt=""
+                    loading="lazy"
+                  />
+                </div>
 
                 <div className={s.blog__body}>
                   <header className={s.blog__cardTop}>
-                    {!post.hasBanner && (
-                      <span className={s.blog__icon} aria-hidden="true">
-                        {iconByCategory[post.category]}
-                      </span>
-                    )}
                     <span className={s.blog__badge}>{post.category}</span>
+                    <span className={s.blog__levelBadge}>{post.level}</span>
                   </header>
 
                   <h3 className={s.blog__cardTitle}>{post.title}</h3>
                   <p className={s.blog__cardExcerpt}>{post.excerpt}</p>
 
-                  <div className={s.blog__meta}>
+                  <div className={s.blog__cardFooter}>
                     <span className={s.blog__metaItem}>
                       <Clock3 size={13} />
                       {post.readTime}
                     </span>
-                    <span className={s.blog__metaDot} aria-hidden="true" />
-                    <span className={s.blog__metaItem}>{post.level}</span>
-                  </div>
 
-                  <Link
-                    className={s.blog__link}
-                    to={`/blog/${post.slug}`}
-                    aria-label={`Read article: ${post.title}`}
-                  >
-                    Read article
-                    <span className={s.blog__linkIcon}>
-                      <ArrowUpRight size={14} />
-                    </span>
-                  </Link>
+                    <Link
+                      className={s.blog__link}
+                      to={`/blog/${post.slug}`}
+                      aria-label={`Read article: ${post.title}`}
+                    >
+                      Read article
+                      <span className={s.blog__linkIcon}>
+                        <ArrowUpRight size={14} />
+                      </span>
+                    </Link>
+                  </div>
                 </div>
               </article>
             </li>

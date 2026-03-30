@@ -160,6 +160,22 @@ $font-heading:  'Poppins', sans-serif;
     min-width: 0;
   }
 
+  // Featured image (shown at top of article)
+  &__featuredImg {
+    width: 100%;
+    border-radius: 16px;
+    overflow: hidden;
+    margin-bottom: 36px;
+    aspect-ratio: 16 / 7;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+  }
+
   &__intro {
     font-size: 1.05rem;
     line-height: 1.85;
@@ -191,6 +207,48 @@ $font-heading:  'Poppins', sans-serif;
     &:last-child { margin-bottom: 0; }
   }
 
+  // Example blocks inside sections
+  &__examples {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 16px;
+  }
+
+  &__exampleItem {
+    padding: 10px 16px;
+    border-radius: 10px;
+    font-size: 0.88rem;
+    line-height: 1.65;
+    border-left: 3px solid;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+
+    &--correct {
+      background: rgba(#16a34a, 0.07);
+      border-color: #16a34a;
+      color: #14532d;
+    }
+
+    &--wrong {
+      background: rgba(#dc2626, 0.07);
+      border-color: #dc2626;
+      color: #7f1d1d;
+      text-decoration-line: none;
+    }
+
+    &--transform {
+      background: rgba($teal-primary, 0.07);
+      border-color: $teal-primary;
+      color: $teal-dark;
+    }
+
+    &--neutral {
+      background: rgba($navy, 0.04);
+      border-color: $border-color;
+      color: $navy;
+    }
+  }
+
   // Pro tip block
   &__tip {
     background: $teal-lightest;
@@ -201,7 +259,9 @@ $font-heading:  'Poppins', sans-serif;
   }
 
   &__tipLabel {
-    display: inline-block;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
     font-size: 0.68rem;
     font-weight: 800;
     letter-spacing: 0.1em;

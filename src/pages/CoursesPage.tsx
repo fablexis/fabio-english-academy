@@ -133,19 +133,10 @@ const CoursesPage: React.FC = () => {
             <div className={s.cta__actions}>
               <a href="mailto:hello@yourenglishbuddy.com" className={s.cta__btnPrimary}>
                 <CalendarCheck size={17} />
-                Reserva tu llamada gratuita
+                Reserva tu clase ahora
                 <span className={s.cta__btnIcon}>
                   <ArrowUpRight size={14} />
                 </span>
-              </a>
-              <a
-                href="https://wa.me/1234567890"
-                target="_blank"
-                rel="noopener noreferrer"
-                className={s.cta__btnSecondary}
-              >
-                <MessageCircle size={17} />
-                Escríbenos por WhatsApp
               </a>
             </div>
             <p className={s.cta__trust}>
