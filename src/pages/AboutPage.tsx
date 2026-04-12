@@ -305,13 +305,17 @@ const AboutPage: React.FC = () => {
                 trasciende las reglas gramaticales para dar voz a tu verdadero yo.
               </p>
               <div className={anim(heroReady, 'anim-slide-up', 'delay-200', s.heroCtas)}>
-                <button className={s.heroCta}>
+                <a
+                  href="https://wa.me/5491123310113?text=Hola%2C%20quisiera%20obtener%20informacion%20para%20agendar%20una%20clase%20para%20Your%20English%20Buddy%2C%20gracias"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={s.heroCta}
+                >
                   Empieza mi viaje
                   <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
                     <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
                   </svg>
-                </button>
-                <button className={s.heroCtaAlt}>Saber más</button>
+                </a>
               </div>
             </div>
 

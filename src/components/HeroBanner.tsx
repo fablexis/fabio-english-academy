@@ -111,8 +111,8 @@ const HeroBanner: React.FC = () => {
                   <SelfPacedIcon size={40} />
                 </div>
                 <div>
-                  <div className={s.hero__badgeLabel}>Personalized Classes</div>
-                  <div className={s.hero__badgeSub}>At Your Own Pace</div>
+                  <div className={s.hero__badgeLabel}>Clases Personalizadas</div>
+                  <div className={s.hero__badgeSub}>A Tu Ritmo</div>
                 </div>
               </div>
             </div>
@@ -132,7 +132,7 @@ const HeroBanner: React.FC = () => {
                 </div>
                 <div>
                   <div className={s.hero__badgeNumber}>24/7</div>
-                  <div className={s.hero__badgeText}>Offline Content</div>
+                  <div className={s.hero__badgeText}>Contenido Offline</div>
                 </div>
               </div>
             </div>
