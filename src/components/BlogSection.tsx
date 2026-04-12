@@ -17,15 +17,15 @@ const anim = (
     : `${base} anim-hidden`.trim();
 };
 
-const categories = ['All', ...new Set(blogPosts.map((p) => p.category))];
+const categories = ['Todos', ...new Set(blogPosts.map((p) => p.category))];
 
 const BlogSection: React.FC = () => {
   const { ref, ready } = useInView({ threshold: 0.1 });
-  const [activeCategory, setActiveCategory] = useState('All');
+  const [activeCategory, setActiveCategory] = useState('Todos');
 
   const visiblePosts = useMemo(
     () =>
-      activeCategory === 'All'
+      activeCategory === 'Todos'
         ? blogPosts
         : blogPosts.filter((p) => p.category === activeCategory),
     [activeCategory]
@@ -43,19 +43,19 @@ const BlogSection: React.FC = () => {
             id="blog-section-title"
             className={anim(ready, 'anim-slide-up', 'delay-100', s.blog__title)}
           >
-            Fresh stories, tips &amp;{' '}
-            <span className={s.blog__titleAccent}>real learning wins</span>
+            Historias, consejos y{' '}
+            <span className={s.blog__titleAccent}>aprendizaje real</span>
           </h2>
           <p className={anim(ready, 'anim-slide-up', 'delay-200', s.blog__subtitle)}>
-            Practical articles designed to improve your English in real-life
-            situations — short enough to read in one coffee break.
+            Artículos prácticos para mejorar tu inglés en situaciones cotidianas
+            — lo suficientemente cortos para leer en un descanso.
           </p>
         </div>
 
         <div
           className={anim(ready, 'anim-fade-scale', 'delay-300', s.blog__filters)}
           role="toolbar"
-          aria-label="Filter blog posts by category"
+          aria-label="Filtrar artículos por categoría"
         >
           {categories.map((cat) => (
             <button
@@ -109,9 +109,9 @@ const BlogSection: React.FC = () => {
                     <Link
                       className={s.blog__link}
                       to={`/blog/${post.slug}`}
-                      aria-label={`Read article: ${post.title}`}
+                      aria-label={`Leer artículo: ${post.title}`}
                     >
-                      Read article
+                      Leer artículo
                       <span className={s.blog__linkIcon}>
                         <ArrowUpRight size={14} />
                       </span>

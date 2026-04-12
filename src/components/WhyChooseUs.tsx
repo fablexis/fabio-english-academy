@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { MonitorSmartphone, GraduationCap, BadgeDollarSign, Image } from 'lucide-react';
+import { MonitorSmartphone, GraduationCap, BadgeDollarSign } from 'lucide-react';
 import s from '../styles/WhyChooseUs.module.scss';
 import { useInView } from '../hooks/useInView';
 
@@ -25,7 +25,6 @@ interface FeatureCard {
   title: string;
   description: string;
   hoverItems?: string[];
-  image?: boolean;
 }
 
 const features: FeatureCard[] = [
@@ -42,7 +41,6 @@ const features: FeatureCard[] = [
       'Tus 8 clases incluyen una sesión adicional de 40 minutos sin costo extra.',
       'Esa sesión está dedicada exclusivamente a resolver dudas de gramática y vocabulario.',
     ],
-    image: true,
   },
   {
     id: 2,
@@ -72,14 +70,6 @@ const features: FeatureCard[] = [
     ],
   },
 ];
-
-// ─── Placeholder image for expanded state ────────────────────────────────────
-
-const CardImage: React.FC = () => (
-  <div className={s.why__cardImage}>
-    <Image size={48} opacity={0.3} color="currentColor" />
-  </div>
-);
 
 // ═════════════════════════════════════════════════════════════════════════════
 // WHY CHOOSE US SECTION
@@ -120,13 +110,6 @@ const WhyChooseUs: React.FC = () => {
                 onMouseEnter={() => setActiveId(feat.id)}
                 onClick={() => setActiveId(feat.id)}
               >
-                {/* Image area — only visible when active and card has image flag */}
-                {isActive && (
-                  <div className={s.why__cardImageWrap}>
-                    <CardImage />
-                  </div>
-                )}
-
                 {/* Content area */}
                 <div className={s.why__cardContent}>
                   {/* Floating label (lime chip) — visible when active */}

@@ -115,7 +115,7 @@ const NewsletterSection: React.FC = () => {
 
           <div className={anim(ready, 'anim-slide-up', 'delay-200', s.newsletter__form)}>
             <a
-              href="https://wa.me/message/your-number"
+              href="https://wa.me/5491123310113?text=Hola%2C%20quisiera%20obtener%20informacion%20para%20agendar%20una%20clase%20para%20Your%20English%20Buddy%2C%20gracias"
               target="_blank"
               rel="noopener noreferrer"
               className={s.newsletter__btn}

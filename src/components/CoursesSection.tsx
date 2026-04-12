@@ -50,7 +50,9 @@ const featuredCourse: Course = {
   features: [
     'Una primera clase diagnóstica gratis de 20 minutos.',
     '8 clases mensuales de 1 hora.',
-    'Yep, más todo lo que indico de la página anterior.',
+    'Clases en línea vía Zoom, interactivas y personalizadas, adaptadas a tus necesidades.',
+    'Acceso a guías y documentos de apoyo que puedes usar incluso fuera de clase.',
+    'Comunidad de WhatsApp con tips, material extra y ejercicios para seguir practicando.',
   ],
 };
 
@@ -67,7 +69,9 @@ const courses: Course[] = [
     features: [
       'Una primera clase diagnóstica gratis de 20 minutos.',
       '8 clases mensuales de 1 hora.',
-      'Yep, más todo lo que indico de la página anterior.',
+      'Clases en línea vía Zoom, interactivas y personalizadas, adaptadas a tus necesidades.',
+      'Acceso a guías y documentos de apoyo que puedes usar incluso fuera de clase.',
+      'Comunidad de WhatsApp con tips, material extra y ejercicios para seguir practicando.',
     ],
   },
   {
@@ -82,7 +86,9 @@ const courses: Course[] = [
     features: [
       'Una primera clase diagnóstica gratis de 20 minutos.',
       '8 clases mensuales de 1 hora.',
-      'Yep, más todo lo que indico de la página anterior.',
+      'Clases en línea vía Zoom, interactivas y personalizadas, adaptadas a tus necesidades.',
+      'Acceso a guías y documentos de apoyo que puedes usar incluso fuera de clase.',
+      'Comunidad de WhatsApp con tips, material extra y ejercicios para seguir practicando.',
     ],
   },
 ];

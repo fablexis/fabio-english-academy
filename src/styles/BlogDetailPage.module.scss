@@ -12,6 +12,26 @@ $text-secondary:#64748B;
 $border-color:  #E2E8F0;
 $font-heading:  'Poppins', sans-serif;
 
+// ── Reading progress bar ──────────────────────────────────────────────────────
+
+.progressBar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: transparent;
+  z-index: 200;
+  pointer-events: none;
+}
+
+.progressFill {
+  height: 100%;
+  background: #5CF890;
+  transition: width 0.1s linear;
+  border-radius: 0 2px 2px 0;
+}
+
 // ── Page wrapper ──────────────────────────────────────────────────────────────
 
 .detail {

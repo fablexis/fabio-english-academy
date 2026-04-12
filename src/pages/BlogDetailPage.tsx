@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Link, useParams, Navigate } from 'react-router-dom';
 import {
   ArrowLeft,
@@ -15,19 +15,43 @@ import { blogPosts } from '../data/blogPosts';
 import s from '../styles/BlogDetailPage.module.scss';
 
 const iconByCategory: Record<string, React.ReactNode> = {
-  Grammar: <BookOpen size={28} />,
-  Vocabulary: <Languages size={28} />,
-  Conversation: <MessageCircle size={28} />,
-  Situations: <Compass size={28} />,
+  'Gramática': <BookOpen size={28} />,
+  'Vocabulario': <Languages size={28} />,
+  'Conversación': <MessageCircle size={28} />,
+  'Situaciones': <Compass size={28} />,
 };
 
 const BlogDetailPage: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
   const post = blogPosts.find((p) => p.slug === slug);
 
+  const articleRef = useRef<HTMLElement>(null);
+  const [progress, setProgress] = useState(0);
+
   // Scroll to top whenever a different article opens
   useEffect(() => {
     window.scrollTo({ top: 0 });
+    setProgress(0);
+  }, [slug]);
+
+  // Track reading progress based on article element bounds
+  useEffect(() => {
+    const handleScroll = () => {
+      const article = articleRef.current;
+      if (!article) return;
+      const { top, height } = article.getBoundingClientRect();
+      const viewH = window.innerHeight;
+      // Progress goes 0→100 as the article scrolls from entering the viewport
+      // to its bottom reaching the bottom of the viewport
+      const scrolled = viewH - top;
+      const total = height;
+      const pct = Math.min(100, Math.max(0, (scrolled / total) * 100));
+      setProgress(pct);
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    handleScroll(); // initialise on mount
+    return () => window.removeEventListener('scroll', handleScroll);
   }, [slug]);
 
   if (!post) {
@@ -48,12 +72,17 @@ const BlogDetailPage: React.FC = () => {
       <Navbar />
 
       <main className={`${s.detail} ${s[`detail--${post.variant}`]}`}>
+        {/* ── Reading progress bar ── */}
+        <div className={s.progressBar} aria-hidden="true">
+          <div className={s.progressFill} style={{ width: `${progress}%` }} />
+        </div>
+
         {/* ── Hero ── */}
         <div className={s.detail__hero}>
           <div className={s.detail__heroInner}>
             <Link to="/blog" className={s.detail__back}>
               <ArrowLeft size={16} />
-              Back to Blog
+              Volver al Blog
             </Link>
 
             <h1 className={s.detail__heroTitle}>{post.title}</h1>
@@ -72,7 +101,7 @@ const BlogDetailPage: React.FC = () => {
 
         {/* ── Article body ── */}
         <div className={s.detail__layout}>
-          <article className={s.detail__article}>
+          <article ref={articleRef} className={s.detail__article}>
             {/* Featured image */}
             {post.image && (
               <div className={s.detail__featuredImg}>
@@ -118,7 +147,7 @@ const BlogDetailPage: React.FC = () => {
             <aside className={s.detail__tip} role="note" aria-label="Pro tip">
               <span className={s.detail__tipLabel}>
                 <Lightbulb size={14} aria-hidden="true" />
-                Pro tip
+                Consejo pro
               </span>
               <p className={s.detail__tipText}>{post.body.tip}</p>
             </aside>
@@ -129,13 +158,13 @@ const BlogDetailPage: React.FC = () => {
             {/* Back link */}
             <Link to="/blog" className={s.detail__backBottom}>
               <ArrowLeft size={15} />
-              Back to all articles
+              Volver a todos los artículos
             </Link>
           </article>
 
           {/* ── Sidebar ── */}
-          <aside className={s.detail__sidebar} aria-label="Related articles">
-            <h3 className={s.detail__sidebarTitle}>More to read</h3>
+          <aside className={s.detail__sidebar} aria-label="Artículos relacionados">
+            <h3 className={s.detail__sidebarTitle}>Más para leer</h3>
             <ul className={s.detail__relatedList}>
               {relatedPosts.map((related) => (
                 <li key={related.id}>
@@ -163,10 +192,10 @@ const BlogDetailPage: React.FC = () => {
 
             {/* Level guide card */}
             <div className={s.detail__levelCard}>
-              <p className={s.detail__levelCardLabel}>Level</p>
+              <p className={s.detail__levelCardLabel}>Nivel</p>
               <p className={s.detail__levelCardValue}>{post.level}</p>
               <p className={s.detail__levelCardHint}>
-                This article is suitable for {post.level.toLowerCase()} learners.
+                Este artículo es ideal para el nivel {post.level.toLowerCase()}.
               </p>
             </div>
           </aside>

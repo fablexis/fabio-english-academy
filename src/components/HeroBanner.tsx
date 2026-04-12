@@ -60,8 +60,14 @@ const HeroBanner: React.FC = () => {
             </p>
 
             <div className={anim(ready, 'anim-slide-up', 'delay-600', s.hero__buttons)}>
-              <button className={s.hero__btnPrimary}>Contáctanos</button>
-              <button className={s.hero__btnSecondary}>¡Empieza hoy!</button>
+              <a
+                href="https://wa.me/5491123310113?text=Hola%2C%20quisiera%20obtener%20informacion%20para%20agendar%20una%20clase%20para%20Your%20English%20Buddy%2C%20gracias"
+                target="_blank"
+                rel="noopener noreferrer"
+                className={s.hero__btnPrimary}
+              >
+                Empieza mi viaje →
+              </a>
             </div>
           </div>
 

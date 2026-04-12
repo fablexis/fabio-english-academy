@@ -42,7 +42,7 @@ const Navbar: React.FC = () => {
           `${s.navbar__link} ${isActive ? s['navbar__link--active'] : ''}`
         }
       >
-        Home
+        Inicio
       </NavLink>
       <NavLink
         to="/about"
@@ -51,7 +51,7 @@ const Navbar: React.FC = () => {
           `${s.navbar__link} ${isActive ? s['navbar__link--active'] : ''}`
         }
       >
-        About
+        Nosotros
       </NavLink>
       <NavLink
         to="/blog"
@@ -69,9 +69,15 @@ const Navbar: React.FC = () => {
           `${s.navbar__link} ${isActive ? s['navbar__link--active'] : ''}`
         }
       >
-        Courses
+        Cursos
       </NavLink>
-      <a href="#" className={s.navbar__link} onClick={() => setMenuOpen(false)}>Contact</a>
+      <a
+        href="https://wa.me/5491123310113?text=Hola%2C%20quisiera%20obtener%20informacion%20para%20agendar%20una%20clase%20para%20Your%20English%20Buddy%2C%20gracias"
+        target="_blank"
+        rel="noopener noreferrer"
+        className={s.navbar__link}
+        onClick={() => setMenuOpen(false)}
+      >Contacto</a>
     </>
   );
 

@@ -131,7 +131,7 @@ const CoursesPage: React.FC = () => {
               qué curso se adapta mejor a ti.
             </p>
             <div className={s.cta__actions}>
-              <a href="mailto:hello@yourenglishbuddy.com" className={s.cta__btnPrimary}>
+              <a href="https://wa.me/5491123310113?text=Hola%2C%20quisiera%20obtener%20informacion%20para%20agendar%20una%20clase%20para%20Your%20English%20Buddy%2C%20gracias" target="_blank" rel="noopener noreferrer" className={s.cta__btnPrimary}>
                 <CalendarCheck size={17} />
                 Reserva tu clase ahora
                 <span className={s.cta__btnIcon}>
