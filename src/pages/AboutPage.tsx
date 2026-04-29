@@ -5,6 +5,9 @@ import Footer from '../components/Footer';
 import { useInView } from '../hooks/useInView';
 import phraseImage from '../assets/phrase-image.jpg';
 import techHuman from '../assets/tech-human.jpg';
+import profileFabio from '../assets/fabio-pernia-pic.png';
+import profileAndreina from '../assets/andreina-luna-pic.png';
+import profileFabian from '../assets/fabian-pernia-pic.png';
 
 // ─── Progressive blur image ───────────────────────────────────────────────────
 
@@ -64,7 +67,7 @@ const teamMembers: TeamMember[] = [
     name: 'Fabio Pernía',
     role: 'Fundador y eterno enamorado del inglés',
     initials: 'FP',
-    imageUrl: 'https://i.pravatar.cc/640?img=12',
+    imageUrl: profileFabio,
     bio: 'Ama compartir lo que sabe de inglés y cuenta cómo este idioma transformó su vida. En él encontró mucho más que un idioma: una forma de sentirse más presente en el mundo.',
     fullBio:
       'Fabio ama compartir lo que sabe de inglés con quienes lo rodean y contar cómo este idioma transformó su vida y la de su familia. Ha intentado aprender unos seis idiomas, pero su relación más estable, fiel y duradera ha sido con el inglés. En él encontró mucho más que un idioma: encontró una forma de sentirse más presente en el mundo.\n\nFabio vive en Argentina y, en su tiempo libre, disfruta de ver películas, tomar cerveza artesanal y compartir con su esposa, a quien considera su mayor inspiración y el mayor éxito de su vida.',
@@ -86,7 +89,7 @@ const teamMembers: TeamMember[] = [
     name: 'Andreina Luna',
     role: 'Cofundadora y Responsable Creativa',
     initials: 'AL',
-    imageUrl: 'https://i.pravatar.cc/640?img=5',
+    imageUrl: profileAndreina,
     bio: 'Después de muchos años intentando aprender inglés, decidió convertir sus propias necesidades como estudiante en ideas para hacerles el camino más claro y menos empedrado a otros.',
     fullBio:
       'Andreina tiene una conexión muy personal con esta academia, porque nació también desde su propia historia con el inglés: una historia de esfuerzo, frustración y superación. Después de muchos años intentando aprenderlo, decidió convertir las necesidades que ella tuvo como estudiante en ideas para hacerles el camino más claro y menos empedrado a otros.\n\nAndreina vive en Argentina y, en su tiempo libre, ama crear ideas de contenido… porque sí, ¡también es YouTuber y Podcaster!',
@@ -107,7 +110,7 @@ const teamMembers: TeamMember[] = [
     name: 'Fabián Pernía',
     role: 'Socio Gerente y Desarrollador Full-Stack',
     initials: 'FPn',
-    imageUrl: 'https://i.pravatar.cc/640?img=13',
+    imageUrl: profileFabian,
     bio: 'Una mente lógica e inquieta apasionada por convertir ideas en herramientas digitales reales. El inglés ha sido clave en toda su carrera como programador.',
     fullBio:
       'Fabián es un inteligente nato con una mente lógica, inquieta y peligrosamente buena para resolver problemas. Es un apasionado del código bien escrito y de convertir ideas en herramientas digitales reales, como este sitio web. Su relación con el inglés también ha sido clave en su carrera como programador, ya que el idioma ha estado presente en gran parte de su crecimiento profesional.\n\nFabián vive en Colombia con su esposa, su hija y su American Bully, Bruno. En su tiempo libre, disfruta estudiar nuevas formas de usar la inteligencia artificial para simplificar su vida y la de otros.',
