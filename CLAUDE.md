@@ -8,6 +8,7 @@ A modern, interactive English learning website built with React and TypeScript. 
 - **React Router v7** for client-side routing
 - **Vite 7** for build tooling
 - **Tailwind CSS v4** (via `@tailwindcss/vite`) + **SCSS Modules** for styling
+- **Motion** (`motion/react`) for advanced animation: route transitions, springs, parallax, layout animations
 - **Lucide React** for supplementary icons
 - **ESLint 9** (flat config) for code quality
 
@@ -66,8 +67,18 @@ Vercel SPA rewrite configured in `vercel.json` to support client-side routing.
 - **TestimonialsSection** - Bento grid with rotating flip-animation cards
 - **BlogSection** - Category-filtered blog post grid
 - **NewsletterSection** - WhatsApp CTA with decorative SVG envelope
-- **Footer** - Social links (TikTok, YouTube, Buy Me Coffee), copyright
+- **Footer** - Three-column footer: brand + tagline, site nav, WhatsApp CTA, social links
 - **Icons** - Custom SVG icon components (BookStackLogo, SelfPacedIcon, etc.)
+
+**Motion infrastructure** (`src/components/`):
+- **SplashLoader** - Branded first-load splash (once per session via sessionStorage, skipped under reduced motion). `splashTiming.ts` exports `splashDelay` so the hero choreography starts as the splash lifts.
+- **PageTransition** - Route-level enter/exit wrapper used with `AnimatePresence` in `App.tsx`
+- **ScrollToTop** - Resets scroll on route change
+- **WhatsAppFloat** - Floating WhatsApp FAB with pulse ring, appears after 420px of scroll
+- **Reveal** - Generic `whileInView` entrance wrapper (used on CoursesPage)
+- **BlurImage** - Shared progressive blur-up image component
+
+The app is wrapped in `MotionConfig reducedMotion="user"`; `global.scss` also has a `prefers-reduced-motion` kill switch, `:focus-visible` styles, and `.btn-shine` / `.btn-arrow` button utilities.
 
 ## Custom Hooks
 

@@ -188,6 +188,31 @@ $shadow-badge-hover: 0 14px 44px rgba(24, 92, 96, 0.20);
     min-height: 620px;
   }
 
+  // ── Parallax layers (absolute pass-throughs, children keep coordinates) ──
+
+  &__bgLayer {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+
+  &__decoLayer {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+
+  &__badgeLayer {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 20;
+
+    > * {
+      pointer-events: auto;
+    }
+  }
+
   // ── Left content ──
 
   &__content {
@@ -195,6 +220,31 @@ $shadow-badge-hover: 0 14px 44px rgba(24, 92, 96, 0.20);
     z-index: 10;
     width: 50%;
     padding: 64px 32px 64px 0;
+  }
+
+  // ── Announcement chip ──
+
+  &__chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    padding: 8px 16px;
+    border-radius: 999px;
+    background: rgba($lime-accent, 0.32);
+    border: 1px solid rgba($lime-accent, 0.95);
+    color: $teal-deeper;
+    font-size: 0.82rem;
+    font-weight: 700;
+    margin-bottom: 22px;
+  }
+
+  &__chipDot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: $green-cta-dark;
+    box-shadow: 0 0 0 0 rgba($green-cta-dark, 0.5);
+    animation: chipPing 2.2s ease-out infinite;
   }
 
   &__heading {
@@ -206,8 +256,36 @@ $shadow-badge-hover: 0 14px 44px rgba(24, 92, 96, 0.20);
     margin-bottom: 24px;
   }
 
+  &__word {
+    display: inline-block;
+  }
+
   &__headingAccent {
     color: $teal-primary;
+  }
+
+  &__accentWrap {
+    position: relative;
+    display: inline-block;
+
+    .hero__word {
+      margin-right: 0.26em;
+
+      &:last-of-type {
+        margin-right: 0;
+      }
+    }
+  }
+
+  &__underline {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -0.16em;
+    width: 100%;
+    height: 0.28em;
+    overflow: visible;
+    pointer-events: none;
   }
 
   &__paragraph {
@@ -232,6 +310,7 @@ $shadow-badge-hover: 0 14px 44px rgba(24, 92, 96, 0.20);
     font-size: 0.9rem;
     font-weight: 700;
     border: 2px solid $green-cta;
+    text-decoration: none;
     cursor: pointer;
     transition: all 0.3s ease;
 
@@ -255,6 +334,7 @@ $shadow-badge-hover: 0 14px 44px rgba(24, 92, 96, 0.20);
     font-size: 0.9rem;
     font-weight: 600;
     border: 2px solid $teal-primary;
+    text-decoration: none;
     cursor: pointer;
     transition: all 0.3s ease;
 
@@ -530,6 +610,46 @@ $shadow-badge-hover: 0 14px 44px rgba(24, 92, 96, 0.20);
       background: radial-gradient(circle, rgba($lime-accent, 0.06) 0%, transparent 70%);
     }
   }
+
+  // ── Scroll cue ──
+
+  &__scrollCue {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 15;
+  }
+
+  &__scrollCueMouse {
+    width: 26px;
+    height: 42px;
+    border: 2px solid rgba($teal-primary, 0.45);
+    border-radius: 14px;
+    display: flex;
+    justify-content: center;
+    padding-top: 7px;
+  }
+
+  &__scrollCueWheel {
+    width: 4px;
+    height: 8px;
+    border-radius: 4px;
+    background: $teal-primary;
+    animation: scrollWheel 1.9s ease-in-out infinite;
+  }
+}
+
+@keyframes scrollWheel {
+  0% { transform: translateY(0); opacity: 0.7; }
+  65% { transform: translateY(13px); opacity: 0; }
+  100% { transform: translateY(0); opacity: 0; }
+}
+
+@keyframes chipPing {
+  0% { box-shadow: 0 0 0 0 rgba($green-cta-dark, 0.5); }
+  70% { box-shadow: 0 0 0 9px rgba($green-cta-dark, 0); }
+  100% { box-shadow: 0 0 0 0 rgba($green-cta-dark, 0); }
 }
 
 // ─── RESPONSIVE ───────────────────────────────────────────────────────────────
@@ -641,8 +761,15 @@ $shadow-badge-hover: 0 14px 44px rgba(24, 92, 96, 0.20);
     &__dotWrap2,
     &__dotWrap3,
     &__blobWarm,
-    &__blobCool {
+    &__blobCool,
+    &__scrollCue {
       display: none;
+    }
+
+    &__chip {
+      font-size: 0.74rem;
+      padding: 7px 13px;
+      margin-bottom: 16px;
     }
   }
 

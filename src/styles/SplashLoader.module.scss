@@ -1,0 +1,48 @@
+$teal-primary: #185C60;
+$teal-deeper: #0D3A3E;
+$lime-accent: #C8E47C;
+$font-heading: 'Poppins', sans-serif;
+
+.splash {
+  position: fixed;
+  inset: 0;
+  z-index: 200; // above modals and navigation
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background:
+    radial-gradient(circle at 70% 20%, rgba($lime-accent, 0.12) 0%, transparent 45%),
+    linear-gradient(150deg, $teal-primary 0%, $teal-deeper 100%);
+
+  &__center {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 26px;
+  }
+
+  &__words {
+    display: flex;
+    gap: 0.45em;
+    font-family: $font-heading;
+    font-size: clamp(1.8rem, 5.5vw, 3.4rem);
+    font-weight: 800;
+    line-height: 1;
+  }
+
+  &__word {
+    color: white;
+  }
+
+  &__word--accent {
+    color: $lime-accent;
+  }
+
+  &__bar {
+    width: min(280px, 56vw);
+    height: 4px;
+    border-radius: 4px;
+    background: linear-gradient(90deg, $lime-accent, #5CF890);
+    transform-origin: left center;
+  }
+}

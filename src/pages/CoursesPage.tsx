@@ -10,6 +10,7 @@ import {
 import Navbar from '../components/Navbar';
 import CoursesSection from '../components/CoursesSection';
 import Footer from '../components/Footer';
+import Reveal from '../components/Reveal';
 import s from '../styles/CoursesPage.module.scss';
 
 // ── What's included perks ────────────────────────────────────────────────────
@@ -58,28 +59,37 @@ const CoursesPage: React.FC = () => {
         <section className={s.hero} aria-labelledby="courses-hero-title">
           <div className={s.hero__inner}>
             <div className={s.hero__content}>
-              <h1 id="courses-hero-title" className={s.hero__title}>
-                Encuentra el curso ideal para{' '}
-                <span className={s.hero__titleAccent}>tu camino con el inglés</span>
-              </h1>
-              <p className={s.hero__subtitle}>
-                Desde conversaciones cotidianas hasta situaciones profesionales,
-                nuestros cursos están diseñados para ofrecerte una experiencia
-                práctica, personalizada y enfocada en ayudarte a comunicarte con
-                más claridad, seguridad y confianza.
-              </p>
+              <Reveal>
+                <h1 id="courses-hero-title" className={s.hero__title}>
+                  Encuentra el curso ideal para{' '}
+                  <span className={s.hero__titleAccent}>tu camino con el inglés</span>
+                </h1>
+              </Reveal>
+              <Reveal delay={0.12}>
+                <p className={s.hero__subtitle}>
+                  Desde conversaciones cotidianas hasta situaciones profesionales,
+                  nuestros cursos están diseñados para ofrecerte una experiencia
+                  práctica, personalizada y enfocada en ayudarte a comunicarte con
+                  más claridad, seguridad y confianza.
+                </p>
+              </Reveal>
             </div>
 
             {/* Decorative level pills */}
             <div className={s.hero__visual} aria-hidden="true">
-              {levels.map((lvl) => (
-                <div key={lvl.name} className={s.hero__levelPill}>
+              {levels.map((lvl, i) => (
+                <Reveal
+                  key={lvl.name}
+                  delay={0.15 + i * 0.12}
+                  y={36}
+                  className={s.hero__levelPill}
+                >
                   <span className={s.hero__levelLabel}>{lvl.label}</span>
                   <div>
                     <p className={s.hero__levelName}>{lvl.name}</p>
                     <p className={s.hero__levelDesc}>{lvl.desc}</p>
                   </div>
-                </div>
+                </Reveal>
               ))}
             </div>
           </div>
@@ -93,21 +103,28 @@ const CoursesPage: React.FC = () => {
         {/* ── What's included ──────────────────────────────────────────────── */}
         <section className={s.perks} aria-labelledby="perks-title">
           <div className={s.perks__inner}>
-            <p className={s.perks__kicker}>Cada curso incluye</p>
-            <h2 id="perks-title" className={s.perks__title}>
-              Todo lo que necesitas para{' '}
-              <span className={s.perks__titleAccent}>lograrlo</span>
-            </h2>
+            <Reveal>
+              <p className={s.perks__kicker}>Cada curso incluye</p>
+              <h2 id="perks-title" className={s.perks__title}>
+                Todo lo que necesitas para{' '}
+                <span className={s.perks__titleAccent}>lograrlo</span>
+              </h2>
+            </Reveal>
             <div className={s.perks__grid}>
-              {perks.map((perk) => (
-                <div key={perk.title} className={`${s.perks__card}${perk.badge ? ` ${s['perks__card--soon']}` : ''}`}>
+              {perks.map((perk, i) => (
+                <Reveal
+                  key={perk.title}
+                  delay={i * 0.1}
+                  y={34}
+                  className={`${s.perks__card}${perk.badge ? ` ${s['perks__card--soon']}` : ''}`}
+                >
                   <span className={s.perks__icon} aria-hidden="true">
                     {perk.icon}
                   </span>
                   <h3 className={s.perks__cardTitle}>{perk.title}</h3>
                   <p className={s.perks__cardDesc}>{perk.desc}</p>
                   {perk.badge && <span className={s.perks__badge}>{perk.badge}</span>}
-                </div>
+                </Reveal>
               ))}
             </div>
           </div>
@@ -118,30 +135,34 @@ const CoursesPage: React.FC = () => {
           <div className={s.cta__orb1} aria-hidden="true" />
           <div className={s.cta__orb2} aria-hidden="true" />
           <div className={s.cta__inner}>
-            <span className={s.cta__badge} aria-hidden="true">
-              <CalendarCheck size={15} />
-              Llamada diagnóstica de 15 minutos
-            </span>
-            <h2 id="cta-title" className={s.cta__title}>
-              ¿Listo para empezar a hablar inglés<br />
-              <span className={s.cta__titleAccent}>con confianza?</span>
-            </h2>
-            <p className={s.cta__subtitle}>
-              Evaluaré tu nivel, entenderé tus objetivos y te diré exactamente
-              qué curso se adapta mejor a ti.
-            </p>
-            <div className={s.cta__actions}>
-              <a href="https://wa.me/5491123310113?text=Hola%2C%20quisiera%20obtener%20informacion%20para%20agendar%20una%20clase%20para%20Your%20English%20Buddy%2C%20gracias" target="_blank" rel="noopener noreferrer" className={s.cta__btnPrimary}>
-                <CalendarCheck size={17} />
-                Reserva tu clase ahora
-                <span className={s.cta__btnIcon}>
-                  <ArrowUpRight size={14} />
-                </span>
-              </a>
-            </div>
-            <p className={s.cta__trust}>
-              Sin compromiso &nbsp;·&nbsp; Resultados en semanas
-            </p>
+            <Reveal>
+              <span className={s.cta__badge} aria-hidden="true">
+                <CalendarCheck size={15} />
+                Llamada diagnóstica de 15 minutos
+              </span>
+              <h2 id="cta-title" className={s.cta__title}>
+                ¿Listo para empezar a hablar inglés<br />
+                <span className={s.cta__titleAccent}>con confianza?</span>
+              </h2>
+              <p className={s.cta__subtitle}>
+                Evaluaré tu nivel, entenderé tus objetivos y te diré exactamente
+                qué curso se adapta mejor a ti.
+              </p>
+            </Reveal>
+            <Reveal delay={0.15}>
+              <div className={s.cta__actions}>
+                <a href="https://wa.me/5491123310113?text=Hola%2C%20quisiera%20obtener%20informacion%20para%20agendar%20una%20clase%20para%20Your%20English%20Buddy%2C%20gracias" target="_blank" rel="noopener noreferrer" className={`${s.cta__btnPrimary} btn-shine`}>
+                  <CalendarCheck size={17} />
+                  Reserva tu clase ahora
+                  <span className={s.cta__btnIcon}>
+                    <ArrowUpRight size={14} />
+                  </span>
+                </a>
+              </div>
+              <p className={s.cta__trust}>
+                Sin compromiso &nbsp;·&nbsp; Resultados en semanas
+              </p>
+            </Reveal>
           </div>
         </section>
       </main>

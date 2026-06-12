@@ -12,15 +12,30 @@ $border-color: #E2E8F0;
 $font-heading: 'Poppins', sans-serif;
 $shadow-badge: 0 8px 32px rgba(24, 92, 96, 0.12);
 
+$teal-dark: #124A4E;
+$green-cta: #5CF890;
+$green-cta-dark: #3CD870;
+
 .navbar {
-  position: relative;
+  position: sticky;
+  top: 0;
   z-index: 50;
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 16px 32px;
-  background: white;
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   border-bottom: 1px solid $border-color;
+  transition: padding 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+
+  &--scrolled {
+    padding: 10px 32px;
+    background: rgba(255, 255, 255, 0.85);
+    box-shadow: 0 10px 30px rgba(24, 92, 96, 0.10);
+    border-bottom-color: transparent;
+  }
 
   &__logo {
     display: flex;
@@ -78,6 +93,29 @@ $shadow-badge: 0 8px 32px rgba(24, 92, 96, 0.12);
     }
   }
 
+  // ─── WhatsApp CTA pill ───
+
+  &__cta {
+    padding: 9px 22px;
+    border-radius: 999px;
+    background: $green-cta;
+    color: $teal-deeper;
+    font-size: 0.88rem;
+    font-weight: 700;
+    text-decoration: none;
+    transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+
+    &:hover {
+      background: $green-cta-dark;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 18px rgba($green-cta, 0.45);
+    }
+
+    &:active {
+      transform: translateY(0) scale(0.96);
+    }
+  }
+
   // ─── Hamburger button (hidden on desktop) ───
 
   &__hamburger {
@@ -124,13 +162,19 @@ $shadow-badge: 0 8px 32px rgba(24, 92, 96, 0.12);
     top: 100%;
     left: 0;
     right: 0;
-    background: white;
+    background: rgba(255, 255, 255, 0.97);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
     border-bottom: 1px solid $border-color;
     box-shadow: 0 8px 24px rgba($navy, 0.08);
     z-index: 100;
+    overflow: hidden;
+  }
+
+  &__drawerInner {
+    display: flex;
     flex-direction: column;
-    padding: 20px 24px 28px;
-    gap: 0;
+    padding: 12px 24px 24px;
 
     .navbar__link {
       display: block;
@@ -138,13 +182,27 @@ $shadow-badge: 0 8px 32px rgba(24, 92, 96, 0.12);
       border-bottom: 1px solid $border-color;
       font-size: 1rem;
 
-      &:last-child {
-        border-bottom: none;
-      }
-
       &::after {
         display: none;
       }
+    }
+  }
+
+  &__drawerCta {
+    display: block;
+    margin-top: 18px;
+    padding: 13px 22px;
+    border-radius: 999px;
+    background: $green-cta;
+    color: $teal-deeper;
+    font-size: 0.95rem;
+    font-weight: 700;
+    text-align: center;
+    text-decoration: none;
+    transition: background 0.25s ease, transform 0.25s ease;
+
+    &:active {
+      transform: scale(0.97);
     }
   }
 
@@ -152,6 +210,10 @@ $shadow-badge: 0 8px 32px rgba(24, 92, 96, 0.12);
 
   @media (max-width: 899px) {
     padding: 14px 20px;
+
+    &--scrolled {
+      padding: 10px 20px;
+    }
 
     &__brand {
       font-size: 1.1rem;
@@ -166,7 +228,7 @@ $shadow-badge: 0 8px 32px rgba(24, 92, 96, 0.12);
     }
 
     &__drawer {
-      display: flex;
+      display: block;
     }
   }
 }

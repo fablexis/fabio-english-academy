@@ -1,0 +1,70 @@
+$teal-deeper: #0D3A3E;
+$green-cta: #5CF890;
+$font-heading: 'Poppins', sans-serif;
+
+@keyframes fabPulse {
+  0%   { transform: scale(1); opacity: 0.55; }
+  70%  { transform: scale(1.55); opacity: 0; }
+  100% { transform: scale(1.55); opacity: 0; }
+}
+
+.fab {
+  position: fixed;
+  bottom: 26px;
+  right: 26px;
+  z-index: 80; // below modals (which sit at 100+), above page content
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 15px 18px;
+  border-radius: 999px;
+  background: $green-cta;
+  color: $teal-deeper;
+  text-decoration: none;
+  box-shadow: 0 10px 32px rgba(13, 58, 62, 0.32);
+
+  &__ring {
+    position: absolute;
+    inset: 0;
+    border-radius: 999px;
+    background: rgba($green-cta, 0.65);
+    z-index: -1;
+    animation: fabPulse 2.4s ease-out infinite;
+    pointer-events: none;
+  }
+
+  &__label {
+    font-family: $font-heading;
+    font-size: 0.85rem;
+    font-weight: 700;
+    white-space: nowrap;
+    max-width: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition: max-width 0.4s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.3s ease;
+  }
+
+  &:hover &__label,
+  &:focus-visible &__label {
+    max-width: 120px;
+    opacity: 1;
+  }
+
+  @media (max-width: 767px) {
+    bottom: 18px;
+    right: 18px;
+    padding: 14px;
+
+    // On touch there is no hover; keep it a compact icon button
+    &__label {
+      display: none;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    &__ring {
+      animation: none;
+      opacity: 0;
+    }
+  }
+}

@@ -63,6 +63,7 @@ $font-heading:  'Poppins', sans-serif;
   }
 
   &__filterBtn {
+    position: relative;
     border: 1.5px solid $border-color;
     background: #fff;
     color: $navy;
@@ -72,7 +73,7 @@ $font-heading:  'Poppins', sans-serif;
     font-weight: 600;
     line-height: 1;
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: border-color 0.2s ease, color 0.2s ease;
 
     &:hover {
       border-color: $teal-primary;
@@ -85,10 +86,26 @@ $font-heading:  'Poppins', sans-serif;
     }
 
     &--active {
-      background: $teal-primary;
       border-color: $teal-primary;
       color: #fff;
+
+      &:hover {
+        color: #fff;
+      }
     }
+  }
+
+  // Sliding active background, shared between buttons via layoutId
+  &__filterPill {
+    position: absolute;
+    inset: -1.5px; // cover the border
+    border-radius: 999px;
+    background: $teal-primary;
+  }
+
+  &__filterLabel {
+    position: relative;
+    z-index: 1;
   }
 
   // ── Grid ─────────────────────────────────────────────────────────────────

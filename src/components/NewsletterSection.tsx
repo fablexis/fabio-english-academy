@@ -97,9 +97,9 @@ const NewsletterSection: React.FC = () => {
               href="https://wa.me/5491123310113?text=Hola%2C%20quisiera%20obtener%20informacion%20para%20agendar%20una%20clase%20para%20Your%20English%20Buddy%2C%20gracias"
               target="_blank"
               rel="noopener noreferrer"
-              className={s.newsletter__btn}
+              className={`${s.newsletter__btn} btn-shine`}
             >
-              Escríbenos por WhatsApp →
+              Escríbenos por WhatsApp <span className="btn-arrow">→</span>
             </a>
           </div>
         </div>

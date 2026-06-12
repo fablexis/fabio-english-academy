@@ -2,38 +2,13 @@ import React, { useState, useEffect, useCallback, useRef } from 'react';
 import s from '../styles/AboutPage.module.scss';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
+import BlurImage from '../components/BlurImage';
 import { useInView } from '../hooks/useInView';
 import phraseImage from '../assets/phrase-image.jpg';
 import techHuman from '../assets/tech-human.jpg';
 import profileFabio from '../assets/fabio-pernia-pic.png';
 import profileAndreina from '../assets/andreina-luna-pic.png';
 import profileFabian from '../assets/fabian-pernia-pic.png';
-
-// ─── Progressive blur image ───────────────────────────────────────────────────
-
-interface BlurImageProps {
-  src: string;
-  alt: string;
-  className?: string;
-}
-
-const BlurImage: React.FC<BlurImageProps> = ({ src, alt, className }) => {
-  const [loaded, setLoaded] = useState(false);
-
-  return (
-    <img
-      src={src}
-      alt={alt}
-      className={className}
-      onLoad={() => setLoaded(true)}
-      style={{
-        filter: loaded ? 'blur(0px)' : 'blur(16px)',
-        transform: loaded ? 'scale(1)' : 'scale(1.04)',
-        transition: 'filter 0.7s ease, transform 0.7s ease',
-      }}
-    />
-  );
-};
 
 // ─── Animation helper ────────────────────────────────────────────────────────
 
@@ -312,7 +287,7 @@ const AboutPage: React.FC = () => {
                   href="https://wa.me/5491123310113?text=Hola%2C%20quisiera%20obtener%20informacion%20para%20agendar%20una%20clase%20para%20Your%20English%20Buddy%2C%20gracias"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className={s.heroCta}
+                  className={`${s.heroCta} btn-shine`}
                 >
                   Empieza mi viaje
                   <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">

@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import s from '../styles/Footer.module.scss';
 
 // ─── Brand SVG icons (not available in lucide) ─────────────────────────────
@@ -32,22 +33,67 @@ const socialLinks = [
   { label: 'Buy Me a Coffee', icon: <BuyMeCoffeeIcon />, href: '#' },
 ];
 
+const navLinks = [
+  { label: 'Inicio', to: '/' },
+  { label: 'Nosotros', to: '/about' },
+  { label: 'Blog', to: '/blog' },
+  { label: 'Cursos', to: '/courses' },
+];
+
+const WA_URL =
+  'https://wa.me/5491123310113?text=Hola%2C%20quisiera%20obtener%20informacion%20para%20agendar%20una%20clase%20para%20Your%20English%20Buddy%2C%20gracias';
+
 const Footer: React.FC = () => (
   <footer className={s.footer}>
-    <div className={s.footer__socials}>
-      {socialLinks.map((link) => (
+    <div className={s.footer__grid}>
+      <div className={s.footer__brandCol}>
+        <p className={s.footer__brand}>Your English Buddy</p>
+        <p className={s.footer__tagline}>
+          Clases de inglés personalizadas para hispanohablantes. Habla con
+          confianza en situaciones reales.
+        </p>
+        <div className={s.footer__socials}>
+          {socialLinks.map((link) => (
+            <a
+              key={link.label}
+              href={link.href}
+              className={s.footer__socialLink}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={link.label}
+            >
+              {link.icon}
+            </a>
+          ))}
+        </div>
+      </div>
+
+      <nav className={s.footer__nav} aria-label="Navegación del pie de página">
+        <p className={s.footer__colTitle}>Explora</p>
+        {navLinks.map((link) => (
+          <Link key={link.to} to={link.to} className={s.footer__navLink}>
+            {link.label}
+          </Link>
+        ))}
+      </nav>
+
+      <div className={s.footer__contactCol}>
+        <p className={s.footer__colTitle}>¿Listo para empezar?</p>
+        <p className={s.footer__contactText}>
+          Tu primera clase diagnóstica es gratis. Escríbenos y encuentra la
+          modalidad ideal para ti.
+        </p>
         <a
-          key={link.label}
-          href={link.href}
-          className={s.footer__socialLink}
+          href={WA_URL}
           target="_blank"
           rel="noopener noreferrer"
-          aria-label={link.label}
+          className={`${s.footer__cta} btn-shine`}
         >
-          {link.icon}
+          Escríbenos por WhatsApp <span className="btn-arrow">→</span>
         </a>
-      ))}
+      </div>
     </div>
+
     <div className={s.footer__divider} />
     <p className={s.footer__copy}>
       © {new Date().getFullYear()} Fabio Pernía. All rights reserved.

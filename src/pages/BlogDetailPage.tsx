@@ -11,6 +11,7 @@ import {
 } from 'lucide-react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
+import BlurImage from '../components/BlurImage';
 import { blogPosts } from '../data/blogPosts';
 import type { Callout } from '../data/blogPosts';
 import s from '../styles/BlogDetailPage.module.scss';
@@ -150,11 +151,6 @@ const BlogDetailPage: React.FC = () => {
   const [progress, setProgress] = useState(0);
 
   useEffect(() => {
-    window.scrollTo({ top: 0 });
-    setProgress(0);
-  }, [slug]);
-
-  useEffect(() => {
     const handleScroll = () => {
       const article = articleRef.current;
       if (!article) return;
@@ -222,7 +218,7 @@ const BlogDetailPage: React.FC = () => {
             {/* Featured image */}
             {post.image && (
               <div className={s.detail__featuredImg}>
-                <img src={post.image} alt={post.title} loading="eager" />
+                <BlurImage src={post.image} alt={post.title} loading="eager" />
               </div>
             )}
 

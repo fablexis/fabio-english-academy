@@ -194,12 +194,19 @@ const CourseModal: React.FC<CourseModalProps> = ({ course, onClose, isVisible })
 
           {/* ── Bottom CTA ── */}
           <div className={s.modal__cta}>
-            <button className={s.courses__viewBtn}>
+            <a
+              href={`https://wa.me/5491123310113?text=${encodeURIComponent(
+                `Hola, quisiera inscribirme en ${course.title} de Your English Buddy, gracias`
+              )}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={`${s.courses__viewBtn} btn-shine`}
+            >
               Inscribirme ahora
               <span className={s.courses__viewBtnIcon}>
                 <ArrowUpRight size={14} />
               </span>
-            </button>
+            </a>
           </div>
         </div>
       </div>
@@ -286,7 +293,7 @@ const CoursesSection: React.FC = () => {
 
             <div className={s.courses__featuredBottom}>
               <button
-                className={s.courses__viewBtn}
+                className={`${s.courses__viewBtn} btn-shine`}
                 onClick={(e) => {
                   e.stopPropagation();
                   openModal(featuredCourse);

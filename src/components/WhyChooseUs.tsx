@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { MonitorSmartphone, GraduationCap, BadgeDollarSign } from 'lucide-react';
+import { AnimatePresence, motion } from 'motion/react';
 import s from '../styles/WhyChooseUs.module.scss';
 import { useInView } from '../hooks/useInView';
 
@@ -109,33 +110,52 @@ const WhyChooseUs: React.FC = () => {
                 )}
                 onMouseEnter={() => setActiveId(feat.id)}
                 onClick={() => setActiveId(feat.id)}
+                onFocus={() => setActiveId(feat.id)}
+                tabIndex={0}
+                role="button"
+                aria-expanded={isActive}
               >
                 {/* Content area */}
                 <div className={s.why__cardContent}>
-                  {/* Floating label (lime chip) — visible when active */}
-                  {isActive ? (
-                    <div className={s.why__cardChip}>
-                      <span className={s.why__cardChipIcon}>{feat.icon}</span>
-                      <div>
-                        <h3 className={s.why__cardChipTitle}>{feat.title}</h3>
-                        {feat.hoverItems ? (
-                          <ul className={s.why__cardChipList}>
-                            {feat.hoverItems.map((item, i) => (
-                              <li key={i} className={s.why__cardChipListItem}>{item}</li>
-                            ))}
-                          </ul>
-                        ) : (
-                          <p className={s.why__cardChipDesc}>{feat.description}</p>
-                        )}
-                      </div>
-                    </div>
-                  ) : (
-                    <>
-                      <div className={s.why__cardIcon}>{feat.icon}</div>
-                      <h3 className={s.why__cardTitle}>{feat.title}</h3>
-                      <p className={s.why__cardDesc}>{feat.description}</p>
-                    </>
-                  )}
+                  <AnimatePresence mode="wait" initial={false}>
+                    {isActive ? (
+                      <motion.div
+                        key="chip"
+                        className={s.why__cardChip}
+                        initial={{ opacity: 0, y: 26 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: 14 }}
+                        transition={{ duration: 0.34, ease: [0.22, 1, 0.36, 1] }}
+                      >
+                        <span className={s.why__cardChipIcon}>{feat.icon}</span>
+                        <div>
+                          <h3 className={s.why__cardChipTitle}>{feat.title}</h3>
+                          {feat.hoverItems ? (
+                            <ul className={s.why__cardChipList}>
+                              {feat.hoverItems.map((item, i) => (
+                                <li key={i} className={s.why__cardChipListItem}>{item}</li>
+                              ))}
+                            </ul>
+                          ) : (
+                            <p className={s.why__cardChipDesc}>{feat.description}</p>
+                          )}
+                        </div>
+                      </motion.div>
+                    ) : (
+                      <motion.div
+                        key="info"
+                        className={s.why__cardFill}
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        transition={{ duration: 0.22 }}
+                      >
+                        <div className={s.why__cardIcon}>{feat.icon}</div>
+                        <h3 className={s.why__cardTitle}>{feat.title}</h3>
+                        <p className={s.why__cardDesc}>{feat.description}</p>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
                 </div>
               </div>
             );

@@ -54,11 +54,47 @@ html {
   -moz-osx-font-smoothing: grayscale;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 body {
   font-family: $font-body;
   color: $navy;
   background: #fff;
   overflow-x: hidden;
+}
+
+// Brand text selection
+::selection {
+  background: rgba($lime-accent, 0.7);
+  color: $teal-deeper;
+}
+
+// Visible keyboard focus, invisible for mouse users
+:focus {
+  outline: none;
+}
+
+:focus-visible {
+  outline: 3px solid rgba($teal-primary, 0.55);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+// Balanced headings, tidy prose
+h1, h2, h3 {
+  text-wrap: balance;
+}
+
+p {
+  text-wrap: pretty;
+}
+
+// Subtle branded scrollbar
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba($teal-primary, 0.35) transparent;
 }
 
 // ═══════════════════════════════════════════════════════════════════════════════
@@ -206,4 +242,71 @@ body {
 
 .spin-slow {
   animation: spinSlow 14s linear infinite;
+}
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// BUTTON SHINE — sweeping highlight on hover (apply alongside any pill button)
+// ═══════════════════════════════════════════════════════════════════════════════
+
+@keyframes shineSweep {
+  from { transform: translateX(-130%) skewX(-18deg); }
+  to   { transform: translateX(230%) skewX(-18deg); }
+}
+
+.btn-shine {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0 auto 0 0;
+    width: 45%;
+    background: linear-gradient(
+      105deg,
+      rgba(255, 255, 255, 0) 0%,
+      rgba(255, 255, 255, 0.55) 50%,
+      rgba(255, 255, 255, 0) 100%
+    );
+    transform: translateX(-130%) skewX(-18deg);
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  &:hover::after {
+    animation: shineSweep 0.75s $ease-out-expo;
+  }
+}
+
+// Arrow nudge — wrap the trailing arrow in .btn-arrow and it slides on hover
+.btn-arrow {
+  display: inline-block;
+  transition: transform 0.35s $ease-spring;
+}
+
+a:hover > .btn-arrow,
+button:hover > .btn-arrow {
+  transform: translateX(5px);
+}
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// REDUCED MOTION — every animation gets an instant alternative
+// ═══════════════════════════════════════════════════════════════════════════════
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .anim-hidden {
+    opacity: 1;
+  }
 }

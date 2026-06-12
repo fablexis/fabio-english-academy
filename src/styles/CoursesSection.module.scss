@@ -285,12 +285,19 @@ $font-heading: 'Poppins', sans-serif;
     color: $navy;
     font-size: 0.82rem;
     font-weight: 600;
+    text-decoration: none;
     cursor: pointer;
     transition: all 0.25s ease;
 
     &:hover {
       background: $navy;
       color: white;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba($navy, 0.18);
+    }
+
+    &:active {
+      transform: translateY(0) scale(0.97);
     }
   }
 
