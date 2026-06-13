@@ -121,7 +121,7 @@ const HeroBanner: React.FC = () => {
               animate="visible"
             >
               <span className={s.hero__chipDot} aria-hidden="true" />
-              Primera clase diagnóstica gratis
+              Clase diagnóstica personalizada
             </motion.div>
 
             <motion.h1

@@ -80,8 +80,8 @@ const Footer: React.FC = () => (
       <div className={s.footer__contactCol}>
         <p className={s.footer__colTitle}>¿Listo para empezar?</p>
         <p className={s.footer__contactText}>
-          Tu primera clase diagnóstica es gratis. Escríbenos y encuentra la
-          modalidad ideal para ti.
+          Empieza con una clase diagnóstica personalizada. Escríbenos y
+          encuentra la modalidad ideal para ti.
         </p>
         <a
           href={WA_URL}

@@ -48,7 +48,7 @@ const featuredCourse: Course = {
   popular: true,
   image: individualClassImg,
   features: [
-    'Una primera clase diagnóstica gratis de 20 minutos.',
+    'Una primera clase diagnóstica de 20 minutos.',
     '8 clases mensuales de 1 hora.',
     'Clases en línea vía Zoom, interactivas y personalizadas, adaptadas a tus necesidades.',
     'Acceso a guías y documentos de apoyo que puedes usar incluso fuera de clase.',
@@ -67,7 +67,7 @@ const courses: Course[] = [
     price: 580,
     image: duoClassImg,
     features: [
-      'Una primera clase diagnóstica gratis de 20 minutos.',
+      'Una primera clase diagnóstica de 20 minutos.',
       '8 clases mensuales de 1 hora.',
       'Clases en línea vía Zoom, interactivas y personalizadas, adaptadas a tus necesidades.',
       'Acceso a guías y documentos de apoyo que puedes usar incluso fuera de clase.',
@@ -84,7 +84,7 @@ const courses: Course[] = [
     price: 320,
     image: saturdayClassImg,
     features: [
-      'Una primera clase diagnóstica gratis de 20 minutos.',
+      'Una primera clase diagnóstica de 20 minutos.',
       '8 clases mensuales de 1 hora.',
       'Clases en línea vía Zoom, interactivas y personalizadas, adaptadas a tus necesidades.',
       'Acceso a guías y documentos de apoyo que puedes usar incluso fuera de clase.',
