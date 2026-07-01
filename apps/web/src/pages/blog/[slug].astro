@@ -1,0 +1,25 @@
+---
+// Blog detail — SSR (on-demand). Fetches the post by slug from the CMS;
+// redirects to /blog when the slug is missing/unpublished (404 from the API).
+export const prerender = false;
+
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import BlogDetailPage from '../../views/BlogDetailPage.tsx';
+import { getPost, getPosts, pickRelated } from '../../lib/api';
+import type { BlogListItemDto } from '@eyb/shared';
+
+const { slug } = Astro.params;
+const post = slug ? await getPost(slug) : null;
+if (!post) return Astro.redirect('/blog');
+
+let related: BlogListItemDto[] = [];
+try {
+  related = pickRelated(await getPosts(), post, 2);
+} catch (err) {
+  console.error('[blog] failed to load related posts:', err);
+}
+---
+
+<BaseLayout title={`${post.title} — Your English Buddy`} description={post.excerpt}>
+  <BlogDetailPage client:load post={post} relatedPosts={related} />
+</BaseLayout>

@@ -1,0 +1,18 @@
+---
+// Homepage — fully static (SSG). Interactive sections hydrate as islands.
+import BaseLayout from '../layouts/BaseLayout.astro';
+import HeroBanner from '../components/HeroBanner.tsx';
+import WhyChooseUs from '../components/WhyChooseUs.tsx';
+import TestimonialsSection from '../components/TestimonialsSection.tsx';
+import NewsletterSection from '../components/NewsletterSection.tsx';
+import Footer from '../components/Footer.tsx';
+---
+
+<BaseLayout title="Your English Buddy — Aprende inglés a tu ritmo">
+  <HeroBanner client:load />
+  <WhyChooseUs client:visible />
+  <TestimonialsSection client:visible />
+  <NewsletterSection client:visible />
+  <!-- Footer has no interactivity → rendered to static HTML, zero JS. -->
+  <Footer />
+</BaseLayout>

@@ -1,0 +1,189 @@
+// Admin panel — utilitarian dashboard styling with the brand palette.
+$teal: #185c60;
+$lime: #c8e47c;
+$ink: #14181a;
+$muted: #667;
+$line: #e4e8ea;
+$danger: #d1495b;
+
+.center { padding: 3rem; text-align: center; color: $muted; }
+.error { color: $danger; font-size: 0.9rem; margin: 0.5rem 0; }
+.warn { color: $danger; font-style: normal; font-weight: 600; }
+
+// ── Login ──
+.loginWrap {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  background: radial-gradient(circle at 30% 20%, #1f6d72 0%, $teal 45%, #0f3b3e 100%);
+  padding: 1.5rem;
+}
+.loginCard {
+  width: 100%;
+  max-width: 380px;
+  background: #fff;
+  border-radius: 18px;
+  padding: 2rem;
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.25);
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+}
+.loginTitle { margin: 0; font-size: 1.35rem; color: $ink; }
+.loginSub { margin: 0 0 0.5rem; color: $muted; font-size: 0.9rem; }
+
+// ── Shell ──
+.shell { display: grid; grid-template-columns: 230px 1fr; min-height: 100vh; }
+.sidebar {
+  background: $teal;
+  color: #fff;
+  padding: 1.5rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.brand { font-weight: 800; font-size: 1.05rem; letter-spacing: 0.02em; }
+.nav { display: flex; flex-direction: column; gap: 0.25rem; flex: 1; }
+.nav a {
+  color: rgba(255, 255, 255, 0.85);
+  text-decoration: none;
+  padding: 0.5rem 0.65rem;
+  border-radius: 9px;
+  font-weight: 600;
+  &:hover { background: rgba(255, 255, 255, 0.12); color: #fff; }
+}
+.userBox { font-size: 0.8rem; display: flex; flex-direction: column; gap: 0.4rem; opacity: 0.95; }
+.main { background: #f6f8f9; padding: 2rem; overflow: auto; }
+
+// ── Page ──
+.page { max-width: 900px; margin: 0 auto; }
+.pageHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+  h1 { margin: 0; font-size: 1.5rem; color: $ink; }
+}
+
+// ── Table ──
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+  th, td { padding: 0.75rem 1rem; text-align: left; border-bottom: 1px solid $line; font-size: 0.9rem; }
+  th { background: #eef2f3; color: $muted; font-weight: 700; }
+}
+.rowActions { display: flex; gap: 0.5rem; justify-content: flex-end; }
+.badgeOn { color: #1a7f4b; font-weight: 700; font-size: 0.8rem; }
+.badgeOff { color: $muted; font-weight: 700; font-size: 0.8rem; }
+
+// ── Forms ──
+.form { background: #fff; border-radius: 14px; padding: 1.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.06); }
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  margin-bottom: 1rem;
+  span { font-size: 0.82rem; font-weight: 600; color: $ink; }
+  input, textarea, select {
+    padding: 0.55rem 0.7rem;
+    border: 1px solid $line;
+    border-radius: 9px;
+    font: inherit;
+    background: #fdfefe;
+    &:focus { outline: 2px solid rgba(24, 92, 96, 0.35); border-color: $teal; }
+  }
+}
+.code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 0.8rem; line-height: 1.5; }
+.checkbox { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1rem; font-weight: 600; font-size: 0.9rem; }
+.formActions { display: flex; justify-content: flex-end; gap: 0.75rem; }
+
+// ── Buttons ──
+.btnPrimary {
+  background: $teal; color: #fff; border: 0; border-radius: 10px;
+  padding: 0.6rem 1.1rem; font-weight: 700; cursor: pointer; text-decoration: none;
+  display: inline-flex; align-items: center;
+  &:hover { background: #12484b; }
+  &:disabled { opacity: 0.55; cursor: not-allowed; }
+}
+.btnGhost {
+  background: transparent; color: inherit; border: 1px solid currentColor;
+  border-radius: 9px; padding: 0.4rem 0.8rem; font-weight: 600; cursor: pointer;
+  text-decoration: none; font-size: 0.85rem; opacity: 0.85;
+  &:hover { opacity: 1; }
+}
+.btnDanger {
+  background: transparent; color: $danger; border: 1px solid $danger;
+  border-radius: 9px; padding: 0.4rem 0.8rem; font-weight: 600; cursor: pointer; font-size: 0.85rem;
+  &:hover { background: $danger; color: #fff; }
+  &:disabled { opacity: 0.5; }
+}
+
+// ── Structured body editor ──
+.bodyHead {
+  display: flex; align-items: center; justify-content: space-between;
+  margin: 1.5rem 0 0.75rem; border-top: 1px solid $line; padding-top: 1.25rem;
+}
+.bodyTitle { margin: 0; font-size: 1.1rem; color: $ink; }
+.modeToggle { display: inline-flex; border: 1px solid $line; border-radius: 9px; overflow: hidden; }
+.modeBtn, .modeActive {
+  border: 0; background: #fff; color: $muted; padding: 0.35rem 0.85rem;
+  font-weight: 600; font-size: 0.82rem; cursor: pointer;
+}
+.modeActive { background: $teal; color: #fff; }
+
+.bodyEditor { display: flex; flex-direction: column; gap: 0.5rem; }
+
+.fieldset {
+  border: 1px solid $line; border-radius: 12px; padding: 1rem 1.1rem 1.15rem; margin: 0.5rem 0 1rem;
+  legend { font-weight: 700; font-size: 0.9rem; color: $teal; padding: 0 0.4rem; }
+}
+.sectionCard {
+  border: 1px solid $line; border-radius: 10px; padding: 0.9rem; margin-bottom: 0.9rem; background: #fbfdfd;
+}
+.sectionHead {
+  display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.6rem;
+  strong { font-size: 0.9rem; color: $ink; }
+}
+.nested { border-left: 2px solid $line; padding-left: 0.85rem; margin: 0.5rem 0; }
+.legendSm { display: block; font-size: 0.8rem; font-weight: 600; color: $muted; margin-bottom: 0.35rem; }
+
+.listField { margin-bottom: 0.75rem; }
+.listRow {
+  display: flex; gap: 0.4rem; margin-bottom: 0.4rem; align-items: flex-start;
+  input, textarea {
+    flex: 1; padding: 0.45rem 0.6rem; border: 1px solid $line; border-radius: 8px; font: inherit;
+    &:focus { outline: 2px solid rgba(24,92,96,0.3); border-color: $teal; }
+  }
+}
+.qaRow {
+  display: flex; gap: 0.4rem; margin-bottom: 0.4rem; align-items: center; flex-wrap: wrap;
+  input {
+    flex: 1; min-width: 160px; padding: 0.45rem 0.6rem; border: 1px solid $line; border-radius: 8px; font: inherit;
+    &:focus { outline: 2px solid rgba(24,92,96,0.3); border-color: $teal; }
+  }
+}
+
+.callout {
+  border: 1px dashed #b9d0c2; border-radius: 10px; padding: 0.8rem; margin-bottom: 0.7rem; background: #f4fbf6;
+}
+.calloutHead {
+  display: flex; gap: 0.5rem; justify-content: space-between; align-items: center; margin-bottom: 0.6rem;
+  select { padding: 0.4rem 0.6rem; border: 1px solid $line; border-radius: 8px; font: inherit; font-weight: 600; }
+}
+.mapCol { border: 1px solid $line; border-radius: 8px; padding: 0.6rem; margin-bottom: 0.5rem; }
+
+.btnAddSm {
+  background: rgba(24,92,96,0.08); color: $teal; border: 1px dashed rgba(24,92,96,0.4);
+  border-radius: 8px; padding: 0.35rem 0.75rem; font-weight: 700; font-size: 0.82rem; cursor: pointer;
+  &:hover { background: rgba(24,92,96,0.14); }
+}
+.btnRemove {
+  background: transparent; color: $danger; border: 0; cursor: pointer;
+  font-weight: 700; font-size: 0.82rem; padding: 0.2rem 0.4rem; white-space: nowrap;
+  &:hover { text-decoration: underline; }
+}

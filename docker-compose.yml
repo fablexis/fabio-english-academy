@@ -1,0 +1,28 @@
+# Local Postgres for development. Matches the default DATABASE_URL in
+# apps/api/.env.example. Start it, then migrate + seed:
+#
+#   docker compose up -d
+#   npm run -w @eyb/api prisma:migrate      # applies migrations
+#   npm run seed                            # seeds the 12 blog posts
+#
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: eyb-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: eyb
+      POSTGRES_PASSWORD: eyb
+      POSTGRES_DB: eyb
+    ports:
+      - '5432:5432'
+    volumes:
+      - eyb-pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U eyb -d eyb']
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  eyb-pgdata:

@@ -1,0 +1,10 @@
+node_modules
+dist
+*.tsbuildinfo
+
+# Prisma local artifacts (dev DB runs in docker-compose Postgres)
+prisma/*.db
+prisma/*.db-journal
+
+# env
+.env

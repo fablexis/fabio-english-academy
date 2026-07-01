@@ -1,0 +1,9 @@
+---
+// Courses — static (SSG). Self-contained React page mounted as one island.
+import BaseLayout from '../layouts/BaseLayout.astro';
+import CoursesPage from '../views/CoursesPage.tsx';
+---
+
+<BaseLayout title="Cursos — Your English Buddy">
+  <CoursesPage client:load />
+</BaseLayout>

@@ -1,36 +1,31 @@
 {
-  "name": "flowdemy-banner",
+  "name": "english-website",
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ],
   "scripts": {
-    "dev": "vite",
-    "build": "tsc -b && vite build",
-    "lint": "eslint .",
-    "preview": "vite preview"
-  },
-  "dependencies": {
-    "lucide-react": "^0.564.0",
-    "motion": "^12.40.0",
-    "react": "^19.2.0",
-    "react-dom": "^19.2.0",
-    "react-router-dom": "^7.13.1"
+    "dev": "npm-run-all2 --parallel dev:api dev:web",
+    "dev:web": "npm run dev -w @eyb/web",
+    "dev:api": "npm run start:dev -w @eyb/api",
+    "build": "npm run build -w @eyb/shared && npm run build -w @eyb/web",
+    "build:api": "npm run build -w @eyb/shared && npm run build -w @eyb/api",
+    "seed": "npm run seed -w @eyb/api",
+    "seed:generate": "npm run seed:generate -w @eyb/api",
+    "typecheck": "tsc -b",
+    "lint": "eslint ."
   },
   "devDependencies": {
     "@eslint/js": "^9.39.1",
-    "@tailwindcss/vite": "^4.1.18",
-    "@types/node": "^24.10.1",
-    "@types/react": "^19.2.5",
-    "@types/react-dom": "^19.2.3",
-    "@vitejs/plugin-react": "^5.1.1",
     "eslint": "^9.39.1",
     "eslint-plugin-react-hooks": "^7.0.1",
     "eslint-plugin-react-refresh": "^0.4.24",
     "globals": "^16.5.0",
-    "sass": "^1.97.3",
-    "tailwindcss": "^4.1.18",
+    "npm-run-all2": "^7.0.2",
     "typescript": "~5.9.3",
-    "typescript-eslint": "^8.46.4",
-    "vite": "^7.2.4"
+    "typescript-eslint": "^8.46.4"
   }
 }

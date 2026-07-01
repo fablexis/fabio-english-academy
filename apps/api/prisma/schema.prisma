@@ -1,0 +1,64 @@
+// Prisma schema for the Your English Buddy content API.
+//
+// Scope: the blog is the only CMS-driven content (see the migration plan),
+// so this schema holds just the BlogPost content table plus the admin auth
+// tables (User + RefreshToken).
+//
+// PostgreSQL in every environment (dev via docker-compose, prod via a managed
+// Postgres). `body` is stored as a JSON-serialized String — swap to `Json`
+// (jsonb) later if you want in-DB querying; the service already serializes.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String         @id @default(cuid())
+  email         String         @unique
+  passwordHash  String
+  role          String         @default("ADMIN")
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  refreshTokens RefreshToken[]
+}
+
+model RefreshToken {
+  id        String    @id @default(cuid())
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String
+  tokenHash String    @unique
+  expiresAt DateTime
+  revokedAt DateTime?
+  createdAt DateTime  @default(now())
+
+  @@index([userId])
+}
+
+// `body` is JSON-stringified (SQLite has no jsonb; Postgres promotion later
+// keeps the same string serialization). Validation happens at the API
+// boundary via class-validator DTOs. `image` is a stable path string
+// (e.g. /blog-images/present-perfect.jpg) served as a static asset by the web
+// app — intentionally decoupled from the frontend's Vite module graph.
+model BlogPost {
+  id        Int      @id @default(autoincrement())
+  slug      String   @unique
+  category  String
+  title     String
+  excerpt   String
+  readTime  String
+  level     String
+  variant   String
+  image     String
+  body      String
+  published Boolean  @default(true)
+  sortOrder Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([published, sortOrder])
+}

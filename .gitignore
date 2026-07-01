@@ -27,3 +27,13 @@ yarn-error.log*
 *.tmp
 *.bak
 .todos/
+
+# Astro / Vercel build output
+.astro/
+.vercel/
+**/dist/
+
+# Prisma SQLite dev database
+apps/api/prisma/*.db
+apps/api/prisma/*.db-journal
+*.tsbuildinfo
