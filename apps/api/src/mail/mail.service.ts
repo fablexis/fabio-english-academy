@@ -67,6 +67,21 @@ export class MailService {
   }
 
   private async deliver(to: string, mail: RenderedEmail, actionUrl: string): Promise<void> {
+    if (!this.resendKey && !this.transporter) {
+      this.logger.log(`[dev mail] to=${to} subject="${mail.subject}" link=${actionUrl}`);
+      return;
+    }
+    try {
+      await this.send(to, mail);
+    } catch (err) {
+      // Surface the action link so a failed delivery (blocked port, sandboxed
+      // sender, provider outage) can still be handed to the user manually.
+      this.logger.error(`[mail failed] to=${to} link=${actionUrl}`);
+      throw err;
+    }
+  }
+
+  private async send(to: string, mail: RenderedEmail): Promise<void> {
     const from =
       this.config.get<string>('MAIL_FROM') ??
       'Your English Buddy <no-reply@yourenglishbuddy.com>';
@@ -88,10 +103,7 @@ export class MailService {
       return;
     }
 
-    if (!this.transporter) {
-      this.logger.log(`[dev mail] to=${to} subject="${mail.subject}" link=${actionUrl}`);
-      return;
-    }
+    if (!this.transporter) return; // unreachable — deliver() guards this
     await this.transporter.sendMail({
       from,
       to,
