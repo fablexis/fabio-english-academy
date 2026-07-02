@@ -5,7 +5,8 @@ WORKDIR /app
 RUN apt-get update -y && apt-get install -y openssl && rm -rf /var/lib/apt/lists/*
 
 # Install with the full workspace lockfile for reproducible deps.
-COPY package.json package-lock.json ./
+# tsconfig.base.json is extended by packages/shared/tsconfig.json.
+COPY package.json package-lock.json tsconfig.base.json ./
 COPY packages/shared/package.json packages/shared/
 COPY apps/api/package.json apps/api/
 RUN npm ci

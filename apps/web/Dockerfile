@@ -4,7 +4,8 @@ FROM node:22-slim AS build
 WORKDIR /app
 
 # Install with the full workspace lockfile for reproducible deps.
-COPY package.json package-lock.json ./
+# tsconfig.base.json is extended by packages/shared/tsconfig.json.
+COPY package.json package-lock.json tsconfig.base.json ./
 COPY packages/shared/package.json packages/shared/
 COPY apps/web/package.json apps/web/
 RUN npm ci
