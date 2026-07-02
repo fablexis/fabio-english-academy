@@ -8,7 +8,13 @@ import {
   Lightbulb,
   MessageCircle,
 } from 'lucide-react';
-import type { BlogListItemDto, BlogPostDto, Callout } from '@eyb/shared';
+import {
+  defaultSite,
+  type BlogListItemDto,
+  type BlogPostDto,
+  type Callout,
+  type SiteContent,
+} from '@eyb/shared';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import BlurImage from '../components/BlurImage';
@@ -146,9 +152,15 @@ interface BlogDetailPageProps {
   post: BlogPostDto;
   /** Related posts (cards) computed server-side. */
   relatedPosts: BlogListItemDto[];
+  /** CMS-managed site chrome (navbar CTA, footer, WhatsApp). */
+  site?: SiteContent;
 }
 
-const BlogDetailPage: React.FC<BlogDetailPageProps> = ({ post, relatedPosts }) => {
+const BlogDetailPage: React.FC<BlogDetailPageProps> = ({
+  post,
+  relatedPosts,
+  site = defaultSite,
+}) => {
   const articleRef = useRef<HTMLElement>(null);
   const [progress, setProgress] = useState(0);
 
@@ -171,7 +183,7 @@ const BlogDetailPage: React.FC<BlogDetailPageProps> = ({ post, relatedPosts }) =
 
   return (
     <>
-      <Navbar />
+      <Navbar site={site} />
 
       <main className={`${s.detail} ${s[`detail--${post.variant}`]}`}>
         {/* ── Reading progress bar ── */}
@@ -355,7 +367,7 @@ const BlogDetailPage: React.FC<BlogDetailPageProps> = ({ post, relatedPosts }) =
         </div>
       </main>
 
-      <Footer />
+      <Footer site={site} />
     </>
   );
 };

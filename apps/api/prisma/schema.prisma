@@ -20,11 +20,54 @@ datasource db {
 model User {
   id            String         @id @default(cuid())
   email         String         @unique
+  // Display name; the UI falls back to the email when unset.
+  name          String?
+  // Profile picture URL (uploaded via /admin/uploads); initials shown when unset.
+  avatarUrl     String?
   passwordHash  String
   role          String         @default("ADMIN")
+  // Start of the current session and of the one before it — the dashboard
+  // greets with prevLoginAt ("tu último acceso") so it survives reloads.
+  lastLoginAt   DateTime?
+  prevLoginAt   DateTime?
   createdAt     DateTime       @default(now())
   updatedAt     DateTime       @updatedAt
   refreshTokens RefreshToken[]
+  tokens        UserToken[]
+  activity      ActivityLog[]
+}
+
+// Audit trail: one row per admin action (content edits, invitations, logins).
+// userEmail is denormalized so history survives user deletion.
+model ActivityLog {
+  id        Int      @id @default(autoincrement())
+  user      User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  userId    String?
+  userEmail String
+  action    String // 'create' | 'update' | 'delete' | 'invite' | 'login' | …
+  entity    String // 'page' | 'blog' | 'user' | 'upload' | 'auth'
+  entityId  String?
+  summary   String // human sentence shown in the admin timeline
+  createdAt DateTime @default(now())
+
+  @@index([createdAt])
+  @@index([entity, createdAt])
+}
+
+// Single-use, expiring tokens for admin invitations and password resets.
+// Only the sha256 of the raw token is stored; the raw value travels once,
+// inside the emailed link.
+model UserToken {
+  id        String    @id @default(cuid())
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String
+  type      String // 'INVITE' | 'RESET'
+  tokenHash String    @unique
+  expiresAt DateTime
+  usedAt    DateTime?
+  createdAt DateTime  @default(now())
+
+  @@index([userId, type])
 }
 
 model RefreshToken {
@@ -44,6 +87,17 @@ model RefreshToken {
 // boundary via class-validator DTOs. `image` is a stable path string
 // (e.g. /blog-images/present-perfect.jpg) served as a static asset by the web
 // app — intentionally decoupled from the frontend's Vite module graph.
+// One JSON document per editable public page ('home' | 'about' | 'courses' |
+// 'blog' | 'site'). `data` is JSON-stringified like BlogPost.body; the row is
+// absent until the admin saves an override — the frontend then falls back to
+// the canonical defaults in @eyb/shared.
+model PageContent {
+  key       String   @id
+  data      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
 model BlogPost {
   id        Int      @id @default(autoincrement())
   slug      String   @unique

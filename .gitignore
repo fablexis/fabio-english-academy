@@ -37,3 +37,6 @@ yarn-error.log*
 apps/api/prisma/*.db
 apps/api/prisma/*.db-journal
 *.tsbuildinfo
+
+# Admin-uploaded images (served by the API at /uploads)
+apps/api/uploads/

@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
+import { defaultSite, type SiteContent } from '@eyb/shared';
 import s from '../styles/WhatsAppFloat.module.scss';
-
-const WA_URL =
-  'https://wa.me/5491123310113?text=Hola%2C%20quisiera%20obtener%20informacion%20para%20agendar%20una%20clase%20para%20Your%20English%20Buddy%2C%20gracias';
+import { waUrl } from '../lib/whatsapp';
 
 const WhatsAppIcon: React.FC = () => (
   <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
@@ -15,7 +14,7 @@ const WhatsAppIcon: React.FC = () => (
  * Floating WhatsApp call-to-action. Appears once the visitor scrolls
  * past the hero so it never competes with the primary CTA.
  */
-const WhatsAppFloat: React.FC = () => {
+const WhatsAppFloat: React.FC<{ site?: SiteContent }> = ({ site = defaultSite }) => {
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
@@ -29,11 +28,11 @@ const WhatsAppFloat: React.FC = () => {
     <AnimatePresence>
       {visible && (
         <motion.a
-          href={WA_URL}
+          href={waUrl(site)}
           target="_blank"
           rel="noopener noreferrer"
           className={s.fab}
-          aria-label="Escríbenos por WhatsApp"
+          aria-label={site.footer.ctaLabel}
           initial={{ opacity: 0, scale: 0.5, y: 24 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.5, y: 24 }}
@@ -43,7 +42,7 @@ const WhatsAppFloat: React.FC = () => {
         >
           <span className={s.fab__ring} aria-hidden="true" />
           <WhatsAppIcon />
-          <span className={s.fab__label}>¿Hablamos?</span>
+          <span className={s.fab__label}>{site.floatLabel}</span>
         </motion.a>
       )}
     </AnimatePresence>

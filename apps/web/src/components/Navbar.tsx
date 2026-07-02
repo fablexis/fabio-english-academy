@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
+import { defaultSite, type SiteContent } from '@eyb/shared';
 import s from '../styles/Navbar.module.scss';
+import { waUrl } from '../lib/whatsapp';
 import { BookStackLogo } from './Icons';
-
-const WA_URL =
-  'https://wa.me/5491123310113?text=Hola%2C%20quisiera%20obtener%20informacion%20para%20agendar%20una%20clase%20para%20Your%20English%20Buddy%2C%20gracias';
 
 const NAV_ITEMS = [
   { to: '/', label: 'Inicio', end: true },
@@ -13,7 +12,8 @@ const NAV_ITEMS = [
   { to: '/courses', label: 'Cursos' },
 ];
 
-const Navbar: React.FC = () => {
+const Navbar: React.FC<{ site?: SiteContent }> = ({ site = defaultSite }) => {
+  const WA_URL = waUrl(site);
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [pathname, setPathname] = useState('/');
@@ -68,7 +68,7 @@ const Navbar: React.FC = () => {
           rel="noopener noreferrer"
           className={`${s.navbar__cta} btn-shine`}
         >
-          Contacto
+          {site.navCtaLabel}
         </a>
       </div>
 
@@ -123,7 +123,7 @@ const Navbar: React.FC = () => {
                   className={s.navbar__drawerCta}
                   onClick={() => setMenuOpen(false)}
                 >
-                  Escríbenos por WhatsApp
+                  {site.footer.ctaLabel}
                 </a>
               </motion.div>
             </div>

@@ -1,5 +1,7 @@
 import React from 'react';
+import { defaultSite, type SiteContent } from '@eyb/shared';
 import s from '../styles/Footer.module.scss';
+import { waUrl } from '../lib/whatsapp';
 
 // ─── Brand SVG icons (not available in lucide) ─────────────────────────────
 
@@ -24,13 +26,23 @@ const BuyMeCoffeeIcon: React.FC = () => (
   </svg>
 );
 
+// Generic fallback for social labels without a dedicated brand icon.
+const GlobeIcon: React.FC = () => (
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+    <circle cx="12" cy="12" r="9" />
+    <path d="M3 12h18M12 3c2.5 2.6 3.75 5.6 3.75 9S14.5 18.4 12 21c-2.5-2.6-3.75-5.6-3.75-9S9.5 5.6 12 3z" />
+  </svg>
+);
+
 // ═════════════════════════════════════════════════════════════════════════════
 
-const socialLinks = [
-  { label: 'TikTok', icon: <TikTokIcon />, href: '#' },
-  { label: 'YouTube', icon: <YouTubeIcon />, href: '#' },
-  { label: 'Buy Me a Coffee', icon: <BuyMeCoffeeIcon />, href: '#' },
-];
+function socialIcon(label: string): React.ReactNode {
+  const key = label.toLowerCase();
+  if (key.includes('tiktok')) return <TikTokIcon />;
+  if (key.includes('youtube')) return <YouTubeIcon />;
+  if (key.includes('coffee')) return <BuyMeCoffeeIcon />;
+  return <GlobeIcon />;
+}
 
 const navLinks = [
   { label: 'Inicio', to: '/' },
@@ -39,20 +51,14 @@ const navLinks = [
   { label: 'Cursos', to: '/courses' },
 ];
 
-const WA_URL =
-  'https://wa.me/5491123310113?text=Hola%2C%20quisiera%20obtener%20informacion%20para%20agendar%20una%20clase%20para%20Your%20English%20Buddy%2C%20gracias';
-
-const Footer: React.FC = () => (
+const Footer: React.FC<{ site?: SiteContent }> = ({ site = defaultSite }) => (
   <footer className={s.footer}>
     <div className={s.footer__grid}>
       <div className={s.footer__brandCol}>
         <p className={s.footer__brand}>Your English Buddy</p>
-        <p className={s.footer__tagline}>
-          Clases de inglés personalizadas para hispanohablantes. Habla con
-          confianza en situaciones reales.
-        </p>
+        <p className={s.footer__tagline}>{site.footer.tagline}</p>
         <div className={s.footer__socials}>
-          {socialLinks.map((link) => (
+          {site.footer.socials.map((link) => (
             <a
               key={link.label}
               href={link.href}
@@ -61,14 +67,14 @@ const Footer: React.FC = () => (
               rel="noopener noreferrer"
               aria-label={link.label}
             >
-              {link.icon}
+              {socialIcon(link.label)}
             </a>
           ))}
         </div>
       </div>
 
       <nav className={s.footer__nav} aria-label="Navegación del pie de página">
-        <p className={s.footer__colTitle}>Explora</p>
+        <p className={s.footer__colTitle}>{site.footer.navTitle}</p>
         {navLinks.map((link) => (
           <a key={link.to} href={link.to} className={s.footer__navLink}>
             {link.label}
@@ -77,25 +83,22 @@ const Footer: React.FC = () => (
       </nav>
 
       <div className={s.footer__contactCol}>
-        <p className={s.footer__colTitle}>¿Listo para empezar?</p>
-        <p className={s.footer__contactText}>
-          Tu primera clase diagnóstica es gratis. Escríbenos y encuentra la
-          modalidad ideal para ti.
-        </p>
+        <p className={s.footer__colTitle}>{site.footer.contactTitle}</p>
+        <p className={s.footer__contactText}>{site.footer.contactText}</p>
         <a
-          href={WA_URL}
+          href={waUrl(site)}
           target="_blank"
           rel="noopener noreferrer"
           className={`${s.footer__cta} btn-shine`}
         >
-          Escríbenos por WhatsApp <span className="btn-arrow">→</span>
+          {site.footer.ctaLabel} <span className="btn-arrow">→</span>
         </a>
       </div>
     </div>
 
     <div className={s.footer__divider} />
     <p className={s.footer__copy}>
-      © {new Date().getFullYear()} Fabio Pernía. All rights reserved.
+      © {new Date().getFullYear()} {site.footer.copyrightName}. All rights reserved.
     </p>
   </footer>
 );

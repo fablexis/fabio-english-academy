@@ -8,15 +8,21 @@ import {
   ParseIntPipe,
   Patch,
   Post,
+  Req,
   UseGuards,
 } from '@nestjs/common';
+import type { Request } from 'express';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { ActivityService, type Actor } from '../activity/activity.service';
 import { BlogService } from './blog.service';
 import { CreateBlogPostDto, UpdateBlogPostDto } from './dto';
 
 @Controller()
 export class BlogController {
-  constructor(private readonly blog: BlogService) {}
+  constructor(
+    private readonly blog: BlogService,
+    private readonly activity: ActivityService,
+  ) {}
 
   // ── Public read endpoints ───────────────────────────────────────────────
   @Get('blog')
@@ -44,20 +50,45 @@ export class BlogController {
 
   @Post('admin/blog')
   @UseGuards(JwtAuthGuard)
-  create(@Body() dto: CreateBlogPostDto) {
-    return this.blog.create(dto);
+  async create(@Body() dto: CreateBlogPostDto, @Req() req: Request) {
+    const post = await this.blog.create(dto);
+    this.activity.log(req.user as Actor, {
+      action: 'create',
+      entity: 'blog',
+      entityId: post.slug,
+      summary: `Creó el artículo «${post.title}»`,
+    });
+    return post;
   }
 
   @Patch('admin/blog/:id')
   @UseGuards(JwtAuthGuard)
-  update(@Param('id', ParseIntPipe) id: number, @Body() dto: UpdateBlogPostDto) {
-    return this.blog.update(id, dto);
+  async update(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() dto: UpdateBlogPostDto,
+    @Req() req: Request,
+  ) {
+    const post = await this.blog.update(id, dto);
+    this.activity.log(req.user as Actor, {
+      action: 'update',
+      entity: 'blog',
+      entityId: post.slug,
+      summary: `Actualizó el artículo «${post.title}»`,
+    });
+    return post;
   }
 
   @Delete('admin/blog/:id')
   @UseGuards(JwtAuthGuard)
   @HttpCode(204)
-  remove(@Param('id', ParseIntPipe) id: number) {
-    return this.blog.remove(id);
+  async remove(@Param('id', ParseIntPipe) id: number, @Req() req: Request) {
+    const post = await this.blog.getById(id);
+    await this.blog.remove(id);
+    this.activity.log(req.user as Actor, {
+      action: 'delete',
+      entity: 'blog',
+      entityId: post.slug,
+      summary: `Eliminó el artículo «${post.title}»`,
+    });
   }
 }

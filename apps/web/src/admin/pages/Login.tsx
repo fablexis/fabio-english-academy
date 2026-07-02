@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { LogIn } from 'lucide-react';
+import { BookStackLogo } from '../../components/Icons';
+import PasswordInput from '../components/PasswordInput';
 import { useAuth } from '../lib/auth';
 import { ApiError } from '../lib/client';
 import s from '../styles/admin.module.scss';
@@ -18,7 +21,7 @@ const Login: React.FC = () => {
     setBusy(true);
     try {
       await login(email, password);
-      navigate('/blog', { replace: true });
+      navigate('/', { replace: true });
     } catch (err) {
       setError(err instanceof ApiError ? err.message : 'No se pudo iniciar sesión');
     } finally {
@@ -29,8 +32,17 @@ const Login: React.FC = () => {
   return (
     <div className={s.loginWrap}>
       <form className={s.loginCard} onSubmit={onSubmit}>
-        <h1 className={s.loginTitle}>Panel de administración</h1>
-        <p className={s.loginSub}>Your English Buddy</p>
+        <div className={s.loginBrand}>
+          <span className={s.brandMark} aria-hidden="true">
+            <BookStackLogo />
+          </span>
+          Your English Buddy
+        </div>
+
+        <h1 className={s.loginTitle}>Bienvenido de nuevo 👋</h1>
+        <p className={s.loginSub}>
+          Inicia sesión para gestionar las páginas y el blog del sitio.
+        </p>
 
         <label className={s.field}>
           <span>Email</span>
@@ -39,16 +51,17 @@ const Login: React.FC = () => {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             autoComplete="username"
+            placeholder="tu@email.com"
             required
           />
         </label>
         <label className={s.field}>
           <span>Contraseña</span>
-          <input
-            type="password"
+          <PasswordInput
             value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            onChange={setPassword}
             autoComplete="current-password"
+            placeholder="········"
             required
           />
         </label>
@@ -56,8 +69,10 @@ const Login: React.FC = () => {
         {error && <p className={s.error}>{error}</p>}
 
         <button type="submit" className={s.btnPrimary} disabled={busy}>
-          {busy ? 'Entrando…' : 'Entrar'}
+          <LogIn size={16} /> {busy ? 'Entrando…' : 'Iniciar sesión'}
         </button>
+
+        <Link to="/forgot" className={s.loginLink}>¿Olvidaste tu contraseña?</Link>
       </form>
     </div>
   );

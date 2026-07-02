@@ -1,9 +1,19 @@
 ---
-// Courses — static (SSG). Self-contained React page mounted as one island.
+// Courses — SSR (on-demand) so CMS edits go live without a rebuild.
+// Self-contained React page mounted as one island, fed with CMS content
+// merged over the @eyb/shared defaults.
+export const prerender = false;
+
 import BaseLayout from '../layouts/BaseLayout.astro';
 import CoursesPage from '../views/CoursesPage.tsx';
+import { getPageContent } from '../lib/pages';
+
+const [courses, site] = await Promise.all([
+  getPageContent('courses'),
+  getPageContent('site'),
+]);
 ---
 
 <BaseLayout title="Cursos — Your English Buddy">
-  <CoursesPage client:load />
+  <CoursesPage client:load content={courses} site={site} />
 </BaseLayout>

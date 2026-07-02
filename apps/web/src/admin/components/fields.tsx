@@ -23,8 +23,8 @@ export const StringList: React.FC<{
           ) : (
             <input value={v} placeholder={placeholder} onChange={(e) => setAt(i, e.target.value)} />
           )}
-          <button type="button" className={s.btnRemove} onClick={() => removeAt(i)}
-            aria-label="Quitar">×</button>
+          <button type="button" className={`${s.btnRemove} ${s.tip}`} data-tip="Quitar"
+            onClick={() => removeAt(i)} aria-label="Quitar">×</button>
         </div>
       ))}
       <button type="button" className={s.btnAddSm} onClick={() => onChange([...items, ''])}>

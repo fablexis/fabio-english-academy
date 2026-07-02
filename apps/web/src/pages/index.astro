@@ -1,18 +1,28 @@
 ---
-// Homepage — fully static (SSG). Interactive sections hydrate as islands.
+// Homepage — SSR (on-demand) so CMS edits go live without a rebuild. Content
+// is fetched from the API and merged over the defaults in @eyb/shared; when
+// the API is unreachable the page still renders with the default copy.
+export const prerender = false;
+
 import BaseLayout from '../layouts/BaseLayout.astro';
 import HeroBanner from '../components/HeroBanner.tsx';
 import WhyChooseUs from '../components/WhyChooseUs.tsx';
 import TestimonialsSection from '../components/TestimonialsSection.tsx';
 import NewsletterSection from '../components/NewsletterSection.tsx';
 import Footer from '../components/Footer.tsx';
+import { getPageContent } from '../lib/pages';
+
+const [home, site] = await Promise.all([
+  getPageContent('home'),
+  getPageContent('site'),
+]);
 ---
 
 <BaseLayout title="Your English Buddy — Aprende inglés a tu ritmo">
-  <HeroBanner client:load />
-  <WhyChooseUs client:visible />
-  <TestimonialsSection client:visible />
-  <NewsletterSection client:visible />
+  <HeroBanner client:load content={home.hero} site={site} />
+  <WhyChooseUs client:visible content={home.why} />
+  <TestimonialsSection client:visible content={home.testimonials} />
+  <NewsletterSection client:visible content={home.cta} site={site} />
   <!-- Footer has no interactivity → rendered to static HTML, zero JS. -->
-  <Footer />
+  <Footer site={site} />
 </BaseLayout>

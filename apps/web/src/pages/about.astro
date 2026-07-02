@@ -1,10 +1,19 @@
 ---
-// About — static (SSG). The page is a self-contained React component
-// (Navbar + content + Footer) mounted as one island.
+// About — SSR (on-demand) so CMS edits go live without a rebuild. The page is
+// a self-contained React component (Navbar + content + Footer) mounted as one
+// island, fed with CMS content merged over the @eyb/shared defaults.
+export const prerender = false;
+
 import BaseLayout from '../layouts/BaseLayout.astro';
 import AboutPage from '../views/AboutPage.tsx';
+import { getPageContent } from '../lib/pages';
+
+const [about, site] = await Promise.all([
+  getPageContent('about'),
+  getPageContent('site'),
+]);
 ---
 
 <BaseLayout title="Nosotros — Your English Buddy">
-  <AboutPage client:load />
+  <AboutPage client:load content={about} site={site} />
 </BaseLayout>

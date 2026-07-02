@@ -1,8 +1,11 @@
 # Your English Buddy
 
 A modern, interactive English learning website. **npm-workspaces monorepo**: an
-**Astro** frontend (React islands) and a **NestJS + Prisma** content API. The blog
-is CMS-driven through the API; the rest of the site is static content.
+**Astro** frontend (React islands) and a **NestJS + Prisma** content API. All public
+pages are CMS-driven through the API: the blog via `BlogPost` rows, and the
+marketing pages (home/about/courses/blog header) + site chrome via per-page
+`PageContent` JSON documents edited in the admin panel and merged over canonical
+defaults from `@eyb/shared`.
 
 ## Monorepo layout
 
@@ -12,7 +15,7 @@ english-website/                 # npm workspaces root
 │   ├── web/                     # @eyb/web — Astro frontend (Vercel)
 │   └── api/                     # @eyb/api — NestJS + Prisma content API (Node host)
 ├── packages/
-│   └── shared/                  # @eyb/shared — BlogPost types + DTOs (types only)
+│   └── shared/                  # @eyb/shared — blog + page-content types, DTOs, page defaults
 ├── tsconfig.base.json           # shared TS options (web/shared)
 └── DEPLOY.md                    # deployment guide (Vercel + Node host)
 ```
@@ -26,7 +29,10 @@ english-website/                 # npm workspaces root
   `react-router-dom` + `@tanstack/react-query` (client-only).
 - **apps/api** — **NestJS 11**, **Prisma 6** (**PostgreSQL** everywhere; local via
   `docker compose up -d`), JWT auth (access+refresh, httpOnly cookies), `class-validator`, helmet.
-- **packages/shared** — plain TS types/DTOs (no React/DOM), consumed by both.
+- **packages/shared** — plain TS types/DTOs (no React/DOM), consumed by both. Also
+  `pages.ts` (`PageContentMap` types, `PAGE_KEYS`, `mergePageContent`) and
+  `page-defaults.ts` (canonical default copy for every public page — frontend
+  fallback, merge base, and admin editor starting draft).
 
 ## Commands (run from repo root)
 
@@ -58,8 +64,8 @@ components/   # React island components (Navbar, HeroBanner, sections, Footer, .
 views/        # Larger page-level React components (AboutPage, CoursesPage, BlogDetailPage)
 pages/        # Astro routes (.astro) — see Routing
 layouts/      # BaseLayout.astro (global.scss, fonts, <ClientRouter/>, persistent chrome)
-admin/        # Client-only React admin SPA (login + blog CRUD)
-lib/          # api.ts — typed fetch to the NestJS API (blog reads)
+admin/        # Client-only React admin SPA (login + blog CRUD + page editors)
+lib/          # api.ts (blog reads) · pages.ts (page content + merge/fallback) · whatsapp.ts (waUrl)
 hooks/        # useInView.ts
 styles/       # SCSS modules + global.scss (design tokens, animation utilities)
 public/       # img/ (decorative images), blog-images/ (blog jpgs), favicon.svg
@@ -73,12 +79,18 @@ Images used inside React islands are served from `public/` as URL strings
 
 | Path | File | Render | Notes |
 |------|------|--------|-------|
-| `/` | `pages/index.astro` | **SSG** | Hero + sections as islands |
-| `/about` | `pages/about.astro` | **SSG** | `views/AboutPage` island |
-| `/courses` | `pages/courses.astro` | **SSG** | `views/CoursesPage` island |
-| `/blog` | `pages/blog/index.astro` | **SSR** (`prerender=false`) | fetches `GET /blog`, feeds `BlogSection` |
+| `/` | `pages/index.astro` | **SSR** | `getPageContent('home'/'site')` → section islands |
+| `/about` | `pages/about.astro` | **SSR** | `views/AboutPage` island, fed `about` + `site` content |
+| `/courses` | `pages/courses.astro` | **SSR** | `views/CoursesPage` island, fed `courses` + `site` content |
+| `/blog` | `pages/blog/index.astro` | **SSR** (`prerender=false`) | fetches `GET /blog` + `blog`/`site` content |
 | `/blog/[slug]` | `pages/blog/[slug].astro` | **SSR** | `getPost(slug)`; redirects to `/blog` on 404 |
 | `/admin/*` | `pages/admin/[...slug].astro` | **SSR shell** | mounts admin SPA `client:only="react"` |
+
+All public pages are SSR so CMS edits publish without a rebuild. `lib/pages.ts`
+`getPageContent(key)` fetches `GET /pages/:key`, deep-merges saved data over
+`PAGE_DEFAULTS[key]`, and returns plain defaults when the API is down (the site
+never breaks). Components take optional `content`/`site` props defaulting to the
+shared defaults; structural bits (icons, layout, nav routes) stay in code.
 
 Islands: `SplashLoader`/`WhatsAppFloat` live in `BaseLayout` with `transition:persist`;
 below-the-fold sections use `client:visible`; `HeroBanner`/`Navbar` use `client:load`;
@@ -87,16 +99,64 @@ below-the-fold sections use `client:visible`; `HeroBanner`/`Navbar` use `client:
 ## Backend / API (`apps/api`)
 
 NestJS + Prisma. `BlogModule`: public `GET /blog` (published), `GET /blog/:slug`;
-JWT-guarded admin CRUD `GET/POST/PATCH/DELETE /admin/blog[/:id]`. `AuthModule`:
-`POST /auth/login|refresh|logout`, `GET /auth/me` (cookie-based JWT; single admin
-seeded from `ADMIN_EMAIL`/`ADMIN_PASSWORD` on boot). `body` is stored JSON-stringified
-and hydrated at the boundary. Prisma models: `BlogPost`, `User`, `RefreshToken`.
+JWT-guarded admin CRUD `GET/POST/PATCH/DELETE /admin/blog[/:id]`. `PagesModule`:
+public `GET /pages/:key` (`data: null` until first save); guarded `GET /admin/pages`
+(saved overrides + updatedAt), `PUT /admin/pages/:key` (upsert `{ data }`),
+`DELETE /admin/pages/:key` (reset to defaults). Page keys are whitelisted
+(`home|about|courses|blog|site`, kept in sync with `PAGE_KEYS` in shared — the API
+avoids value imports from the ESM-only shared package). `AuthModule`:
+`POST /auth/login|refresh|logout`, `GET /auth/me`, plus `POST /auth/forgot-password`
+(always 200; emails a 60-min single-use reset link) and `POST /auth/set-password`
+(redeems INVITE/RESET tokens; revokes all sessions). Cookie-based JWT; the first
+admin is seeded from `ADMIN_EMAIL`/`ADMIN_PASSWORD` on boot. `UsersModule`:
+guarded `GET/POST/DELETE /admin/users[/:id]` + `POST /admin/users/:id/invite`
+(resend) — invited accounts get a random placeholder hash and a 48h invite link;
+can't delete yourself or the last admin. `MailModule`: nodemailer via `SMTP_*`
+env; without `SMTP_HOST` emails are logged (with the action link) instead of
+sent. Branded HTML templates live in `src/mail/templates.ts`; links point at
+`ADMIN_URL` (default: first `WEB_ORIGIN` + `/admin`). Tokens are sha256-hashed
+in the `UserToken` table (single-use + expiring). `UploadsModule`: guarded
+`POST /admin/uploads` (multipart image → disk at `UPLOAD_DIR`, default
+`apps/api/uploads/`, gitignored) served statically at `/uploads/*` with
+immutable caching + cross-origin CORP; returns an absolute URL built from
+`API_PUBLIC_URL` (set it in prod). `body`/`data` are stored JSON-stringified
+and hydrated at the boundary. `ActivityModule` (global): `ActivityService.log()`
+records every admin action (fire-and-forget) from each controller into the
+`ActivityLog` table (denormalized `userEmail`, Spanish `summary`); guarded
+`GET /admin/activity?entity=&action=&before=&take=` paginates newest-first.
+Logins stamp `User.lastLoginAt`/`prevLoginAt`; `/auth/me` and login responses
+expose `lastLoginAt` (the previous session) for the dashboard greeting.
+Prisma models: `BlogPost`, `PageContent`, `User`, `RefreshToken`, `UserToken`,
+`ActivityLog`.
 
 ## Admin panel (`apps/web/src/admin`)
 
 Client-only React SPA at `/admin` (react-router `basename="/admin"` + TanStack Query).
-Login → blog list → editor (scalar fields + JSON body editor). Talks to the guarded
-`/admin/blog` + `/auth` endpoints with `credentials: 'include'`.
+Vuexy-style dashboard shell (brand teal, **Public Sans** loaded in `pages/admin/[...slug].astro`):
+fixed white sidebar (mobile drawer <1100px), detached top bar with breadcrumbs +
+avatar dropdown (Ver sitio / logout). Routes: **Panel** (`/`, content overview),
+**Páginas** (page-content CMS) and **Blog** (post CRUD with search + thumbnails).
+Pages CMS: `pages/PagesList` (card per public page with edited/original status) →
+`pages/PageEditor` — schema-driven forms defined in `pageSchemas.ts` and rendered
+generically by `components/ContentFields.tsx` (text/textarea/image/toggle/stringList
++ collapsible `repeater` cards with add/move/remove, recursion for nested lists).
+Image fields use `components/ImageField.tsx`: live preview + click or drag & drop
+upload through `POST /admin/uploads`, with a manual path input for existing
+`/img` + `/blog-images` assets (also used for the blog post image).
+**Usuarios** (`pages/Users.tsx`): invite admins by email (+optional name), inline
+row-edit of name/email (`PATCH /admin/users/:id`), invite status with sent date,
+resend pending/expired invites, delete (never self). **Mi cuenta**
+(`pages/Profile.tsx`, via the avatar dropdown): own name + profile picture
+(`PATCH /auth/me`; picture uploads reuse `/admin/uploads`; `User.avatarUrl`).
+`components/Avatar.tsx` renders picture-or-initials everywhere. **Actividad** (`pages/Activity.tsx`): audit table
+with entity/action filters + cursor "Cargar más" (useInfiniteQuery); friendly
+timestamps via `lib/dates.ts` (`formatRelative`, `greeting` — also used by the
+dashboard greeting + last-login line and its "Actividad reciente" card).
+Public routes: `/forgot` (request reset) and `/set-password?token=…` (landing
+page for both invite and reset emails).
+Editor draft = `mergePageContent(PAGE_DEFAULTS[key], saved)`; dirty state drives a
+sticky save bar; extras: JSON escape hatch, "Restaurar original", "Ver página".
+Talks to the guarded `/admin/*` + `/auth` endpoints with `credentials: 'include'`.
 
 ## Key Components
 
@@ -141,8 +201,12 @@ The app is wrapped in `MotionConfig reducedMotion="user"`; `global.scss` also ha
 - **Seed** — `apps/api/prisma/blog-seed.json`, generated from the canonical authored
   content at `apps/api/prisma/seed-data/blogPosts.ts` via `npm run seed:generate`
   (an esbuild transform that rewrites the 12 image imports to `/blog-images/<file>`).
-- Marketing content (home/about/courses, testimonials, team) is still hardcoded in the
-  respective `apps/web/src/views` + `components`.
+- **Pages** — marketing content (home/about/courses/blog header, testimonials, team,
+  site chrome) lives in the `PageContent` Prisma table as one JSON document per
+  `PageKey`, edited in the admin "Páginas" section. No seeding needed: a page with
+  no saved row renders the defaults from `@eyb/shared/page-defaults.ts`, and saved
+  documents are deep-merged over those defaults (old saves keep working when new
+  fields ship).
 
 > Note: component paths below predate the monorepo — they now live under
 > `apps/web/src/components`, `apps/web/src/views`, `apps/web/src/hooks`, etc.

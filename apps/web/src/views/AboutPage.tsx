@@ -1,16 +1,17 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
+import {
+  defaultAbout,
+  defaultSite,
+  type AboutContent,
+  type SiteContent,
+  type TeamMemberContent,
+} from '@eyb/shared';
 import s from '../styles/AboutPage.module.scss';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import BlurImage from '../components/BlurImage';
+import { waUrl } from '../lib/whatsapp';
 import { useInView } from '../hooks/useInView';
-// Served from public/ as plain URL strings (Astro turns src/ image imports
-// into ImageMetadata objects, which would break <img src>).
-const phraseImage = '/img/phrase-image.jpg';
-const techHuman = '/img/tech-human.jpg';
-const profileFabio = '/img/fabio-pernia-pic.png';
-const profileAndreina = '/img/andreina-luna-pic.png';
-const profileFabian = '/img/fabian-pernia-pic.png';
 
 // ─── Animation helper ────────────────────────────────────────────────────────
 
@@ -26,124 +27,30 @@ const anim = (
     : `${base} anim-hidden`.trim();
 };
 
-// ─── Team data ────────────────────────────────────────────────────────────────
+type TeamMember = TeamMemberContent;
 
-interface TeamMember {
-  name: string;
-  role: string;
-  initials: string;
-  imageUrl: string;
-  bio: string;
-  fullBio: string;
-  highlights: { label: string; value: string }[];
-  functions: string[];
-}
+// ─── Pillar icons ─────────────────────────────────────────────────────────────
+// Structural SVGs assigned by card position; the copy comes from the CMS.
 
-const teamMembers: TeamMember[] = [
-  {
-    name: 'Fabio Pernía',
-    role: 'Fundador y eterno enamorado del inglés',
-    initials: 'FP',
-    imageUrl: profileFabio,
-    bio: 'Ama compartir lo que sabe de inglés y cuenta cómo este idioma transformó su vida. En él encontró mucho más que un idioma: una forma de sentirse más presente en el mundo.',
-    fullBio:
-      'Fabio ama compartir lo que sabe de inglés con quienes lo rodean y contar cómo este idioma transformó su vida y la de su familia. Ha intentado aprender unos seis idiomas, pero su relación más estable, fiel y duradera ha sido con el inglés. En él encontró mucho más que un idioma: encontró una forma de sentirse más presente en el mundo.\n\nFabio vive en Argentina y, en su tiempo libre, disfruta de ver películas, tomar cerveza artesanal y compartir con su esposa, a quien considera su mayor inspiración y el mayor éxito de su vida.',
-    highlights: [
-      { label: 'Rol', value: 'Fundador & CEO' },
-      { label: 'Especialidad', value: 'Inglés conversacional y laboral' },
-      { label: 'Idiomas', value: 'Español & Inglés' },
-    ],
-    functions: [
-      'Imparte todas las clases de inglés con paciencia, pasión y probablemente bastante café.',
-      'Intenta no estresarse cuando no aparecen ideas para TikTok.',
-      'Busca constantemente nuevas formas y recursos para que sus estudiantes se enamoren del inglés.',
-      'Crea la identidad visual de todos los recursos de la academia (guías, ebooks, etc.).',
-      'Sueña todos los días con hacer de Your English Buddy una comunidad donde aprender inglés se sienta como una herramienta de vida.',
-      'Encuentra maneras de que la academia crezca y pueda sostenerse en el tiempo.',
-    ],
-  },
-  {
-    name: 'Andreina Luna',
-    role: 'Cofundadora y Responsable Creativa',
-    initials: 'AL',
-    imageUrl: profileAndreina,
-    bio: 'Después de muchos años intentando aprender inglés, decidió convertir sus propias necesidades como estudiante en ideas para hacerles el camino más claro y menos empedrado a otros.',
-    fullBio:
-      'Andreina tiene una conexión muy personal con esta academia, porque nació también desde su propia historia con el inglés: una historia de esfuerzo, frustración y superación. Después de muchos años intentando aprenderlo, decidió convertir las necesidades que ella tuvo como estudiante en ideas para hacerles el camino más claro y menos empedrado a otros.\n\nAndreina vive en Argentina y, en su tiempo libre, ama crear ideas de contenido… porque sí, ¡también es YouTuber y Podcaster!',
-    highlights: [
-      { label: 'Background', value: 'Project Management' },
-      { label: 'Focus', value: 'Operations & Creative Direction' },
-      { label: 'Idiomas', value: 'Español & Inglés' },
-    ],
-    functions: [
-      'Idea el contenido que se publica en TikTok, incluso cuando la inspiración decide no colaborar.',
-      'Graba a Fabio para los videos y hace su mejor esfuerzo por no mandarlo todo "a la shit" tras la toma número 38.',
-      'Edita cada video y trata de no odiar CapCut después de las revisiones de Fabio.',
-      'Gestiona los pagos de los estudiantes.',
-      'Crea y actualiza las políticas de la academia a medida que Your English Buddy sigue creciendo.',
-    ],
-  },
-  {
-    name: 'Fabián Pernía',
-    role: 'Socio Gerente y Desarrollador Full-Stack',
-    initials: 'FPn',
-    imageUrl: profileFabian,
-    bio: 'Una mente lógica e inquieta apasionada por convertir ideas en herramientas digitales reales. El inglés ha sido clave en toda su carrera como programador.',
-    fullBio:
-      'Fabián es un inteligente nato con una mente lógica, inquieta y peligrosamente buena para resolver problemas. Es un apasionado del código bien escrito y de convertir ideas en herramientas digitales reales, como este sitio web. Su relación con el inglés también ha sido clave en su carrera como programador, ya que el idioma ha estado presente en gran parte de su crecimiento profesional.\n\nFabián vive en Colombia con su esposa, su hija y su American Bully, Bruno. En su tiempo libre, disfruta estudiar nuevas formas de usar la inteligencia artificial para simplificar su vida y la de otros.',
-    highlights: [
-      { label: 'Rol', value: 'Socio Gerente & Dev' },
-      { label: 'Stack', value: 'React, TypeScript, Node.js' },
-      { label: 'Focus', value: 'Productos digitales' },
-    ],
-    functions: [
-      'Fue el primer gran creyente e inversionista de Your English Buddy.',
-      'Desarrolla y mantiene todos los productos digitales: sitio web, app móvil, automatizaciones y pasarelas de pago.',
-      'Genera ideas para llevar la visión de la academia al mundo digital.',
-      'Trabaja para que Your English Buddy sea una comunidad digital cada vez más útil, sólida y valiosa.',
-    ],
-  },
-];
-
-// ─── Pillars data ─────────────────────────────────────────────────────────────
-
-const pillars = [
-  {
-    title: 'No Miedo',
-    desc: 'Eliminamos la barrera del juicio. Aquí el error no es un fallo, es el material de construcción de tu fluidez. Un espacio seguro para soltarte.',
-    icon: (
-      <svg width="26" height="26" viewBox="0 0 26 26" fill="none" aria-hidden="true">
-        <circle cx="13" cy="13" r="9" stroke="currentColor" strokeWidth="1.7" />
-        <path d="M9 13.5C9 13.5 10.5 16 13 16s4-2.5 4-2.5" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" />
-        <circle cx="10" cy="10.5" r="1" fill="currentColor" />
-        <circle cx="16" cy="10.5" r="1" fill="currentColor" />
-      </svg>
-    ),
-  },
-  {
-    title: 'Confianza',
-    desc: 'Te dotamos de las herramientas precisas para que tu voz suene con autoridad, ya sea en una reunión de negocios o en una cena informal.',
-    icon: (
-      <svg width="26" height="26" viewBox="0 0 26 26" fill="none" aria-hidden="true">
-        <path d="M13 3L4 7v6.5C4 19 8.5 22.5 13 24c4.5-1.5 9-5 9-10.5V7L13 3Z" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" />
-        <path d="M9.5 13l2.5 2.5 5-5" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" />
-      </svg>
-    ),
-  },
-  {
-    title: 'Conexión',
-    desc: 'El inglés es solo el medio; el fin es la conexión humana. Aprende a transmitir no solo palabras, sino intenciones y emociones.',
-    icon: (
-      <svg width="26" height="26" viewBox="0 0 26 26" fill="none" aria-hidden="true">
-        <circle cx="8.5" cy="9" r="3" stroke="currentColor" strokeWidth="1.7" />
-        <circle cx="17.5" cy="9" r="3" stroke="currentColor" strokeWidth="1.7" />
-        <path d="M3 21c0-3 2.5-5 5-5h2" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" />
-        <path d="M16 16h2c2.5 0 5 2 5 5" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" />
-        <path d="M13 14v8" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" />
-        <circle cx="13" cy="12" r="2" stroke="currentColor" strokeWidth="1.7" />
-      </svg>
-    ),
-  },
+const PILLAR_ICONS = [
+  <svg width="26" height="26" viewBox="0 0 26 26" fill="none" aria-hidden="true">
+    <circle cx="13" cy="13" r="9" stroke="currentColor" strokeWidth="1.7" />
+    <path d="M9 13.5C9 13.5 10.5 16 13 16s4-2.5 4-2.5" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" />
+    <circle cx="10" cy="10.5" r="1" fill="currentColor" />
+    <circle cx="16" cy="10.5" r="1" fill="currentColor" />
+  </svg>,
+  <svg width="26" height="26" viewBox="0 0 26 26" fill="none" aria-hidden="true">
+    <path d="M13 3L4 7v6.5C4 19 8.5 22.5 13 24c4.5-1.5 9-5 9-10.5V7L13 3Z" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" />
+    <path d="M9.5 13l2.5 2.5 5-5" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" />
+  </svg>,
+  <svg width="26" height="26" viewBox="0 0 26 26" fill="none" aria-hidden="true">
+    <circle cx="8.5" cy="9" r="3" stroke="currentColor" strokeWidth="1.7" />
+    <circle cx="17.5" cy="9" r="3" stroke="currentColor" strokeWidth="1.7" />
+    <path d="M3 21c0-3 2.5-5 5-5h2" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" />
+    <path d="M16 16h2c2.5 0 5 2 5 5" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" />
+    <path d="M13 14v8" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" />
+    <circle cx="13" cy="12" r="2" stroke="currentColor" strokeWidth="1.7" />
+  </svg>,
 ];
 
 // ─── Team Member Modal ───────────────────────────────────────────────────────
@@ -241,7 +148,15 @@ const TeamMemberModal: React.FC<TeamMemberModalProps> = ({ member, onClose, isVi
 // ABOUT PAGE
 // ═════════════════════════════════════════════════════════════════════════════
 
-const AboutPage: React.FC = () => {
+interface AboutPageProps {
+  content?: AboutContent;
+  site?: SiteContent;
+}
+
+const AboutPage: React.FC<AboutPageProps> = ({
+  content = defaultAbout,
+  site = defaultSite,
+}) => {
   const { ref: heroRef, ready: heroReady } = useInView({ threshold: 0.1 });
   const { ref: missionRef, ready: missionReady } = useInView({ threshold: 0.1 });
   const { ref: pillarsRef, ready: pillarsReady } = useInView({ threshold: 0.1 });
@@ -265,7 +180,7 @@ const AboutPage: React.FC = () => {
 
   return (
     <div className={s.page}>
-      <Navbar />
+      <Navbar site={site} />
 
       <main className={s.main}>
 
@@ -277,21 +192,20 @@ const AboutPage: React.FC = () => {
           <div className={s.heroInner}>
             <div className={s.heroLeft}>
               <h1 className={anim(heroReady, 'anim-slide-right', 'delay-0', s.heroTitle)}>
-                La maestría del inglés,{' '}
-                <span className={s.heroTitleItalic}>con alma humana.</span>
+                {content.hero.title}{' '}
+                <span className={s.heroTitleItalic}>{content.hero.titleItalic}</span>
               </h1>
               <p className={anim(heroReady, 'anim-slide-up', 'delay-100', s.heroSubtitle)}>
-                Mucho más que una academia. Un santuario de aprendizaje donde la conexión
-                trasciende las reglas gramaticales para dar voz a tu verdadero yo.
+                {content.hero.subtitle}
               </p>
               <div className={anim(heroReady, 'anim-slide-up', 'delay-200', s.heroCtas)}>
                 <a
-                  href="https://wa.me/5491123310113?text=Hola%2C%20quisiera%20obtener%20informacion%20para%20agendar%20una%20clase%20para%20Your%20English%20Buddy%2C%20gracias"
+                  href={waUrl(site)}
                   target="_blank"
                   rel="noopener noreferrer"
                   className={`${s.heroCta} btn-shine`}
                 >
-                  Empieza mi viaje
+                  {content.hero.ctaLabel}
                   <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
                     <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
                   </svg>
@@ -303,15 +217,13 @@ const AboutPage: React.FC = () => {
               <div className={s.heroImgWrap}>
                 <BlurImage
                   className={s.heroImg}
-                  src={phraseImage}
+                  src={content.hero.image}
                   alt="Ambiente de aprendizaje de inglés"
                 />
               </div>
               <div className={s.heroFloatCard}>
-                <p className={s.heroFloatCardQuote}>
-                  "El lenguaje es la única cosa que vale la pena conocer incluso de manera pobre."
-                </p>
-                <p className={s.heroFloatCardCite}>Kató Lomb · Polyglot</p>
+                <p className={s.heroFloatCardQuote}>{content.hero.cardQuote}</p>
+                <p className={s.heroFloatCardCite}>{content.hero.cardCite}</p>
               </div>
             </div>
           </div>
@@ -328,36 +240,22 @@ const AboutPage: React.FC = () => {
                 <div className={s.missionImgBg} />
                 <BlurImage
                   className={s.missionImg}
-                  src={techHuman}
+                  src={content.mission.image}
                   alt="Conexión humana en el aprendizaje"
                 />
               </div>
 
               <div className={s.missionTextCol}>
                 <span className={anim(missionReady, 'anim-slide-up', 'delay-100', s.missionEyebrow)}>
-                  Nuestra Misión
+                  {content.mission.eyebrow}
                 </span>
                 <h2 className={anim(missionReady, 'anim-slide-up', 'delay-200', s.missionTitle)}>
-                  Humanizando el aprendizaje en la era digital.
+                  {content.mission.title}
                 </h2>
                 <div className={anim(missionReady, 'anim-slide-up', 'delay-300', s.missionTextBlock)}>
-                  <p>
-                    En un mundo saturado de aplicaciones automáticas y correcciones frías,
-                    nosotros elegimos el camino de la empatía. Creemos que aprender un idioma
-                    es, ante todo, un acto de vulnerabilidad y valentía.
-                  </p>
-                  <p>
-                    Nuestro enfoque no se basa en la repetición mecánica, sino en la
-                    construcción de un puente real entre tu cultura y el mundo anglosajón,
-                    guiado por personas que entienden que detrás de cada error hay un
-                    intento de conexión.
-                  </p>
-                  <p>
-                    Your English Buddy fue creada por personas que también estuvieron en ese
-                    lugar de duda, frustración e inseguridad. Porque aprender un idioma no
-                    debería sentirse como una presión constante, sino como una experiencia
-                    profundamente transformadora.
-                  </p>
+                  {content.mission.paragraphs.map((para, i) => (
+                    <p key={i}>{para}</p>
+                  ))}
                 </div>
               </div>
             </div>
@@ -373,62 +271,52 @@ const AboutPage: React.FC = () => {
             {/* Header — split two-column */}
             <div className={anim(pillarsReady, 'anim-slide-up', 'delay-0', s.pillarsHeader)}>
               <div className={s.pillarsHeaderLeft}>
-                <span className={s.pillarsEyebrow}>Metodología de Vanguardia</span>
+                <span className={s.pillarsEyebrow}>{content.pillars.eyebrow}</span>
                 <h2 className={s.pillarsTitle}>
-                  Los tres pilares de{' '}
+                  {content.pillars.title}{' '}
                   <br />
-                  <span className={s.pillarsTitleItalic}>tu evolución personal.</span>
+                  <span className={s.pillarsTitleItalic}>{content.pillars.titleItalic}</span>
                 </h2>
               </div>
               <div className={s.pillarsHeaderRight}>
                 <div className={s.pillarsHeaderDivider} />
-                <p className={s.pillarsHeaderDesc}>
-                  Un enfoque tridimensional diseñado para transformar el conocimiento
-                  en expresión auténtica.
-                </p>
+                <p className={s.pillarsHeaderDesc}>{content.pillars.headerDesc}</p>
               </div>
             </div>
 
-            {/* Cards — asymmetric 4/5/3 bento */}
+            {/* Cards — asymmetric 4/5/3 bento; per-slot styling cycles by position */}
             <div className={s.pillarsGrid}>
-
-              {/* Card 1 – No Miedo */}
-              <div className={anim(pillarsReady, 'anim-fade-scale', 'delay-100', s.pillarCard)}>
-                <span className={s.pillarBgNumber} aria-hidden="true">01</span>
-                <div className={s.pillarIconOrg1}>
-                  {pillars[0].icon}
-                </div>
-                <h3 className={s.pillarCardTitle}>
-                  No <span className={s.pillarCardTitleItalic}>Miedo</span>
-                </h3>
-                <p className={s.pillarDesc}>{pillars[0].desc}</p>
-              </div>
-
-              {/* Card 2 – Confianza (accent) */}
-              <div className={anim(pillarsReady, 'anim-fade-scale', 'delay-200', `${s.pillarCard} ${s.pillarCard__accent}`)}>
-                <span className={`${s.pillarBgNumber} ${s.pillarBgNumber__accent}`} aria-hidden="true">02</span>
-                <div className={s.pillarIconOrg2}>
-                  {pillars[1].icon}
-                </div>
-                <h3 className={`${s.pillarCardTitle} ${s.pillarCardTitle__accent}`}>
-                  La <span className={s.pillarCardTitleItalic}>Confianza</span>
-                </h3>
-                <p className={`${s.pillarDesc} ${s.pillarDesc__accent}`}>{pillars[1].desc}</p>
-              </div>
-
-              {/* Card 3 – Conexión */}
-              <div className={anim(pillarsReady, 'anim-fade-scale', 'delay-300', `${s.pillarCard} ${s.pillarCard__light}`)}>
-                <span className={s.pillarBgNumber} aria-hidden="true">03</span>
-                <div className={s.pillarIconOrg3}>
-                  {pillars[2].icon}
-                </div>
-                <h3 className={s.pillarCardTitle}>
-                  Conexión <br />
-                  <span className={s.pillarCardTitleItalic}>Humana</span>
-                </h3>
-                <p className={s.pillarDesc}>{pillars[2].desc}</p>
-              </div>
-
+              {content.pillars.cards.map((card, i) => {
+                const slot = i % 3;
+                const cardClass =
+                  slot === 1
+                    ? `${s.pillarCard} ${s.pillarCard__accent}`
+                    : slot === 2
+                      ? `${s.pillarCard} ${s.pillarCard__light}`
+                      : s.pillarCard;
+                const iconClass = [s.pillarIconOrg1, s.pillarIconOrg2, s.pillarIconOrg3][slot];
+                return (
+                  <div
+                    key={i}
+                    className={anim(pillarsReady, 'anim-fade-scale', `delay-${(i + 1) * 100}`, cardClass)}
+                  >
+                    <span
+                      className={slot === 1 ? `${s.pillarBgNumber} ${s.pillarBgNumber__accent}` : s.pillarBgNumber}
+                      aria-hidden="true"
+                    >
+                      {String(i + 1).padStart(2, '0')}
+                    </span>
+                    <div className={iconClass}>{PILLAR_ICONS[slot]}</div>
+                    <h3 className={slot === 1 ? `${s.pillarCardTitle} ${s.pillarCardTitle__accent}` : s.pillarCardTitle}>
+                      {card.titleTop}{' '}
+                      <span className={s.pillarCardTitleItalic}>{card.titleItalic}</span>
+                    </h3>
+                    <p className={slot === 1 ? `${s.pillarDesc} ${s.pillarDesc__accent}` : s.pillarDesc}>
+                      {card.desc}
+                    </p>
+                  </div>
+                );
+              })}
             </div>
           </div>
         </section>
@@ -441,11 +329,11 @@ const AboutPage: React.FC = () => {
           <div className={anim(quoteReady, 'anim-fade-scale', 'delay-0', s.quoteWrapper)}>
             <span className={s.quoteIcon} aria-hidden="true">"</span>
             <blockquote className={s.quoteBlockquote}>
-              Language is the only thing{' '}
-              <span className={s.quoteHighlight}>worth knowing</span>{' '}
-              even poorly.
+              {content.quote.pre}{' '}
+              <span className={s.quoteHighlight}>{content.quote.highlight}</span>{' '}
+              {content.quote.post}
             </blockquote>
-            <cite className={s.quoteCite}>— Kató Lomb, Polyglot Mastery</cite>
+            <cite className={s.quoteCite}>{content.quote.cite}</cite>
           </div>
         </section>
 
@@ -453,15 +341,15 @@ const AboutPage: React.FC = () => {
         <div className={s.teamSection}>
           <div className={s.inner}>
             <h2 className={anim(gridReady, 'anim-slide-up', 'delay-0', s.teamHeading)}>
-              Las grandes mentes detrás de{' '}
-              <span>Your English Buddy</span>
+              {content.team.headingPre}{' '}
+              <span>{content.team.headingAccent}</span>
             </h2>
 
             <div
               className={s.grid}
               ref={gridRef as React.RefObject<HTMLDivElement>}
             >
-              {teamMembers.map((member, i) => (
+              {content.team.members.map((member, i) => (
                 <div
                   key={member.name}
                   className={anim(gridReady, 'anim-fade-scale', `delay-${(i + 1) * 100}`)}
@@ -503,7 +391,7 @@ const AboutPage: React.FC = () => {
 
       </main>
 
-      <Footer />
+      <Footer site={site} />
 
       {activeMember && (
         <TeamMemberModal

@@ -1,5 +1,12 @@
 import React from 'react';
+import {
+  defaultHome,
+  defaultSite,
+  type HomeContent,
+  type SiteContent,
+} from '@eyb/shared';
 import s from '../styles/NewsletterSection.module.scss';
+import { waUrl } from '../lib/whatsapp';
 import { useInView } from '../hooks/useInView';
 
 // ─── Animation helper ────────────────────────────────────────────────────────
@@ -69,8 +76,17 @@ const WhatsAppDecoration: React.FC<{ ready: boolean }> = ({ ready }) => (
 // NEWSLETTER SECTION
 // ═════════════════════════════════════════════════════════════════════════════
 
-const NewsletterSection: React.FC = () => {
+interface NewsletterSectionProps {
+  content?: HomeContent['cta'];
+  site?: SiteContent;
+}
+
+const NewsletterSection: React.FC<NewsletterSectionProps> = ({
+  content = defaultHome.cta,
+  site = defaultSite,
+}) => {
   const { ref, ready } = useInView({ threshold: 0.15 });
+  const headingLines = content.heading.split('\n');
 
   return (
     <section className={s.newsletter} ref={ref as React.RefObject<HTMLElement>}>
@@ -78,28 +94,26 @@ const NewsletterSection: React.FC = () => {
         {/* Left content */}
         <div className={s.newsletter__content}>
           <h2 className={anim(ready, 'anim-slide-up', 'delay-0', s.newsletter__heading)}>
-            Conversemos y encuentra
-            <br />
-            la modalidad ideal
-            <br />
-            para ti.
+            {headingLines.map((line, i) => (
+              <React.Fragment key={i}>
+                {i > 0 && <br />}
+                {line}
+              </React.Fragment>
+            ))}
           </h2>
 
           <p className={anim(ready, 'anim-slide-up', 'delay-100', s.newsletter__subtitle)}>
-            Si quieres mejorar tu inglés de forma práctica, clara y personalizada,
-            estamos aquí para ayudarte. Escríbenos directamente por WhatsApp y te
-            orientamos según tu nivel, tus objetivos y la modalidad que mejor se
-            adapte a ti.
+            {content.subtitle}
           </p>
 
           <div className={anim(ready, 'anim-slide-up', 'delay-200', s.newsletter__form)}>
             <a
-              href="https://wa.me/5491123310113?text=Hola%2C%20quisiera%20obtener%20informacion%20para%20agendar%20una%20clase%20para%20Your%20English%20Buddy%2C%20gracias"
+              href={waUrl(site)}
               target="_blank"
               rel="noopener noreferrer"
               className={`${s.newsletter__btn} btn-shine`}
             >
-              Escríbenos por WhatsApp <span className="btn-arrow">→</span>
+              {content.buttonLabel} <span className="btn-arrow">→</span>
             </a>
           </div>
         </div>

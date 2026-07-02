@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { MonitorSmartphone, GraduationCap, BadgeDollarSign } from 'lucide-react';
 import { AnimatePresence, motion } from 'motion/react';
+import { defaultHome, type HomeContent } from '@eyb/shared';
 import s from '../styles/WhyChooseUs.module.scss';
 import { useInView } from '../hooks/useInView';
 
@@ -28,69 +29,42 @@ interface FeatureCard {
   hoverItems?: string[];
 }
 
-const features: FeatureCard[] = [
-  {
-    id: 1,
-    icon: <MonitorSmartphone size={36} color="#C8E47C" />,
-    title: 'Clases en línea y personalizadas.',
-    description: 'Aprende en línea con clases dinámicas y personalizadas.',
-    hoverItems: [
-      'Clases en vivo a través de Zoom.',
-      'Adaptadas a tu nivel, tus objetivos y tu ritmo de aprendizaje.',
-      'Accede desde cualquier lugar, en cualquier momento y desde cualquier dispositivo.',
-      'Aprende de forma práctica, cómoda y enfocada en tus necesidades reales.',
-      'Tus 8 clases incluyen una sesión adicional de 40 minutos sin costo extra.',
-      'Esa sesión está dedicada exclusivamente a resolver dudas de gramática y vocabulario.',
-    ],
-  },
-  {
-    id: 2,
-    icon: <GraduationCap size={36} color="#C8E47C" />,
-    title: 'Material de apoyo a tu disposición.',
-    description: 'Accede a guías y recursos para seguir practicando fuera de clase.',
-    hoverItems: [
-      'Tendrás acceso a guías, materiales y recursos de apoyo.',
-      'Todo está pensado para reforzar lo aprendido en cada sesión.',
-      'Podrás repasar y practicar fuera del horario de clases.',
-      'Te ayudará a ganar más seguridad y claridad con el inglés.',
-      'Mantendrás un progreso más constante, organizado y estructurado.',
-    ],
-  },
-  {
-    id: 3,
-    icon: <BadgeDollarSign size={36} color="#C8E47C" />,
-    title: 'Forma parte de una comunidad activa.',
-    description: 'Forma parte de un espacio donde seguirás en contacto con el inglés cada día.',
-    hoverItems: [
-      'Tendrás acceso a una comunidad de WhatsApp exclusiva para estudiantes.',
-      'Comparto tips, ejercicios, explicaciones y material extra de apoyo.',
-      'También recibirás información sobre fechas de clubes de conversación.',
-      'Formarás parte de un grupo especialmente diseñado para practicar tu writing.',
-      'Es un espacio dinámico, cercano y hasta divertido, donde incluso compartimos memes.',
-      'Así, el inglés se convierte en parte de tu rutina diaria.',
-    ],
-  },
+// Icons stay structural (assigned by card position); copy comes from the CMS.
+const CARD_ICONS = [
+  <MonitorSmartphone size={36} color="#C8E47C" />,
+  <GraduationCap size={36} color="#C8E47C" />,
+  <BadgeDollarSign size={36} color="#C8E47C" />,
 ];
 
 // ═════════════════════════════════════════════════════════════════════════════
 // WHY CHOOSE US SECTION
 // ═════════════════════════════════════════════════════════════════════════════
 
-const WhyChooseUs: React.FC = () => {
+const WhyChooseUs: React.FC<{ content?: HomeContent['why'] }> = ({
+  content = defaultHome.why,
+}) => {
   const [activeId, setActiveId] = useState<number>(1);
   const { ref, ready } = useInView({ threshold: 0.15 });
+
+  const features: FeatureCard[] = content.cards.map((card, i) => ({
+    id: i + 1,
+    icon: CARD_ICONS[i % CARD_ICONS.length],
+    title: card.title,
+    description: card.description,
+    hoverItems: card.details.length > 0 ? card.details : undefined,
+  }));
 
   return (
     <section className={s.why} ref={ref as React.RefObject<HTMLElement>}>
       <div className={s.why__inner}>
         {/* Header */}
         <h2 className={anim(ready, 'anim-slide-up', 'delay-0', s.why__heading)}>
-          ¿Por qué elegir <span className={s.why__headingAccent}>Your English Buddy</span>?
+          {content.headingPre}{' '}
+          <span className={s.why__headingAccent}>{content.headingAccent}</span>
+          {content.headingPost}
         </h2>
         <p className={anim(ready, 'anim-slide-up', 'delay-100', s.why__subtitle)}>
-          Aprenderás a desenvolverte con frases y estructuras que muchas academias y libros
-          tradicionales no suelen enseñar, convirtiendo tu inglés en un espacio seguro desde
-          el cual puedas expresarte y proyectarte con confianza en todos los ámbitos de tu vida.
+          {content.subtitle}
         </p>
 
         {/* Cards row */}

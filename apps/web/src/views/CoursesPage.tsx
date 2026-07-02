@@ -7,52 +7,41 @@ import {
   Smartphone,
   UserRound,
 } from 'lucide-react';
+import {
+  defaultCourses,
+  defaultSite,
+  type CoursesContent,
+  type SiteContent,
+} from '@eyb/shared';
 import Navbar from '../components/Navbar';
 import CoursesSection from '../components/CoursesSection';
 import Footer from '../components/Footer';
 import Reveal from '../components/Reveal';
+import { waUrl } from '../lib/whatsapp';
 import s from '../styles/CoursesPage.module.scss';
 
-// ── What's included perks ────────────────────────────────────────────────────
-
-const perks = [
-  {
-    icon: <UserRound size={26} />,
-    title: 'Clases personalizadas',
-    desc: 'Cada clase está adaptada a tus objetivos, nivel y estilo de aprendizaje, sin un programa genérico.',
-  },
-  {
-    icon: <BookOpen size={26} />,
-    title: 'Material de estudio especial',
-    desc: 'Recursos hechos a medida y adaptados especialmente para ti, para que estudies de forma más inteligente.',
-  },
-  {
-    icon: <MessageCircle size={26} />,
-    title: 'Acceso a la comunidad',
-    desc: 'Únete a grupos exclusivos de WhatsApp donde comparto tips diarios, vocabulario y expresiones reales.',
-  },
-  {
-    icon: <Smartphone size={26} />,
-    title: 'App móvil — Próximamente',
-    desc: 'Estamos desarrollando una app para iOS y Android para que puedas practicar y aprender desde cualquier lugar.',
-    badge: 'Próximamente',
-  },
-];
-
-// ── Levels guide ─────────────────────────────────────────────────────────────
-
-const levels = [
-  { label: 'A1 – A2', name: 'Principiante', desc: 'Sin experiencia previa. Construye tus bases desde el primer día.' },
-  { label: 'B1 – B2', name: 'Intermedio', desc: 'Entiendes lo básico y quieres hablar con verdadera confianza.' },
-  { label: 'C1 – C2', name: 'Avanzado', desc: 'Perfecciona tu fluidez, domina los matices y prepárate para exámenes de alto nivel.' },
+// Structural perk icons, assigned by card position; copy comes from the CMS.
+const PERK_ICONS = [
+  <UserRound size={26} />,
+  <BookOpen size={26} />,
+  <MessageCircle size={26} />,
+  <Smartphone size={26} />,
 ];
 
 // ═════════════════════════════════════════════════════════════════════════════
 
-const CoursesPage: React.FC = () => {
+interface CoursesPageProps {
+  content?: CoursesContent;
+  site?: SiteContent;
+}
+
+const CoursesPage: React.FC<CoursesPageProps> = ({
+  content = defaultCourses,
+  site = defaultSite,
+}) => {
   return (
     <>
-      <Navbar />
+      <Navbar site={site} />
 
       <main>
         {/* ── Hero ─────────────────────────────────────────────────────────── */}
@@ -61,23 +50,18 @@ const CoursesPage: React.FC = () => {
             <div className={s.hero__content}>
               <Reveal>
                 <h1 id="courses-hero-title" className={s.hero__title}>
-                  Encuentra el curso ideal para{' '}
-                  <span className={s.hero__titleAccent}>tu camino con el inglés</span>
+                  {content.hero.titlePre}{' '}
+                  <span className={s.hero__titleAccent}>{content.hero.titleAccent}</span>
                 </h1>
               </Reveal>
               <Reveal delay={0.12}>
-                <p className={s.hero__subtitle}>
-                  Desde conversaciones cotidianas hasta situaciones profesionales,
-                  nuestros cursos están diseñados para ofrecerte una experiencia
-                  práctica, personalizada y enfocada en ayudarte a comunicarte con
-                  más claridad, seguridad y confianza.
-                </p>
+                <p className={s.hero__subtitle}>{content.hero.subtitle}</p>
               </Reveal>
             </div>
 
             {/* Decorative level pills */}
             <div className={s.hero__visual} aria-hidden="true">
-              {levels.map((lvl, i) => (
+              {content.hero.levels.map((lvl, i) => (
                 <Reveal
                   key={lvl.name}
                   delay={0.15 + i * 0.12}
@@ -97,29 +81,33 @@ const CoursesPage: React.FC = () => {
 
         {/* ── Courses list ─────────────────────────────────────────────────── */}
         <div id="courses-list">
-          <CoursesSection />
+          <CoursesSection
+            section={content.section}
+            courses={content.courses}
+            site={site}
+          />
         </div>
 
         {/* ── What's included ──────────────────────────────────────────────── */}
         <section className={s.perks} aria-labelledby="perks-title">
           <div className={s.perks__inner}>
             <Reveal>
-              <p className={s.perks__kicker}>Cada curso incluye</p>
+              <p className={s.perks__kicker}>{content.perks.kicker}</p>
               <h2 id="perks-title" className={s.perks__title}>
-                Todo lo que necesitas para{' '}
-                <span className={s.perks__titleAccent}>lograrlo</span>
+                {content.perks.titlePre}{' '}
+                <span className={s.perks__titleAccent}>{content.perks.titleAccent}</span>
               </h2>
             </Reveal>
             <div className={s.perks__grid}>
-              {perks.map((perk, i) => (
+              {content.perks.cards.map((perk, i) => (
                 <Reveal
-                  key={perk.title}
+                  key={perk.title || i}
                   delay={i * 0.1}
                   y={34}
                   className={`${s.perks__card}${perk.badge ? ` ${s['perks__card--soon']}` : ''}`}
                 >
                   <span className={s.perks__icon} aria-hidden="true">
-                    {perk.icon}
+                    {PERK_ICONS[i % PERK_ICONS.length]}
                   </span>
                   <h3 className={s.perks__cardTitle}>{perk.title}</h3>
                   <p className={s.perks__cardDesc}>{perk.desc}</p>
@@ -138,36 +126,31 @@ const CoursesPage: React.FC = () => {
             <Reveal>
               <span className={s.cta__badge} aria-hidden="true">
                 <CalendarCheck size={15} />
-                Llamada diagnóstica de 15 minutos
+                {content.cta.badge}
               </span>
               <h2 id="cta-title" className={s.cta__title}>
-                ¿Listo para empezar a hablar inglés<br />
-                <span className={s.cta__titleAccent}>con confianza?</span>
+                {content.cta.title}<br />
+                <span className={s.cta__titleAccent}>{content.cta.titleAccent}</span>
               </h2>
-              <p className={s.cta__subtitle}>
-                Evaluaré tu nivel, entenderé tus objetivos y te diré exactamente
-                qué curso se adapta mejor a ti.
-              </p>
+              <p className={s.cta__subtitle}>{content.cta.subtitle}</p>
             </Reveal>
             <Reveal delay={0.15}>
               <div className={s.cta__actions}>
-                <a href="https://wa.me/5491123310113?text=Hola%2C%20quisiera%20obtener%20informacion%20para%20agendar%20una%20clase%20para%20Your%20English%20Buddy%2C%20gracias" target="_blank" rel="noopener noreferrer" className={`${s.cta__btnPrimary} btn-shine`}>
+                <a href={waUrl(site)} target="_blank" rel="noopener noreferrer" className={`${s.cta__btnPrimary} btn-shine`}>
                   <CalendarCheck size={17} />
-                  Reserva tu clase ahora
+                  {content.cta.buttonLabel}
                   <span className={s.cta__btnIcon}>
                     <ArrowUpRight size={14} />
                   </span>
                 </a>
               </div>
-              <p className={s.cta__trust}>
-                Sin compromiso &nbsp;·&nbsp; Resultados en semanas
-              </p>
+              <p className={s.cta__trust}>{content.cta.trust}</p>
             </Reveal>
           </div>
         </section>
       </main>
 
-      <Footer />
+      <Footer site={site} />
     </>
   );
 };

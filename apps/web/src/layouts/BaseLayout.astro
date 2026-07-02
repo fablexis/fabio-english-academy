@@ -3,6 +3,7 @@ import '../styles/global.scss';
 import { ClientRouter } from 'astro:transitions';
 import SplashLoader from '../components/SplashLoader.tsx';
 import WhatsAppFloat from '../components/WhatsAppFloat.tsx';
+import { getPageContent } from '../lib/pages';
 
 interface Props {
   title?: string;
@@ -13,6 +14,10 @@ const {
   title = 'Your English Buddy',
   description = 'Aprende inglés de forma práctica, clara y personalizada con Your English Buddy.',
 } = Astro.props;
+
+// CMS-managed chrome for the floating WhatsApp FAB (cached in lib/pages, so
+// this doesn't duplicate the page's own 'site' fetch within a request burst).
+const site = await getPageContent('site');
 ---
 
 <!doctype html>
@@ -34,6 +39,6 @@ const {
          session-guard and the floating button don't re-mount on every nav. -->
     <SplashLoader client:load transition:persist />
     <slot />
-    <WhatsAppFloat client:idle transition:persist />
+    <WhatsAppFloat client:idle transition:persist site={site} />
   </body>
 </html>

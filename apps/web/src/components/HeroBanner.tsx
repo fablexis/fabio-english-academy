@@ -7,16 +7,21 @@ import {
   useTransform,
   type Variants,
 } from 'motion/react';
+import {
+  defaultHome,
+  defaultSite,
+  type BilingualPhrase,
+  type HomeContent,
+  type SiteContent,
+} from '@eyb/shared';
 import s from '../styles/HeroBanner.module.scss';
+import { waUrl } from '../lib/whatsapp';
 import { SelfPacedIcon, OfflineContentIcon } from './Icons';
 import Navbar from './Navbar';
 import { splashDelay } from './splashTiming';
 // Served from public/ as a plain URL string (Astro turns src/ image imports
 // into ImageMetadata objects, which would break <img src>).
 const characterImg = '/img/character.png';
-
-const WA_URL =
-  'https://wa.me/5491123310113?text=Hola%2C%20quisiera%20obtener%20informacion%20para%20agendar%20una%20clase%20para%20Your%20English%20Buddy%2C%20gracias';
 
 // ─── Motion variants ─────────────────────────────────────────────────────────
 
@@ -64,20 +69,13 @@ const popIn = (delay: number): Variants => ({
 
 // ─── Speech bubble: the character practices real English out loud ───────────
 
-const PHRASES = [
-  { en: "Hello! How's it going?", es: '¡Hola! ¿Cómo va todo?' },
-  { en: "I'm learning English!", es: '¡Estoy aprendiendo inglés!' },
-  { en: 'Could I get a coffee, please?', es: 'Un café, por favor.' },
-  { en: 'I got the job!', es: '¡Conseguí el trabajo!' },
-  { en: 'Practice makes perfect.', es: 'La práctica hace al maestro.' },
-];
-
 const TYPING_MS = 950;
 const PHRASE_MS = 4300;
 
-const SpeechBubble: React.FC = () => {
+const SpeechBubble: React.FC<{ phrases: BilingualPhrase[] }> = ({ phrases }) => {
   const [idx, setIdx] = useState(0);
   const [typing, setTyping] = useState(true);
+  const PHRASES = phrases.length > 0 ? phrases : defaultHome.hero.phrases;
 
   useEffect(() => {
     const typingTimer = setTimeout(() => setTyping(false), TYPING_MS);
@@ -89,7 +87,7 @@ const SpeechBubble: React.FC = () => {
       clearTimeout(typingTimer);
       clearTimeout(cycleTimer);
     };
-  }, [idx]);
+  }, [idx, PHRASES.length]);
 
   return (
     <div className={s.hero__bubble} aria-hidden="true">
@@ -126,16 +124,10 @@ const SpeechBubble: React.FC = () => {
 
 // ─── Flashcard: EN word flips to its ES translation ─────────────────────────
 
-const WORDS = [
-  { en: 'confidence', es: 'confianza' },
-  { en: 'achieve', es: 'lograr' },
-  { en: 'fluently', es: 'con fluidez' },
-  { en: 'improve', es: 'mejorar' },
-];
-
-const FlashCard: React.FC = () => {
+const FlashCard: React.FC<{ words: BilingualPhrase[] }> = ({ words }) => {
   const [idx, setIdx] = useState(0);
   const [flipped, setFlipped] = useState(false);
+  const WORDS = words.length > 0 ? words : defaultHome.hero.words;
 
   useEffect(() => {
     const flipTimer = setTimeout(() => setFlipped(true), 2300);
@@ -147,7 +139,7 @@ const FlashCard: React.FC = () => {
       clearTimeout(flipTimer);
       clearTimeout(nextTimer);
     };
-  }, [idx]);
+  }, [idx, WORDS.length]);
 
   return (
     <div className={s.hero__flashScene} aria-hidden="true">
@@ -173,7 +165,15 @@ const FlashCard: React.FC = () => {
 // HERO BANNER COMPONENT
 // ═════════════════════════════════════════════════════════════════════════════
 
-const HeroBanner: React.FC = () => {
+interface HeroBannerProps {
+  content?: HomeContent['hero'];
+  site?: SiteContent;
+}
+
+const HeroBanner: React.FC<HeroBannerProps> = ({
+  content = defaultHome.hero,
+  site = defaultSite,
+}) => {
   // Mouse-driven parallax, smoothed by springs
   const mx = useMotionValue(0);
   const my = useMotionValue(0);
@@ -203,7 +203,7 @@ const HeroBanner: React.FC = () => {
 
   return (
     <div className="w-full">
-      <Navbar />
+      <Navbar site={site} />
 
       <section
         className={s.hero}
@@ -230,7 +230,7 @@ const HeroBanner: React.FC = () => {
               animate="visible"
             >
               <span className={s.hero__chipDot} aria-hidden="true" />
-              Primera clase diagnóstica gratis
+              {content.chip}
             </motion.div>
 
             <motion.h1
@@ -239,16 +239,17 @@ const HeroBanner: React.FC = () => {
               initial="hidden"
               animate="visible"
             >
-              <motion.span className={s.hero__word} variants={wordRise}>
-                Bienvenido
-              </motion.span>{' '}
-              <motion.span className={s.hero__word} variants={wordRise}>
-                a
-              </motion.span>{' '}
+              {content.titlePre.split(/\s+/).map((w, i) => (
+                <React.Fragment key={`pre-${i}`}>
+                  <motion.span className={s.hero__word} variants={wordRise}>
+                    {w}
+                  </motion.span>{' '}
+                </React.Fragment>
+              ))}
               <span className={s.hero__accentWrap}>
-                {['Your', 'English', 'Buddy'].map((w) => (
+                {content.titleAccent.split(/\s+/).map((w, i) => (
                   <motion.span
-                    key={w}
+                    key={`accent-${i}`}
                     className={`${s.hero__word} ${s.hero__headingAccent}`}
                     variants={wordRise}
                   >
@@ -285,10 +286,7 @@ const HeroBanner: React.FC = () => {
               initial="hidden"
               animate="visible"
             >
-              En Your English Buddy ayudamos a personas hispanohablantes a mejorar su
-              inglés con explicaciones simples, acompañamiento real y clases pensadas
-              para la vida diaria. Nuestro propósito es que ganes confianza al hablar,
-              entender, escribir y usar el inglés en situaciones reales.
+              {content.paragraph}
             </motion.p>
 
             <motion.div
@@ -298,15 +296,15 @@ const HeroBanner: React.FC = () => {
               animate="visible"
             >
               <a
-                href={WA_URL}
+                href={waUrl(site)}
                 target="_blank"
                 rel="noopener noreferrer"
                 className={`${s.hero__btnPrimary} btn-shine`}
               >
-                Empieza mi viaje <span className="btn-arrow">→</span>
+                {content.ctaPrimary} <span className="btn-arrow">→</span>
               </a>
               <a href="/courses" className={s.hero__btnSecondary}>
-                Ver cursos
+                {content.ctaSecondary}
               </a>
             </motion.div>
           </div>
@@ -380,8 +378,8 @@ const HeroBanner: React.FC = () => {
                     <SelfPacedIcon size={40} />
                   </div>
                   <div>
-                    <div className={s.hero__badgeLabel}>Clases Personalizadas</div>
-                    <div className={s.hero__badgeSub}>A Tu Ritmo</div>
+                    <div className={s.hero__badgeLabel}>{content.badge1Title}</div>
+                    <div className={s.hero__badgeSub}>{content.badge1Sub}</div>
                   </div>
                 </motion.div>
               </div>
@@ -398,8 +396,8 @@ const HeroBanner: React.FC = () => {
                     <OfflineContentIcon size={36} />
                   </div>
                   <div>
-                    <div className={s.hero__badgeNumber}>24/7</div>
-                    <div className={s.hero__badgeText}>Contenido Offline</div>
+                    <div className={s.hero__badgeNumber}>{content.badge2Number}</div>
+                    <div className={s.hero__badgeText}>{content.badge2Text}</div>
                   </div>
                 </motion.div>
               </div>
@@ -411,7 +409,7 @@ const HeroBanner: React.FC = () => {
                   initial="hidden"
                   animate="visible"
                 >
-                  <SpeechBubble />
+                  <SpeechBubble phrases={content.phrases} />
                 </motion.div>
               </div>
 
@@ -422,7 +420,7 @@ const HeroBanner: React.FC = () => {
                   initial="hidden"
                   animate="visible"
                 >
-                  <FlashCard />
+                  <FlashCard words={content.words} />
                 </motion.div>
               </div>
             </motion.div>

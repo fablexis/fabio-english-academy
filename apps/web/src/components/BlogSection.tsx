@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react';
 import { ArrowUpRight, Clock3 } from 'lucide-react';
 import { AnimatePresence, motion } from 'motion/react';
-import type { BlogListItemDto } from '@eyb/shared';
+import { defaultBlogPage, type BlogListItemDto, type BlogPageContent } from '@eyb/shared';
 import s from '../styles/BlogSection.module.scss';
 import { useInView } from '../hooks/useInView';
 import BlurImage from './BlurImage';
@@ -21,9 +21,14 @@ const anim = (
 interface BlogSectionProps {
   /** Posts fetched server-side (SSR) and passed in from the Astro page. */
   posts: BlogListItemDto[];
+  /** CMS-managed section header (title + subtitle). */
+  header?: BlogPageContent['header'];
 }
 
-const BlogSection: React.FC<BlogSectionProps> = ({ posts }) => {
+const BlogSection: React.FC<BlogSectionProps> = ({
+  posts,
+  header = defaultBlogPage.header,
+}) => {
   const { ref, ready } = useInView({ threshold: 0.1 });
   const [activeCategory, setActiveCategory] = useState('Todos');
 
@@ -52,12 +57,11 @@ const BlogSection: React.FC<BlogSectionProps> = ({ posts }) => {
             id="blog-section-title"
             className={anim(ready, 'anim-slide-up', 'delay-100', s.blog__title)}
           >
-            Historias, consejos y{' '}
-            <span className={s.blog__titleAccent}>aprendizaje real</span>
+            {header.titlePre}{' '}
+            <span className={s.blog__titleAccent}>{header.titleAccent}</span>
           </h2>
           <p className={anim(ready, 'anim-slide-up', 'delay-200', s.blog__subtitle)}>
-            Artículos prácticos para mejorar tu inglés en situaciones cotidianas
-            — lo suficientemente cortos para leer en un descanso.
+            {header.subtitle}
           </p>
         </div>
 

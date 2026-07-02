@@ -1,189 +1,1454 @@
-// Admin panel — utilitarian dashboard styling with the brand palette.
-$teal: #185c60;
-$lime: #c8e47c;
-$ink: #14181a;
-$muted: #667;
-$line: #e4e8ea;
-$danger: #d1495b;
+// Admin panel design system — Vuexy-style dashboard language (light vertical
+// sidebar, detached top bar, card surfaces, soft tinted badges) executed on
+// the Your English Buddy teal. Font: Public Sans (loaded in admin/[...slug].astro).
 
-.center { padding: 3rem; text-align: center; color: $muted; }
-.error { color: $danger; font-size: 0.9rem; margin: 0.5rem 0; }
+// ── Tokens ──────────────────────────────────────────────────────────────────
+$font:
+  'Public Sans',
+  ui-sans-serif,
+  system-ui,
+  -apple-system,
+  'Segoe UI',
+  sans-serif;
+
+// Neutrals, tinted toward the brand teal.
+$body-bg: #f3f7f7;
+$card: #fff;
+$heading: #35494c;
+$text: #52676a;
+$muted: #67797c; // smallest text; ≥4.5:1 on white and on $body-bg
+$line: #e2eaea;
+$input-border: #cfdcdc;
+
+// Brand + semantic.
+$primary: #185c60;
+$primary-strong: #114448;
+$primary-soft: rgba(24, 92, 96, 0.09);
+$primary-ring: rgba(24, 92, 96, 0.16);
+$lime: #c8e47c;
+$success-ink: #1b6f4a;
+$success-soft: #e2f2e9;
+$danger: #c43d52;
+$danger-soft: #f9e7ea;
+$neutral-soft: #eef3f3;
+
+// Elevation (teal-cast, Vuexy-soft).
+$shadow-sm: 0 2px 8px rgba(22, 56, 59, 0.06);
+$shadow-md: 0 4px 20px rgba(22, 56, 59, 0.08);
+$shadow-lg: 0 14px 38px rgba(22, 56, 59, 0.16);
+
+// Radii.
+$r-control: 8px;
+$r-card: 12px;
+
+// Z scale: dropdown < sticky topbar < drawer backdrop < drawer < savebar < toast.
+$z-dropdown: 20;
+$z-topbar: 30;
+$z-backdrop: 40;
+$z-drawer: 50;
+$z-savebar: 60;
+$z-toast: 70;
+
+$sidebar-w: 260px;
+$ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+
+@mixin focus-ring {
+  &:focus-visible {
+    outline: 2px solid $primary;
+    outline-offset: 2px;
+  }
+}
+
+// ── Generic states ──────────────────────────────────────────────────────────
+.center { padding: 3rem; text-align: center; color: $muted; font-family: $font; }
+.error { color: $danger; font-size: 0.875rem; margin: 0.5rem 0; }
 .warn { color: $danger; font-style: normal; font-weight: 600; }
 
-// ── Login ──
+// ── Login ───────────────────────────────────────────────────────────────────
 .loginWrap {
   min-height: 100vh;
   display: grid;
   place-items: center;
-  background: radial-gradient(circle at 30% 20%, #1f6d72 0%, $teal 45%, #0f3b3e 100%);
+  background: $body-bg;
   padding: 1.5rem;
+  font-family: $font;
+  position: relative;
+  overflow: hidden;
+  &::before,
+  &::after {
+    content: '';
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    pointer-events: none;
+  }
+  &::before { width: 420px; height: 420px; background: rgba(24, 92, 96, 0.14); top: -140px; right: -100px; }
+  &::after { width: 380px; height: 380px; background: rgba(200, 228, 124, 0.28); bottom: -140px; left: -90px; }
 }
 .loginCard {
+  position: relative;
   width: 100%;
-  max-width: 380px;
-  background: #fff;
-  border-radius: 18px;
+  max-width: 400px;
+  background: $card;
+  border-radius: $r-card;
   padding: 2rem;
-  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.25);
+  box-shadow: $shadow-md;
   display: flex;
   flex-direction: column;
   gap: 0.9rem;
 }
-.loginTitle { margin: 0; font-size: 1.35rem; color: $ink; }
-.loginSub { margin: 0 0 0.5rem; color: $muted; font-size: 0.9rem; }
+.loginBrand {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  font-weight: 800;
+  color: $heading;
+  font-size: 1rem;
+  margin-bottom: 0.4rem;
+}
+.loginTitle {
+  margin: 0;
+  font-size: 1.35rem;
+  color: $heading;
+  font-weight: 700;
+  // Flex keeps trailing icons on the same line (Tailwind preflight makes svg block).
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+.loginSub { margin: 0 0 0.5rem; color: $text; font-size: 0.9rem; }
+.loginLink {
+  align-self: center;
+  margin-top: 0.35rem;
+  color: $primary;
+  font-size: 0.84rem;
+  font-weight: 600;
+  text-decoration: none;
+  &:hover { text-decoration: underline; }
+}
 
-// ── Shell ──
-.shell { display: grid; grid-template-columns: 230px 1fr; min-height: 100vh; }
-.sidebar {
-  background: $teal;
-  color: #fff;
-  padding: 1.5rem 1rem;
+// ── Password input with show/hide toggle ────────────────────────────────────
+.pwWrap {
+  position: relative;
+  display: flex;
+  input { flex: 1; }
+}
+// Extra specificity: outranks the later `.field input` padding shorthand.
+.field .pwWrap input { padding-right: 2.7rem; }
+// Extra specificity: outranks `.tip`'s position:relative (defined later).
+.pwWrap .pwToggle {
+  position: absolute;
+  right: 6px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: inline-grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border: 0;
+  border-radius: $r-control;
+  background: transparent;
+  color: $muted;
+  cursor: pointer;
+  &:hover { background: $primary-soft; color: $primary; }
+  @include focus-ring;
+}
+
+// ── Live password-policy checklist ──────────────────────────────────────────
+.pwRules {
+  list-style: none;
+  margin: -0.2rem 0 0.4rem;
+  padding: 0.75rem 0.9rem;
+  background: #f7fafa;
+  border: 1px solid $line;
+  border-radius: $r-control;
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 0.4rem;
 }
-.brand { font-weight: 800; font-size: 1.05rem; letter-spacing: 0.02em; }
-.nav { display: flex; flex-direction: column; gap: 0.25rem; flex: 1; }
-.nav a {
-  color: rgba(255, 255, 255, 0.85);
-  text-decoration: none;
-  padding: 0.5rem 0.65rem;
-  border-radius: 9px;
-  font-weight: 600;
-  &:hover { background: rgba(255, 255, 255, 0.12); color: #fff; }
+.pwRule {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.8rem;
+  color: $muted;
+  transition: color 0.15s ease;
 }
-.userBox { font-size: 0.8rem; display: flex; flex-direction: column; gap: 0.4rem; opacity: 0.95; }
-.main { background: #f6f8f9; padding: 2rem; overflow: auto; }
+.pwRuleIcon {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 1.5px solid $input-border;
+  background: $card;
+  display: inline-grid;
+  place-items: center;
+  flex-shrink: 0;
+  color: transparent;
+  transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+.pwRuleOk {
+  color: $success-ink;
+  .pwRuleIcon {
+    background: $success-ink;
+    border-color: $success-ink;
+    color: #fff;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .pwRule, .pwRuleIcon { transition: none; }
+}
 
-// ── Page ──
-.page { max-width: 900px; margin: 0 auto; }
+// ── Shell ───────────────────────────────────────────────────────────────────
+.shell {
+  min-height: 100vh;
+  background: $body-bg;
+  font-family: $font;
+  color: $text;
+}
+
+// Sidebar: fixed, white, Vuexy-style.
+.sidebar {
+  position: fixed;
+  inset-block: 0;
+  left: 0;
+  width: $sidebar-w;
+  background: $card;
+  box-shadow: $shadow-sm;
+  display: flex;
+  flex-direction: column;
+  padding: 1rem 0.85rem 1.1rem;
+  z-index: $z-drawer;
+  transition: transform 0.25s $ease-out;
+}
+.sideBrand {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.35rem 0.5rem 1rem;
+  strong { display: block; font-size: 0.95rem; color: $heading; line-height: 1.2; letter-spacing: -0.01em; }
+  small { display: block; font-size: 0.72rem; color: $muted; font-weight: 500; }
+}
+.brandMark {
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  background: rgba(200, 228, 124, 0.4);
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  svg { width: 22px; height: 22px; }
+}
+.menu { display: flex; flex-direction: column; gap: 0.15rem; flex: 1; overflow-y: auto; }
+.menuLabel {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: $muted;
+  padding: 1.1rem 0.6rem 0.45rem;
+  &::after { content: ''; flex: 1; height: 1px; background: $line; }
+}
+.menuItem {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  color: $text;
+  text-decoration: none;
+  padding: 0.58rem 0.7rem;
+  border-radius: $r-control;
+  font-weight: 600;
+  font-size: 0.9rem;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  width: 100%;
+  font-family: inherit;
+  transition: background 0.15s ease, color 0.15s ease;
+  svg { flex-shrink: 0; opacity: 0.85; }
+  &:hover { background: $neutral-soft; color: $heading; }
+  @include focus-ring;
+}
+.menuItemActive {
+  background: linear-gradient(80deg, $primary 0%, #2a7a7f 100%);
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(24, 92, 96, 0.35);
+  svg { opacity: 1; }
+  &:hover { background: linear-gradient(80deg, $primary 0%, #2a7a7f 100%); color: #fff; }
+}
+.menuText { flex: 1; text-align: left; min-width: 0; }
+.menuChevron {
+  margin-left: auto;
+  flex-shrink: 0;
+  transition: transform 0.2s $ease-out;
+}
+.menuChevronOpen { transform: rotate(180deg); }
+// Parent of the currently-active child route (kept lighter than the child pill).
+.menuParent { color: $primary; background: $primary-soft; svg { opacity: 1; } }
+
+// Second navigation level (Vuexy's dotted children).
+.submenu { display: flex; flex-direction: column; gap: 2px; padding: 2px 0 6px; }
+.subItem {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  color: $text;
+  text-decoration: none;
+  padding: 0.42rem 0.7rem 0.42rem 1.1rem;
+  border-radius: $r-control;
+  font-size: 0.85rem;
+  font-weight: 500;
+  &:hover { background: $neutral-soft; color: $heading; }
+  @include focus-ring;
+}
+.subDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  border: 2px solid $input-border;
+  background: transparent;
+  flex-shrink: 0;
+}
+.subItemActive {
+  background: $primary-soft;
+  color: $primary;
+  font-weight: 600;
+  .subDot { border-color: $primary; background: $primary; }
+  &:hover { background: $primary-soft; color: $primary; }
+}
+.sideFootNote {
+  margin: 0.75rem 0.5rem 0;
+  padding-top: 0.75rem;
+  border-top: 1px solid $line;
+  font-size: 0.72rem;
+  color: $muted;
+}
+
+// Mobile drawer behaviour.
+.backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(22, 56, 59, 0.4);
+  z-index: $z-backdrop;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+}
+@media (max-width: 1099px) {
+  .sidebar { transform: translateX(-105%); box-shadow: $shadow-lg; }
+  .sidebarOpen { transform: translateX(0); }
+}
+
+// Content column.
+.main {
+  margin-left: $sidebar-w;
+  padding: 1.1rem 1.5rem 6.5rem;
+  min-height: 100vh;
+}
+@media (max-width: 1099px) {
+  .main { margin-left: 0; }
+}
+
+// Detached top bar (Vuexy's floating navbar).
+.topbar {
+  position: sticky;
+  top: 0.9rem;
+  z-index: $z-topbar;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: $card;
+  border-radius: 10px;
+  box-shadow: $shadow-md;
+  padding: 0.5rem 0.65rem 0.5rem 0.9rem;
+  max-width: 1120px;
+  margin: 0 auto 1.5rem;
+}
+.hamburger {
+  display: none;
+  border: 0;
+  background: transparent;
+  color: $text;
+  cursor: pointer;
+  padding: 0.4rem;
+  border-radius: $r-control;
+  &:hover { background: $neutral-soft; color: $heading; }
+  @include focus-ring;
+}
+@media (max-width: 1099px) {
+  .hamburger { display: inline-grid; place-items: center; }
+}
+.crumbs {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.875rem;
+  min-width: 0;
+  flex: 1;
+  a {
+    color: $muted;
+    text-decoration: none;
+    font-weight: 500;
+    &:hover { color: $primary; }
+  }
+  svg { color: $input-border; flex-shrink: 0; }
+}
+// Non-clickable section label (Contenido / Administración).
+.crumbSection { color: $muted; font-weight: 500; }
+.crumbCurrent {
+  color: $heading;
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.topbarActions { display: flex; align-items: center; gap: 0.35rem; }
+
+// Avatar + dropdown.
+.avatarBtn {
+  border: 0;
+  background: transparent;
+  padding: 2px;
+  border-radius: 50%;
+  cursor: pointer;
+  @include focus-ring;
+}
+.avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: $lime;
+  color: $primary-strong;
+  display: grid;
+  place-items: center;
+  font-weight: 800;
+  font-size: 0.9rem;
+  position: relative;
+}
+.avatarDot {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #35c789;
+  border: 2px solid $card;
+}
+.userMenuWrap { position: relative; }
+.userMenu {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 0.6rem);
+  width: 230px;
+  background: $card;
+  border-radius: 10px;
+  box-shadow: $shadow-lg;
+  padding: 0.4rem;
+  z-index: $z-dropdown;
+}
+.userMenuHead {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.55rem 0.6rem;
+  border-bottom: 1px solid $line;
+  margin-bottom: 0.35rem;
+  strong { display: block; font-size: 0.82rem; color: $heading; }
+  small { display: block; font-size: 0.72rem; color: $muted; }
+  > div { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+}
+.userMenuItem {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  width: 100%;
+  border: 0;
+  background: transparent;
+  text-align: left;
+  font: inherit;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: $text;
+  padding: 0.5rem 0.6rem;
+  border-radius: $r-control;
+  cursor: pointer;
+  text-decoration: none;
+  &:hover { background: $neutral-soft; color: $heading; }
+  @include focus-ring;
+}
+.userMenuDanger { color: $danger; &:hover { background: $danger-soft; color: $danger; } }
+
+// ── Page scaffolding ────────────────────────────────────────────────────────
+.page { max-width: 1120px; margin: 0 auto; }
+.pageNarrow { max-width: 880px; } // editors: keeps inputs at a readable width
 .pageHead {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 1.5rem;
-  h1 { margin: 0; font-size: 1.5rem; color: $ink; }
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 1.4rem;
+  h1 { margin: 0; font-size: 1.45rem; color: $heading; font-weight: 700; letter-spacing: -0.01em; }
+}
+.pageSub { margin: 0.3rem 0 0; color: $text; font-size: 0.875rem; }
+
+// ── Cards ───────────────────────────────────────────────────────────────────
+.card {
+  background: $card;
+  border-radius: $r-card;
+  box-shadow: $shadow-sm;
+  padding: 1.4rem 1.5rem;
+}
+.cardHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+  h2 { margin: 0; font-size: 1.05rem; color: $heading; font-weight: 700; }
+  p { margin: 0.2rem 0 0; color: $muted; font-size: 0.82rem; }
 }
 
-// ── Table ──
+// ── Dashboard ───────────────────────────────────────────────────────────────
+.dashGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.25rem;
+  grid-auto-rows: 1fr; // widgets in a row share the same height
+}
+.dashCard {
+  background: $card;
+  border-radius: $r-card;
+  box-shadow: $shadow-sm;
+  padding: 1.3rem 1.4rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+}
+.dashCardHead {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  h2 { margin: 0; font-size: 1rem; color: $heading; font-weight: 700; }
+  small { display: block; color: $muted; font-size: 0.78rem; margin-top: 0.1rem; }
+}
+.dashIcon {
+  width: 42px;
+  height: 42px;
+  border-radius: 10px;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  background: $primary-soft;
+  color: $primary;
+}
+.dashIconLime { background: rgba(200, 228, 124, 0.42); color: #4c611c; }
+.dashChips { display: flex; gap: 0.4rem; flex-wrap: wrap; }
+.dashRows { display: flex; flex-direction: column; }
+.dashRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.5rem 0.1rem;
+  font-size: 0.86rem;
+  color: $text;
+  text-decoration: none;
+  border-bottom: 1px solid $line;
+  &:last-child { border-bottom: 0; }
+  strong { color: $heading; font-weight: 600; }
+  time { color: $muted; font-size: 0.76rem; white-space: nowrap; }
+}
+// Nested to out-specify `.dashRow strong`.
+.dashRow .dashRowText {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-weight: 500;
+}
+a.dashRow:hover strong { color: $primary; }
+.dashActions { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: auto; }
+
+// ── Badges (soft, Vuexy-style) ──────────────────────────────────────────────
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  border-radius: 6px;
+  padding: 0.22rem 0.55rem;
+  font-size: 0.74rem;
+  font-weight: 700;
+}
+.badgePrimary { background: $primary-soft; color: $primary; }
+.badgeOn { @extend .badge; background: $success-soft; color: $success-ink; }
+.badgeOff { @extend .badge; background: $neutral-soft; color: $muted; }
+.badgeWarn { @extend .badge; background: #f8ecd9; color: #8a5a10; }
+.badgeInline { margin-left: 0.45rem; vertical-align: 1px; }
+
+// ── Table ───────────────────────────────────────────────────────────────────
+.tableCard {
+  background: $card;
+  border-radius: $r-card;
+  box-shadow: $shadow-sm;
+  overflow: hidden;
+}
+.tableTools {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  padding: 1.1rem 1.25rem;
+}
+.searchBox {
+  position: relative;
+  // Grow to fill the toolbar; wide enough that the placeholder always shows.
+  flex: 1 1 320px;
+  min-width: 0;
+  svg {
+    position: absolute;
+    left: 0.7rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: $muted;
+    pointer-events: none;
+  }
+  input {
+    font: inherit;
+    font-size: 0.875rem;
+    color: $heading;
+    padding: 0.5rem 0.8rem 0.5rem 2.2rem;
+    border: 1px solid $input-border;
+    border-radius: $r-control;
+    background: $card;
+    width: 100%;
+    &::placeholder { color: $muted; }
+    &:focus {
+      outline: none;
+      border-color: $primary;
+      box-shadow: 0 0 0 3px $primary-ring;
+    }
+  }
+}
 .table {
   width: 100%;
   border-collapse: collapse;
-  background: #fff;
-  border-radius: 12px;
-  overflow: hidden;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
-  th, td { padding: 0.75rem 1rem; text-align: left; border-bottom: 1px solid $line; font-size: 0.9rem; }
-  th { background: #eef2f3; color: $muted; font-weight: 700; }
+  th, td {
+    padding: 0.7rem 1.25rem;
+    text-align: left;
+    border-top: 1px solid $line;
+    font-size: 0.875rem;
+    color: $text;
+    vertical-align: middle;
+  }
+  th {
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: $muted;
+    background: #f8fbfb;
+    border-top: 1px solid $line;
+  }
+  tbody tr { transition: background 0.12s ease; }
+  tbody tr:hover { background: #f6faf9; }
 }
-.rowActions { display: flex; gap: 0.5rem; justify-content: flex-end; }
-.badgeOn { color: #1a7f4b; font-weight: 700; font-size: 0.8rem; }
-.badgeOff { color: $muted; font-weight: 700; font-size: 0.8rem; }
+.cellMain {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  min-width: 0;
+}
+.thumb {
+  width: 40px;
+  height: 40px;
+  border-radius: $r-control;
+  object-fit: cover;
+  flex-shrink: 0;
+  background: $neutral-soft;
+}
+.cellTitle {
+  min-width: 0;
+  strong { display: block; color: $heading; font-weight: 600; font-size: 0.875rem; }
+  small {
+    display: block;
+    color: $muted;
+    font-size: 0.75rem;
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
+.rowActions { display: flex; gap: 0.2rem; justify-content: flex-end; }
+.avatarSm {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: $lime;
+  color: $primary-strong;
+  display: inline-grid;
+  place-items: center;
+  font-weight: 800;
+  font-size: 0.72rem;
+  flex-shrink: 0;
+  position: relative;
+}
+.avatarLg {
+  width: 76px;
+  height: 76px;
+  border-radius: 50%;
+  background: $lime;
+  color: $primary-strong;
+  display: inline-grid;
+  place-items: center;
+  font-weight: 800;
+  font-size: 1.7rem;
+  flex-shrink: 0;
+  position: relative;
+}
+// Profile picture inside any avatar circle.
+.avatarImg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+}
+.profileAvatarRow { display: flex; align-items: center; gap: 1.1rem; }
+.profileAvatarActions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  .fieldHelp { width: 100%; margin: 0; }
+}
+// Inline row editing in the users table.
+.editStack {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  max-width: 260px;
+  input {
+    font: inherit;
+    font-size: 0.85rem;
+    color: $heading;
+    padding: 0.4rem 0.6rem;
+    border: 1px solid $input-border;
+    border-radius: $r-control;
+    &:focus { outline: none; border-color: $primary; box-shadow: 0 0 0 3px $primary-ring; }
+  }
+}
+.cellSub { display: block; margin-top: 0.3rem; color: $muted; font-size: 0.74rem; }
+.filterRow { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+.filterSelect {
+  font: inherit;
+  font-size: 0.86rem;
+  color: $heading;
+  padding: 0.5rem 0.7rem;
+  border: 1px solid $input-border;
+  border-radius: $r-control;
+  background: $card;
+  &:focus {
+    outline: none;
+    border-color: $primary;
+    box-shadow: 0 0 0 3px $primary-ring;
+  }
+}
+.loadMore {
+  display: flex;
+  justify-content: center;
+  padding: 0.9rem;
+  border-top: 1px solid $line;
+}
 
-// ── Forms ──
-.form { background: #fff; border-radius: 14px; padding: 1.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.06); }
-.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+// ── Pages dashboard (cards) ─────────────────────────────────────────────────
+.pageCards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.25rem;
+  grid-auto-rows: 1fr; // equal-height widget cards, Vuexy-style
+}
+.pageCard {
+  background: $card;
+  border-radius: $r-card;
+  box-shadow: $shadow-sm;
+  padding: 1.25rem 1.3rem 1.2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  transition: box-shadow 0.18s ease, transform 0.18s $ease-out;
+  &:hover { transform: translateY(-3px); box-shadow: $shadow-md; }
+}
+.pageCardTop { display: flex; align-items: center; gap: 0.7rem; }
+.pageCardIcon {
+  width: 42px;
+  height: 42px;
+  border-radius: 10px;
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  background: $primary-soft;
+  color: $primary;
+}
+.pageCardTitles h2 { margin: 0; font-size: 1rem; color: $heading; font-weight: 700; }
+.routeChip {
+  display: inline-block;
+  margin-top: 0.2rem;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: $primary;
+  background: $primary-soft;
+  border-radius: 6px;
+  padding: 0.12rem 0.45rem;
+}
+.pageCardBlurb { margin: 0; color: $text; font-size: 0.84rem; line-height: 1.5; flex: 1; }
+.cardBadge { margin-left: auto; flex-shrink: 0; }
+.pageCardActions {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  padding-top: 0.85rem;
+  border-top: 1px solid $line;
+  margin-top: auto; // pins the footer so every card bottom lines up
+}
+
+// Data-preview rows inside page cards (Vuexy campaign-card pattern).
+.pageStats {
+  list-style: none;
+  margin: 0.4rem 0 1rem;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+  flex: 1;
+  li { display: flex; align-items: center; gap: 0.65rem; }
+}
+.statIcon {
+  width: 30px;
+  height: 30px;
+  border-radius: $r-control;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+}
+.tintPrimary { background: $primary-soft; color: $primary; }
+.tintLime { background: rgba(200, 228, 124, 0.42); color: #4c611c; }
+.tintNeutral { background: $neutral-soft; color: $heading; }
+.statLabel { flex: 1; min-width: 0; font-size: 0.84rem; color: $text; }
+.statValue {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: $heading;
+  max-width: 46%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+// Skeleton shimmer while the content documents load.
+.skelRow {
+  height: 30px;
+  width: 100%;
+  border-radius: $r-control;
+  background: linear-gradient(90deg, $neutral-soft 25%, #f8fbfb 50%, $neutral-soft 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.2s linear infinite;
+}
+@keyframes shimmer {
+  to { background-position: -200% 0; }
+}
+
+// ── Editor header ───────────────────────────────────────────────────────────
+.editorHead {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 1.25rem;
+  h1 {
+    margin: 0.3rem 0 0;
+    font-size: 1.4rem;
+    color: $heading;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+  }
+}
+.editorHeadLeft { min-width: 0; }
+.editorHeadActions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  a, button { display: inline-flex; align-items: center; gap: 0.35rem; }
+}
+.backLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  color: $muted;
+  text-decoration: none;
+  font-size: 0.82rem;
+  font-weight: 600;
+  &:hover { color: $primary; }
+}
+
+// ── Forms ───────────────────────────────────────────────────────────────────
+.form {
+  background: $card;
+  border-radius: $r-card;
+  padding: 1.5rem;
+  box-shadow: $shadow-sm;
+}
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 0 1.25rem; }
+@media (max-width: 720px) {
+  .grid2 { grid-template-columns: 1fr; }
+}
 .field {
   display: flex;
   flex-direction: column;
-  gap: 0.3rem;
+  gap: 0.35rem;
   margin-bottom: 1rem;
-  span { font-size: 0.82rem; font-weight: 600; color: $ink; }
+  span { font-size: 0.8rem; font-weight: 600; color: $heading; }
   input, textarea, select {
-    padding: 0.55rem 0.7rem;
-    border: 1px solid $line;
-    border-radius: 9px;
     font: inherit;
-    background: #fdfefe;
-    &:focus { outline: 2px solid rgba(24, 92, 96, 0.35); border-color: $teal; }
+    font-size: 0.9rem;
+    color: $heading;
+    padding: 0.55rem 0.75rem;
+    border: 1px solid $input-border;
+    border-radius: $r-control;
+    background: $card;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+    &::placeholder { color: $muted; }
+    &:focus {
+      outline: none;
+      border-color: $primary;
+      box-shadow: 0 0 0 3px $primary-ring;
+    }
   }
 }
 .code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 0.8rem; line-height: 1.5; }
-.checkbox { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1rem; font-weight: 600; font-size: 0.9rem; }
+.checkbox {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  font-weight: 600;
+  font-size: 0.875rem;
+  color: $heading;
+  input { accent-color: $primary; width: 16px; height: 16px; }
+}
 .formActions { display: flex; justify-content: flex-end; gap: 0.75rem; }
+.fieldHelp { display: block; color: $muted; font-size: 0.75rem; font-style: normal; margin-top: 0.15rem; }
+.imgPreview {
+  margin-top: 0.4rem;
+  max-height: 72px;
+  max-width: 140px;
+  border-radius: $r-control;
+  border: 1px solid $line;
+  object-fit: cover;
+}
 
-// ── Buttons ──
+// ── Image upload (preview + click / drag & drop) ────────────────────────────
+.dropzone {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  border: 2px dashed $input-border;
+  border-radius: $r-card;
+  background: #fafcfc;
+  padding: 0.85rem;
+  cursor: pointer;
+  transition: border-color 0.15s ease, background 0.15s ease;
+  &:hover { border-color: $primary; background: $primary-soft; }
+  @include focus-ring;
+}
+.dropzoneActive {
+  border-color: $primary;
+  background: $primary-soft;
+  box-shadow: 0 0 0 3px $primary-ring;
+}
+.dropzoneThumb {
+  width: 132px;
+  height: 88px;
+  border-radius: $r-control;
+  object-fit: cover;
+  flex-shrink: 0;
+  background: $neutral-soft;
+  border: 1px solid $line;
+}
+.dropzoneInfo {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.3rem;
+  min-width: 0;
+  strong { font-size: 0.84rem; color: $heading; }
+  small {
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    color: $muted;
+    font-size: 0.74rem;
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  }
+  .btnSoft { padding: 0.35rem 0.75rem; font-size: 0.8rem; margin-top: 0.2rem; }
+}
+.dropzoneEmpty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  width: 100%;
+  padding: 1.2rem 1rem;
+  text-align: center;
+  color: $primary;
+  strong { font-size: 0.86rem; color: $heading; }
+  small { color: $muted; font-size: 0.75rem; }
+}
+// Nested under .field to out-specify the generic `.field input` rules.
+.field .pathInput {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.78rem;
+}
+.spin { animation: spin 0.9s linear infinite; }
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+// ── Buttons ─────────────────────────────────────────────────────────────────
 .btnPrimary {
-  background: $teal; color: #fff; border: 0; border-radius: 10px;
-  padding: 0.6rem 1.1rem; font-weight: 700; cursor: pointer; text-decoration: none;
-  display: inline-flex; align-items: center;
-  &:hover { background: #12484b; }
-  &:disabled { opacity: 0.55; cursor: not-allowed; }
+  display: inline-flex;
+  align-items: center;
+  justify-content: center; // stays centered when stretched full-width
+  gap: 0.4rem;
+  background: $primary;
+  color: #fff;
+  border: 0;
+  border-radius: $r-control;
+  padding: 0.55rem 1.05rem;
+  font-family: inherit;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background 0.15s ease, box-shadow 0.15s ease;
+  &:hover { background: $primary-strong; box-shadow: 0 4px 12px rgba(24, 92, 96, 0.3); }
+  &:disabled { opacity: 0.55; cursor: not-allowed; box-shadow: none; }
+  @include focus-ring;
+}
+.btnSoft {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  background: $primary-soft;
+  color: $primary;
+  border: 0;
+  border-radius: $r-control;
+  padding: 0.55rem 1.05rem;
+  font-family: inherit;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  &:hover { background: rgba(24, 92, 96, 0.16); }
+  @include focus-ring;
 }
 .btnGhost {
-  background: transparent; color: inherit; border: 1px solid currentColor;
-  border-radius: 9px; padding: 0.4rem 0.8rem; font-weight: 600; cursor: pointer;
-  text-decoration: none; font-size: 0.85rem; opacity: 0.85;
-  &:hover { opacity: 1; }
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  background: $card;
+  color: $text;
+  border: 1px solid $input-border;
+  border-radius: $r-control;
+  padding: 0.5rem 0.9rem;
+  font-family: inherit;
+  font-size: 0.84rem;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  transition: border-color 0.15s ease, color 0.15s ease;
+  &:hover { border-color: $primary; color: $primary; }
+  &:disabled { opacity: 0.5; cursor: not-allowed; }
+  @include focus-ring;
 }
 .btnDanger {
-  background: transparent; color: $danger; border: 1px solid $danger;
-  border-radius: 9px; padding: 0.4rem 0.8rem; font-weight: 600; cursor: pointer; font-size: 0.85rem;
-  &:hover { background: $danger; color: #fff; }
-  &:disabled { opacity: 0.5; }
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: $card;
+  color: $danger;
+  border: 1px solid rgba(196, 61, 82, 0.45);
+  border-radius: $r-control;
+  padding: 0.5rem 0.9rem;
+  font-family: inherit;
+  font-size: 0.84rem;
+  font-weight: 600;
+  cursor: pointer;
+  &:hover { background: $danger; border-color: $danger; color: #fff; }
+  &:disabled { opacity: 0.5; cursor: not-allowed; }
+  @include focus-ring;
+}
+.btnIcon {
+  display: inline-grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border: 0;
+  border-radius: $r-control;
+  background: transparent;
+  color: $muted;
+  cursor: pointer;
+  &:hover { background: $primary-soft; color: $primary; }
+  &:disabled { opacity: 0.3; cursor: not-allowed; }
+  @include focus-ring;
+}
+.btnIconDanger:hover { background: $danger-soft; color: $danger; }
+.btnAddSm {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  background: $primary-soft;
+  color: $primary;
+  border: 1px dashed rgba(24, 92, 96, 0.4);
+  border-radius: $r-control;
+  padding: 0.4rem 0.8rem;
+  font-family: inherit;
+  font-weight: 700;
+  font-size: 0.8rem;
+  cursor: pointer;
+  &:hover { background: rgba(24, 92, 96, 0.15); }
+  @include focus-ring;
+}
+.btnRemove {
+  background: transparent;
+  color: $danger;
+  border: 0;
+  cursor: pointer;
+  font-family: inherit;
+  font-weight: 700;
+  font-size: 0.85rem;
+  padding: 0.2rem 0.45rem;
+  border-radius: 6px;
+  white-space: nowrap;
+  &:hover { background: $danger-soft; }
+  @include focus-ring;
 }
 
-// ── Structured body editor ──
+// ── Editor group cards ──────────────────────────────────────────────────────
+.groupCard {
+  background: $card;
+  border-radius: $r-card;
+  padding: 1.35rem 1.5rem;
+  margin-bottom: 1.25rem;
+  box-shadow: $shadow-sm;
+}
+.groupHead {
+  margin-bottom: 1.1rem;
+  padding-bottom: 0.8rem;
+  border-bottom: 1px solid $line;
+  h2 { margin: 0; font-size: 1rem; color: $heading; font-weight: 700; }
+  p { margin: 0.25rem 0 0; color: $muted; font-size: 0.82rem; }
+}
+
+// ── Structured body editor (blog) ───────────────────────────────────────────
 .bodyHead {
-  display: flex; align-items: center; justify-content: space-between;
-  margin: 1.5rem 0 0.75rem; border-top: 1px solid $line; padding-top: 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin: 1.5rem 0 0.75rem;
+  border-top: 1px solid $line;
+  padding-top: 1.25rem;
 }
-.bodyTitle { margin: 0; font-size: 1.1rem; color: $ink; }
-.modeToggle { display: inline-flex; border: 1px solid $line; border-radius: 9px; overflow: hidden; }
+.bodyTitle { margin: 0; font-size: 1.02rem; color: $heading; font-weight: 700; }
+.modeToggle {
+  display: inline-flex;
+  border: 1px solid $input-border;
+  border-radius: $r-control;
+  overflow: hidden;
+  background: $card;
+}
 .modeBtn, .modeActive {
-  border: 0; background: #fff; color: $muted; padding: 0.35rem 0.85rem;
-  font-weight: 600; font-size: 0.82rem; cursor: pointer;
+  border: 0;
+  background: transparent;
+  color: $muted;
+  padding: 0.4rem 0.9rem;
+  font-family: inherit;
+  font-weight: 600;
+  font-size: 0.8rem;
+  cursor: pointer;
 }
-.modeActive { background: $teal; color: #fff; }
+.modeActive { background: $primary; color: #fff; }
 
 .bodyEditor { display: flex; flex-direction: column; gap: 0.5rem; }
-
 .fieldset {
-  border: 1px solid $line; border-radius: 12px; padding: 1rem 1.1rem 1.15rem; margin: 0.5rem 0 1rem;
-  legend { font-weight: 700; font-size: 0.9rem; color: $teal; padding: 0 0.4rem; }
+  border: 1px solid $line;
+  border-radius: $r-card;
+  padding: 1rem 1.1rem 1.15rem;
+  margin: 0.5rem 0 1rem;
+  legend { font-weight: 700; font-size: 0.875rem; color: $primary; padding: 0 0.4rem; }
 }
 .sectionCard {
-  border: 1px solid $line; border-radius: 10px; padding: 0.9rem; margin-bottom: 0.9rem; background: #fbfdfd;
+  border: 1px solid $line;
+  border-radius: 10px;
+  padding: 0.9rem;
+  margin-bottom: 0.9rem;
+  background: #fafcfc;
 }
 .sectionHead {
-  display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.6rem;
-  strong { font-size: 0.9rem; color: $ink; }
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.6rem;
+  strong { font-size: 0.875rem; color: $heading; }
 }
 .nested { border-left: 2px solid $line; padding-left: 0.85rem; margin: 0.5rem 0; }
-.legendSm { display: block; font-size: 0.8rem; font-weight: 600; color: $muted; margin-bottom: 0.35rem; }
+.legendSm { display: block; font-size: 0.8rem; font-weight: 600; color: $heading; margin-bottom: 0.35rem; }
 
 .listField { margin-bottom: 0.75rem; }
 .listRow {
-  display: flex; gap: 0.4rem; margin-bottom: 0.4rem; align-items: flex-start;
+  display: flex;
+  gap: 0.4rem;
+  margin-bottom: 0.4rem;
+  align-items: flex-start;
   input, textarea {
-    flex: 1; padding: 0.45rem 0.6rem; border: 1px solid $line; border-radius: 8px; font: inherit;
-    &:focus { outline: 2px solid rgba(24,92,96,0.3); border-color: $teal; }
+    flex: 1;
+    font: inherit;
+    font-size: 0.875rem;
+    color: $heading;
+    padding: 0.45rem 0.65rem;
+    border: 1px solid $input-border;
+    border-radius: $r-control;
+    &::placeholder { color: $muted; }
+    &:focus { outline: none; border-color: $primary; box-shadow: 0 0 0 3px $primary-ring; }
   }
 }
 .qaRow {
-  display: flex; gap: 0.4rem; margin-bottom: 0.4rem; align-items: center; flex-wrap: wrap;
+  display: flex;
+  gap: 0.4rem;
+  margin-bottom: 0.4rem;
+  align-items: center;
+  flex-wrap: wrap;
   input {
-    flex: 1; min-width: 160px; padding: 0.45rem 0.6rem; border: 1px solid $line; border-radius: 8px; font: inherit;
-    &:focus { outline: 2px solid rgba(24,92,96,0.3); border-color: $teal; }
+    flex: 1;
+    min-width: 160px;
+    font: inherit;
+    font-size: 0.875rem;
+    color: $heading;
+    padding: 0.45rem 0.65rem;
+    border: 1px solid $input-border;
+    border-radius: $r-control;
+    &:focus { outline: none; border-color: $primary; box-shadow: 0 0 0 3px $primary-ring; }
   }
 }
-
 .callout {
-  border: 1px dashed #b9d0c2; border-radius: 10px; padding: 0.8rem; margin-bottom: 0.7rem; background: #f4fbf6;
+  border: 1px dashed rgba(24, 92, 96, 0.35);
+  border-radius: 10px;
+  padding: 0.8rem;
+  margin-bottom: 0.7rem;
+  background: #f6faf5;
 }
 .calloutHead {
-  display: flex; gap: 0.5rem; justify-content: space-between; align-items: center; margin-bottom: 0.6rem;
-  select { padding: 0.4rem 0.6rem; border: 1px solid $line; border-radius: 8px; font: inherit; font-weight: 600; }
+  display: flex;
+  gap: 0.5rem;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.6rem;
+  select {
+    font: inherit;
+    font-size: 0.85rem;
+    padding: 0.4rem 0.6rem;
+    border: 1px solid $input-border;
+    border-radius: $r-control;
+    font-weight: 600;
+    color: $heading;
+    &:focus { outline: none; border-color: $primary; box-shadow: 0 0 0 3px $primary-ring; }
+  }
 }
-.mapCol { border: 1px solid $line; border-radius: 8px; padding: 0.6rem; margin-bottom: 0.5rem; }
+.mapCol { border: 1px solid $line; border-radius: $r-control; padding: 0.6rem; margin-bottom: 0.5rem; }
 
-.btnAddSm {
-  background: rgba(24,92,96,0.08); color: $teal; border: 1px dashed rgba(24,92,96,0.4);
-  border-radius: 8px; padding: 0.35rem 0.75rem; font-weight: 700; font-size: 0.82rem; cursor: pointer;
-  &:hover { background: rgba(24,92,96,0.14); }
+// ── Repeater ────────────────────────────────────────────────────────────────
+.repeater { margin: 0.35rem 0 1.1rem; }
+.repeaterHead { margin-bottom: 0.5rem; .legendSm { margin-bottom: 0.1rem; } }
+.repeaterItem {
+  border: 1px solid $line;
+  border-radius: 10px;
+  background: #fafcfc;
+  margin-bottom: 0.55rem;
+  // No overflow:hidden — tooltips on the header controls must escape the box;
+  // the body rounds its own bottom corners instead.
 }
-.btnRemove {
-  background: transparent; color: $danger; border: 0; cursor: pointer;
-  font-weight: 700; font-size: 0.82rem; padding: 0.2rem 0.4rem; white-space: nowrap;
-  &:hover { text-decoration: underline; }
+.repeaterItemHead {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.25rem 0.5rem 0.25rem 0.25rem;
+}
+.repeaterToggle {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  border: 0;
+  background: transparent;
+  padding: 0.5rem 0.55rem;
+  cursor: pointer;
+  font: inherit;
+  font-weight: 600;
+  font-size: 0.86rem;
+  color: $heading;
+  min-width: 0;
+  text-align: left;
+  border-radius: $r-control;
+  &:hover { background: $primary-soft; }
+  @include focus-ring;
+}
+.repeaterGrip { color: $input-border; flex-shrink: 0; }
+.repeaterTitle { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.repeaterActions { display: flex; gap: 0.15rem; }
+.repeaterItemBody {
+  padding: 0.9rem 1rem 0.4rem;
+  border-top: 1px solid $line;
+  background: $card;
+  border-radius: 0 0 9px 9px;
+}
+
+// ── Tooltips (CSS-only; instant, also on keyboard focus) ───────────────────
+.tip {
+  position: relative;
+  &::after {
+    content: attr(data-tip);
+    position: absolute;
+    bottom: calc(100% + 7px);
+    left: 50%;
+    transform: translateX(-50%) scale(0.94);
+    transform-origin: bottom center;
+    background: $heading;
+    color: #fff;
+    font-size: 0.72rem;
+    font-weight: 600;
+    line-height: 1;
+    padding: 0.34rem 0.55rem;
+    border-radius: 6px;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.12s ease, transform 0.12s $ease-out;
+    z-index: $z-toast;
+  }
+  &::before {
+    content: '';
+    position: absolute;
+    bottom: calc(100% + 2px);
+    left: 50%;
+    transform: translateX(-50%);
+    border: 5px solid transparent;
+    border-top-color: $heading;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.12s ease;
+    z-index: $z-toast;
+  }
+  &:hover::after,
+  &:hover::before,
+  &:focus-visible::after,
+  &:focus-visible::before { opacity: 1; }
+  &:hover::after,
+  &:focus-visible::after { transform: translateX(-50%) scale(1); }
+}
+// Right-anchored variant for wide controls (bubble sits by the chevron).
+.tipEnd {
+  &::after {
+    left: auto;
+    right: 0;
+    transform: scale(0.94);
+    transform-origin: bottom right;
+  }
+  &::before { left: auto; right: 14px; transform: none; }
+  &:hover::after,
+  &:focus-visible::after { transform: scale(1); }
+}
+
+// ── Sticky save bar + toast ─────────────────────────────────────────────────
+.saveBar {
+  position: fixed;
+  left: 50%;
+  bottom: 1.1rem;
+  transform: translate(-50%, 5rem);
+  display: flex;
+  align-items: center;
+  gap: 1.1rem;
+  background: $card;
+  color: $heading;
+  border-radius: $r-card;
+  padding: 0.65rem 0.75rem 0.65rem 1.1rem;
+  box-shadow: $shadow-lg;
+  border: 1px solid $line;
+  opacity: 0;
+  pointer-events: none;
+  transition: transform 0.25s $ease-out, opacity 0.2s ease;
+  z-index: $z-savebar;
+  max-width: calc(100vw - 2rem);
+}
+.saveBarVisible { transform: translate(-50%, 0); opacity: 1; pointer-events: auto; }
+.saveBarText {
+  font-size: 0.85rem;
+  font-weight: 600;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  &::before {
+    content: '';
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #e2a63d;
+  }
+}
+.saveBarActions { display: flex; gap: 0.5rem; }
+.toast {
+  position: fixed;
+  right: 1.25rem;
+  bottom: 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  background: $card;
+  color: $success-ink;
+  border: 1px solid rgba(31, 138, 91, 0.25);
+  border-radius: 10px;
+  padding: 0.6rem 1rem;
+  font-size: 0.86rem;
+  font-weight: 600;
+  box-shadow: $shadow-lg;
+  z-index: $z-toast;
+}
+
+// ── Reduced motion ──────────────────────────────────────────────────────────
+@media (prefers-reduced-motion: reduce) {
+  .sidebar, .saveBar, .pageCard, .btnPrimary, .menuItem, .menuChevron {
+    transition: none;
+  }
+  .tip::after, .tip::before { transition: none; }
+  .skelRow { animation: none; }
 }

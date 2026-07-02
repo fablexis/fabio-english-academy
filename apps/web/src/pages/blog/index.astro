@@ -7,6 +7,7 @@ import Navbar from '../../components/Navbar.tsx';
 import BlogSection from '../../components/BlogSection.tsx';
 import Footer from '../../components/Footer.tsx';
 import { getPosts } from '../../lib/api';
+import { getPageContent } from '../../lib/pages';
 import type { BlogListItemDto } from '@eyb/shared';
 
 let posts: BlogListItemDto[] = [];
@@ -15,10 +16,14 @@ try {
 } catch (err) {
   console.error('[blog] failed to load posts from API:', err);
 }
+const [blogPage, site] = await Promise.all([
+  getPageContent('blog'),
+  getPageContent('site'),
+]);
 ---
 
 <BaseLayout title="Blog — Your English Buddy" description="Artículos prácticos para mejorar tu inglés en situaciones cotidianas.">
-  <Navbar client:load />
-  <BlogSection client:visible posts={posts} />
-  <Footer />
+  <Navbar client:load site={site} />
+  <BlogSection client:visible posts={posts} header={blogPage.header} />
+  <Footer site={site} />
 </BaseLayout>

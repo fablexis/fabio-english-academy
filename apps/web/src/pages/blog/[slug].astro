@@ -6,6 +6,7 @@ export const prerender = false;
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import BlogDetailPage from '../../views/BlogDetailPage.tsx';
 import { getPost, getPosts, pickRelated } from '../../lib/api';
+import { getPageContent } from '../../lib/pages';
 import type { BlogListItemDto } from '@eyb/shared';
 
 const { slug } = Astro.params;
@@ -18,8 +19,9 @@ try {
 } catch (err) {
   console.error('[blog] failed to load related posts:', err);
 }
+const site = await getPageContent('site');
 ---
 
 <BaseLayout title={`${post.title} — Your English Buddy`} description={post.excerpt}>
-  <BlogDetailPage client:load post={post} relatedPosts={related} />
+  <BlogDetailPage client:load post={post} relatedPosts={related} site={site} />
 </BaseLayout>

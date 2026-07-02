@@ -3,6 +3,7 @@ import {
   Controller,
   Get,
   HttpCode,
+  Patch,
   Post,
   Req,
   Res,
@@ -13,6 +14,8 @@ import { ConfigService } from '@nestjs/config';
 import type { CookieOptions, Request, Response } from 'express';
 import { AuthService, type AuthTokens } from './auth.service';
 import { LoginDto } from './dto/login.dto';
+import { ForgotPasswordDto, SetPasswordDto } from './dto/password.dto';
+import { UpdateProfileDto } from './dto/profile.dto';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { ACCESS_COOKIE, REFRESH_COOKIE } from './types';
 
@@ -29,7 +32,8 @@ export class AuthController {
     const user = await this.auth.validateUser(dto.email, dto.password);
     const tokens = await this.auth.issueTokens(user);
     this.setCookies(res, tokens);
-    return { user };
+    const lastLoginAt = await this.auth.recordLogin(user);
+    return { user: { ...user, lastLoginAt } };
   }
 
   @Post('refresh')
@@ -53,8 +57,36 @@ export class AuthController {
 
   @Get('me')
   @UseGuards(JwtAuthGuard)
-  me(@Req() req: Request) {
-    return { user: req.user };
+  async me(@Req() req: Request) {
+    const { id } = req.user as { id: string };
+    return { user: await this.auth.getProfile(id) };
+  }
+
+  /** Own profile: display name + picture. */
+  @Patch('me')
+  @UseGuards(JwtAuthGuard)
+  async updateMe(@Body() dto: UpdateProfileDto, @Req() req: Request) {
+    const { id } = req.user as { id: string };
+    await this.auth.updateProfile(id, dto);
+    return { user: await this.auth.getProfile(id) };
+  }
+
+  // ── password recovery / invite activation ────────────────────────────────
+
+  /** Always 200 — never reveals whether the email exists. */
+  @Post('forgot-password')
+  @HttpCode(200)
+  async forgotPassword(@Body() dto: ForgotPasswordDto) {
+    await this.auth.requestPasswordReset(dto.email);
+    return { ok: true };
+  }
+
+  /** Redeems an emailed INVITE or RESET token and sets the new password. */
+  @Post('set-password')
+  @HttpCode(200)
+  async setPassword(@Body() dto: SetPasswordDto) {
+    const { email } = await this.auth.setPasswordWithToken(dto.token, dto.password);
+    return { ok: true, email };
   }
 
   // ── cookie helpers ────────────────────────────────────────────────────────

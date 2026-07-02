@@ -2,13 +2,16 @@ import React, { useState, useEffect, useCallback } from 'react';
 import {
   ArrowUpRight, X, Check, Image,
 } from 'lucide-react';
+import {
+  defaultCourses,
+  defaultSite,
+  type CourseItem,
+  type CoursesContent,
+  type SiteContent,
+} from '@eyb/shared';
 import s from '../styles/CoursesSection.module.scss';
+import { waUrl } from '../lib/whatsapp';
 import { useInView } from '../hooks/useInView';
-// Served from public/ as plain URL strings (Astro turns src/ image imports
-// into ImageMetadata objects, which would break <img src>).
-const individualClassImg = '/img/individual-class.jpg';
-const duoClassImg = '/img/duo-class.jpg';
-const saturdayClassImg = '/img/saturday-class.jpg';
 
 // ─── Animation helper ────────────────────────────────────────────────────────
 
@@ -25,75 +28,10 @@ const anim = (
 };
 
 // ─── Data ────────────────────────────────────────────────────────────────────
+// Courses come from the CMS (`CourseItem` in @eyb/shared): the first entry is
+// the featured card, the rest fill the grid below.
 
-interface Course {
-  id: number;
-  category: string;
-  title: string;
-  description: string;
-  priceLabel: string;
-  priceUnit: string;
-  price: number;
-  popular?: boolean;
-  image: string;
-  features: string[];
-}
-
-const featuredCourse: Course = {
-  id: 1,
-  category: 'Individual',
-  title: 'Clases Individuales',
-  description: '1 sola persona por clase personalizada.',
-  priceLabel: '$290',
-  priceUnit: '8 clases',
-  price: 290,
-  popular: true,
-  image: individualClassImg,
-  features: [
-    'Una primera clase diagnóstica gratis de 20 minutos.',
-    '8 clases mensuales de 1 hora.',
-    'Clases en línea vía Zoom, interactivas y personalizadas, adaptadas a tus necesidades.',
-    'Acceso a guías y documentos de apoyo que puedes usar incluso fuera de clase.',
-    'Comunidad de WhatsApp con tips, material extra y ejercicios para seguir practicando.',
-  ],
-};
-
-const courses: Course[] = [
-  {
-    id: 2,
-    category: 'Dúo',
-    title: 'Clases en Dúo',
-    description: '2 personas por clase personalizada.',
-    priceLabel: '$580',
-    priceUnit: '8 clases',
-    price: 580,
-    image: duoClassImg,
-    features: [
-      'Una primera clase diagnóstica gratis de 20 minutos.',
-      '8 clases mensuales de 1 hora.',
-      'Clases en línea vía Zoom, interactivas y personalizadas, adaptadas a tus necesidades.',
-      'Acceso a guías y documentos de apoyo que puedes usar incluso fuera de clase.',
-      'Comunidad de WhatsApp con tips, material extra y ejercicios para seguir practicando.',
-    ],
-  },
-  {
-    id: 3,
-    category: 'Sabatinas',
-    title: 'Clases Sabatinas',
-    description: '1 sola persona por clase personalizada (consultar para dúos).',
-    priceLabel: '$320',
-    priceUnit: '8 clases',
-    price: 320,
-    image: saturdayClassImg,
-    features: [
-      'Una primera clase diagnóstica gratis de 20 minutos.',
-      '8 clases mensuales de 1 hora.',
-      'Clases en línea vía Zoom, interactivas y personalizadas, adaptadas a tus necesidades.',
-      'Acceso a guías y documentos de apoyo que puedes usar incluso fuera de clase.',
-      'Comunidad de WhatsApp con tips, material extra y ejercicios para seguir practicando.',
-    ],
-  },
-];
+type Course = CourseItem;
 
 // ─── Placeholder image component ─────────────────────────────────────────────
 
@@ -111,11 +49,12 @@ const PlaceholderImg: React.FC<{ label: string; className?: string }> = ({
 
 interface CourseModalProps {
   course: Course;
+  site: SiteContent;
   onClose: () => void;
   isVisible: boolean;
 }
 
-const CourseModal: React.FC<CourseModalProps> = ({ course, onClose, isVisible }) => {
+const CourseModal: React.FC<CourseModalProps> = ({ course, site, onClose, isVisible }) => {
   // Lock body scroll when open
   useEffect(() => {
     if (isVisible) {
@@ -197,9 +136,10 @@ const CourseModal: React.FC<CourseModalProps> = ({ course, onClose, isVisible })
           {/* ── Bottom CTA ── */}
           <div className={s.modal__cta}>
             <a
-              href={`https://wa.me/5491123310113?text=${encodeURIComponent(
+              href={waUrl(
+                site,
                 `Hola, quisiera inscribirme en ${course.title} de Your English Buddy, gracias`
-              )}`}
+              )}
               target="_blank"
               rel="noopener noreferrer"
               className={`${s.courses__viewBtn} btn-shine`}
@@ -220,10 +160,23 @@ const CourseModal: React.FC<CourseModalProps> = ({ course, onClose, isVisible })
 // COURSES SECTION COMPONENT
 // ═════════════════════════════════════════════════════════════════════════════
 
-const CoursesSection: React.FC = () => {
+interface CoursesSectionProps {
+  section?: CoursesContent['section'];
+  courses?: CourseItem[];
+  site?: SiteContent;
+}
+
+const CoursesSection: React.FC<CoursesSectionProps> = ({
+  section = defaultCourses.section,
+  courses: allCourses = defaultCourses.courses,
+  site = defaultSite,
+}) => {
   const [modalCourse, setModalCourse] = useState<Course | null>(null);
   const [modalVisible, setModalVisible] = useState(false);
   const { ref, ready } = useInView({ threshold: 0.1 });
+
+  const featuredCourse = allCourses[0];
+  const courses = allCourses.slice(1);
 
   const openModal = useCallback((course: Course) => {
     setModalCourse(course);
@@ -243,11 +196,12 @@ const CoursesSection: React.FC = () => {
       <div className={s.courses__inner}>
         {/* ─── Heading ─── */}
         <h2 className={anim(ready, 'anim-slide-up', 'delay-0', s.courses__heading)}>
-          Comienza Tu{' '}
-          <span className={s.courses__headingAccent}>English Journey Today!</span>
+          {section.headingPre}{' '}
+          <span className={s.courses__headingAccent}>{section.headingAccent}</span>
         </h2>
 
         {/* ─── Featured Course ─── */}
+        {featuredCourse && (
         <div
           className={anim(ready, 'anim-slide-up', 'delay-200', s.courses__featured)}
           onClick={() => openModal(featuredCourse)}
@@ -309,12 +263,13 @@ const CoursesSection: React.FC = () => {
             </div>
           </div>
         </div>
+        )}
 
         {/* ─── Course Grid ─── */}
         <div className={s.courses__grid}>
-          {courses.slice(0, 2).map((course, index) => (
+          {courses.map((course, index) => (
             <div
-              key={course.id}
+              key={course.title || index}
               className={anim(
                 ready,
                 'anim-fade-scale',
@@ -363,6 +318,7 @@ const CoursesSection: React.FC = () => {
       {modalCourse && (
         <CourseModal
           course={modalCourse}
+          site={site}
           onClose={closeModal}
           isVisible={modalVisible}
         />

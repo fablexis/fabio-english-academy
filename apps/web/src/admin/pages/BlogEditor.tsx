@@ -4,6 +4,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import type { BlogBody, BlogVariant, CreateBlogPostInput } from '@eyb/shared';
 import { api, ApiError } from '../lib/client';
 import BodyEditor from '../components/BodyEditor';
+import ImageField from '../components/ImageField';
 import s from '../styles/admin.module.scss';
 
 const VARIANTS: BlogVariant[] = ['teal', 'lime', 'dark', 'plain'];
@@ -39,14 +40,16 @@ const BLANK_META: MetaState = {
   readTime: '5 min de lectura',
   level: 'Intermedio',
   variant: 'teal',
-  image: '/blog-images/',
+  image: '',
   published: true,
   sortOrder: 0,
 };
 
 const BlogEditor: React.FC = () => {
   const { id } = useParams<{ id: string }>();
-  const isNew = id === 'new';
+  // The /blog/new route has no :id param (id is undefined there); /blog/:id
+  // carries a numeric id. Both "new" cases must be treated as a fresh draft.
+  const isNew = id === undefined || id === 'new';
   const numericId = isNew ? null : Number(id);
   const navigate = useNavigate();
   const qc = useQueryClient();
@@ -60,11 +63,6 @@ const BlogEditor: React.FC = () => {
   const [meta, setMeta] = useState<MetaState>(BLANK_META);
   const [body, setBody] = useState<BlogBody>(EMPTY_BODY);
   const [error, setError] = useState<string | null>(null);
-
-  // JSON escape hatch (advanced): edit the raw body JSON directly.
-  const [jsonMode, setJsonMode] = useState(false);
-  const [bodyJson, setBodyJson] = useState('');
-  const [jsonError, setJsonError] = useState<string | null>(null);
 
   useEffect(() => {
     if (!existing) return;
@@ -85,30 +83,6 @@ const BlogEditor: React.FC = () => {
 
   const set = <K extends keyof MetaState>(key: K, value: MetaState[K]) =>
     setMeta((m) => ({ ...m, [key]: value }));
-
-  const enterJson = () => {
-    setBodyJson(JSON.stringify(body, null, 2));
-    setJsonError(null);
-    setJsonMode(true);
-  };
-  const exitJson = () => {
-    try {
-      setBody(JSON.parse(bodyJson) as BlogBody);
-      setJsonError(null);
-      setJsonMode(false);
-    } catch {
-      setJsonError('JSON inválido — corrígelo antes de volver al editor.');
-    }
-  };
-  const onJsonChange = (v: string) => {
-    setBodyJson(v);
-    try {
-      setBody(JSON.parse(v) as BlogBody);
-      setJsonError(null);
-    } catch {
-      setJsonError('JSON inválido');
-    }
-  };
 
   const save = useMutation({
     mutationFn: async () => {
@@ -136,10 +110,8 @@ const BlogEditor: React.FC = () => {
     },
   });
 
-  const blocked = jsonMode && jsonError != null;
-
   return (
-    <div className={s.page}>
+    <div className={`${s.page} ${s.pageNarrow}`}>
       <header className={s.pageHead}>
         <h1>{isNew ? 'Nuevo artículo' : `Editar: ${meta.title || '…'}`}</h1>
         <button className={s.btnGhost} onClick={() => navigate('/blog')}>← Volver</button>
@@ -171,15 +143,17 @@ const BlogEditor: React.FC = () => {
               {VARIANTS.map((v) => <option key={v} value={v}>{v}</option>)}
             </select>
           </label>
-          <label className={s.field}><span>Imagen (ruta pública)</span>
-            <input value={meta.image} onChange={(e) => set('image', e.target.value)}
-              placeholder="/blog-images/mi-post.jpg" required />
-          </label>
           <label className={s.field}><span>Orden</span>
             <input type="number" value={meta.sortOrder}
               onChange={(e) => set('sortOrder', Number(e.target.value))} />
           </label>
         </div>
+
+        <ImageField
+          label="Imagen del artículo"
+          value={meta.image}
+          onChange={(v) => set('image', v)}
+        />
 
         <label className={s.field}><span>Extracto</span>
           <textarea rows={2} value={meta.excerpt} onChange={(e) => set('excerpt', e.target.value)} required />
@@ -194,34 +168,14 @@ const BlogEditor: React.FC = () => {
         {/* ── Body editor ── */}
         <div className={s.bodyHead}>
           <h2 className={s.bodyTitle}>Contenido del artículo</h2>
-          <div className={s.modeToggle}>
-            <button type="button"
-              className={!jsonMode ? s.modeActive : s.modeBtn}
-              onClick={() => (jsonMode ? exitJson() : undefined)}>
-              Editor
-            </button>
-            <button type="button"
-              className={jsonMode ? s.modeActive : s.modeBtn}
-              onClick={() => (!jsonMode ? enterJson() : undefined)}>
-              JSON
-            </button>
-          </div>
         </div>
 
-        {jsonMode ? (
-          <label className={s.field}>
-            <span>Cuerpo (JSON){jsonError && <em className={s.warn}> — {jsonError}</em>}</span>
-            <textarea className={s.code} rows={20} value={bodyJson}
-              onChange={(e) => onJsonChange(e.target.value)} spellCheck={false} />
-          </label>
-        ) : (
-          <BodyEditor value={body} onChange={setBody} />
-        )}
+        <BodyEditor value={body} onChange={setBody} />
 
         {error && <p className={s.error}>{error}</p>}
 
         <div className={s.formActions}>
-          <button type="submit" className={s.btnPrimary} disabled={save.isPending || blocked}>
+          <button type="submit" className={s.btnPrimary} disabled={save.isPending}>
             {save.isPending ? 'Guardando…' : 'Guardar'}
           </button>
         </div>
