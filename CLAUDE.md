@@ -12,8 +12,8 @@ defaults from `@eyb/shared`.
 ```
 english-website/                 # npm workspaces root
 ├── apps/
-│   ├── web/                     # @eyb/web — Astro frontend (Vercel)
-│   └── api/                     # @eyb/api — NestJS + Prisma content API (Node host)
+│   ├── web/                     # @eyb/web — Astro frontend (Railway, Docker)
+│   └── api/                     # @eyb/api — NestJS + Prisma content API (Railway, Docker)
 ├── packages/
 │   └── shared/                  # @eyb/shared — blog + page-content types, DTOs, page defaults
 ├── tsconfig.base.json           # shared TS options (web/shared)
@@ -22,7 +22,7 @@ english-website/                 # npm workspaces root
 
 ## Tech Stack
 
-- **apps/web** — **Astro 5** (`output: 'static'` + `@astrojs/vercel` adapter → hybrid
+- **apps/web** — **Astro 5** (`output: 'static'` + `@astrojs/node` adapter, standalone → hybrid
   SSG/SSR), **@astrojs/react** islands, **React 19**, **Tailwind v4** (via `@tailwindcss/vite`,
   NOT `@astrojs/tailwind`) + **SCSS Modules**, **Motion** (`motion/react`), **Lucide React**.
   Astro **View Transitions** (`<ClientRouter/>`) replace React Router. Admin SPA uses

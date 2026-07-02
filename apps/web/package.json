@@ -11,8 +11,8 @@
     "astro": "astro"
   },
   "dependencies": {
+    "@astrojs/node": "^9.5.5",
     "@astrojs/react": "^4.4.0",
-    "@astrojs/vercel": "^8.2.7",
     "@eyb/shared": "*",
     "@tanstack/react-query": "^5.62.0",
     "astro": "^5.14.0",

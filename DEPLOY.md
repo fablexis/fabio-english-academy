@@ -4,27 +4,29 @@ Monorepo with two independently deployed apps:
 
 | App | What | Host |
 |-----|------|------|
-| `apps/web` | Astro frontend (SSG marketing + SSR blog + `/admin` SPA) | **Vercel** |
-| `apps/api` | NestJS + Prisma content API | **Node host** (Railway / Render / Fly) |
+| `apps/web` | Astro frontend (SSG marketing + SSR blog + `/admin` SPA) | **Railway** (Docker, `apps/web/Dockerfile`) |
+| `apps/api` | NestJS + Prisma content API | **Railway** (Docker, `apps/api/Dockerfile`) |
 
 `packages/shared` is built as part of both.
 
 ---
 
-## Frontend → Vercel
+## Frontend → Railway (Docker)
 
-1. **New Project** → import this repo.
-2. **Root Directory:** `apps/web`.
-3. **Build Command:** `npm run build` (the repo-root build compiles `@eyb/shared` first, then Astro). Vercel runs it from the repo root because workspaces are detected.
-4. **Install Command:** `npm install` (root).
-5. **Node version:** 22 (see `apps/web/.nvmrc`; Vercel serverless functions don't support Node 24).
-6. **Environment variables:**
-   - `PUBLIC_API_URL` = `https://<your-api-host>` (the deployed API base URL).
-7. The `@astrojs/vercel` adapter emits static assets for `/`, `/about`, `/courses` and a serverless function for the SSR routes (`/blog`, `/blog/[slug]`, `/admin/*`).
+Uses the `@astrojs/node` adapter in standalone mode: one Node process serves the
+prerendered assets and the SSR routes (`/blog`, `/blog/[slug]`, `/admin/*`).
 
-> The old SPA `vercel.json` rewrite has been removed — Astro handles routing.
+1. Service from this repo, **Dockerfile path** `apps/web/Dockerfile` (build context = repo root so the workspace + `@eyb/shared` resolve).
+2. **Environment variables:**
+   - `PUBLIC_API_URL` = `https://<your-api-host>` (the deployed API base URL). It is
+     inlined into the bundles at **build** time (the Dockerfile declares it as `ARG`),
+     so changing it requires a rebuild, not just a restart.
+3. The container listens on `PORT` (default 4321), `HOST=0.0.0.0`.
 
-## Backend → Node host (Railway / Render / Fly)
+> The site also deploys fine to any other Docker host; only the old `@astrojs/vercel`
+> setup is gone.
+
+## Backend → Railway / any Node host
 
 Build from the repo root so the workspace + `@eyb/shared` resolve.
 
