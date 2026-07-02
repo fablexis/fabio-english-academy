@@ -11,6 +11,15 @@ import type {
   PageContentMetaDto,
   PageKey,
   UpdateBlogPostInput,
+  StudentListItemDto,
+  StudentDetailDto,
+  StudentClassDto,
+  CreateStudentInput,
+  UpdateStudentInput,
+  ClassInput,
+  ChatMessageDto,
+  PortalSettingsDto,
+  UpdateSettingsInput,
 } from '@eyb/shared';
 
 const BASE = import.meta.env.PUBLIC_API_URL ?? 'http://localhost:3001';
@@ -116,6 +125,23 @@ export const api = {
     return data as { url: string; filename: string; size: number };
   },
 
+  // Same endpoint as uploadImage, but for any allowed file (e.g. class PDFs).
+  uploadFile: async (file: File): Promise<{ url: string; filename: string; size: number }> => {
+    const body = new FormData();
+    body.append('file', file);
+    const res = await fetch(`${BASE}/admin/uploads`, {
+      method: 'POST',
+      credentials: 'include',
+      body,
+    });
+    const text = await res.text();
+    const data = text ? JSON.parse(text) : undefined;
+    if (!res.ok) {
+      throw new ApiError(res.status, data?.message ?? `No se pudo subir el archivo (${res.status})`);
+    }
+    return data as { url: string; filename: string; size: number };
+  },
+
   // ── Page content (site pages CMS) ──
   listPages: () => request<PageContentMetaDto[]>('/admin/pages'),
   getPage: (key: PageKey) => request<PageContentDto>(`/pages/${key}`),
@@ -126,4 +152,52 @@ export const api = {
     }),
   resetPage: (key: PageKey) =>
     request<void>(`/admin/pages/${key}`, { method: 'DELETE' }),
+
+  // ── Student portal: students + classes ──
+  listStudents: () => request<StudentListItemDto[]>('/admin/students'),
+  getStudent: (id: string) => request<StudentDetailDto>(`/admin/students/${id}`),
+  createStudent: (input: CreateStudentInput) =>
+    request<StudentListItemDto>('/admin/students', {
+      method: 'POST',
+      body: JSON.stringify(input),
+    }),
+  updateStudent: (id: string, input: UpdateStudentInput) =>
+    request<{ ok: boolean }>(`/admin/students/${id}`, {
+      method: 'PATCH',
+      body: JSON.stringify(input),
+    }),
+  deleteStudent: (id: string) => request<void>(`/admin/students/${id}`, { method: 'DELETE' }),
+  resetStudentPassword: (id: string) =>
+    request<{ password: string }>(`/admin/students/${id}/reset-password`, { method: 'POST' }),
+
+  createClass: (studentId: string, input: ClassInput) =>
+    request<StudentClassDto>(`/admin/students/${studentId}/classes`, {
+      method: 'POST',
+      body: JSON.stringify(input),
+    }),
+  updateClass: (id: string, input: ClassInput) =>
+    request<StudentClassDto>(`/admin/classes/${id}`, {
+      method: 'PATCH',
+      body: JSON.stringify(input),
+    }),
+  deleteClass: (id: string) => request<void>(`/admin/classes/${id}`, { method: 'DELETE' }),
+
+  // ── Student portal: conversations ──
+  getStudentChat: (id: string) => request<ChatMessageDto[]>(`/admin/students/${id}/chat`),
+  replyStudentChat: (id: string, text: string) =>
+    request<ChatMessageDto>(`/admin/students/${id}/chat`, {
+      method: 'POST',
+      body: JSON.stringify({ text }),
+    }),
+
+  // ── Student portal: booking / agenda ──
+  getBookingSettings: () => request<PortalSettingsDto>('/admin/booking/settings'),
+  updateBookingSettings: (input: UpdateSettingsInput) =>
+    request<PortalSettingsDto>('/admin/booking/settings', {
+      method: 'PUT',
+      body: JSON.stringify(input),
+    }),
+  googleConnectUrl: () => request<{ url: string }>('/admin/booking/google/connect'),
+  googleDisconnect: () =>
+    request<{ ok: boolean }>('/admin/booking/google/disconnect', { method: 'POST' }),
 };

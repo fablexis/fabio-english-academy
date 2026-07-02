@@ -32,6 +32,13 @@ export function formatRelative(iso: string): string {
   return `${(sameYear ? DAY : DAY_YEAR).format(date)}, ${TIME.format(date)}`;
 }
 
+/** "25 jun 2026" from a YYYY-MM-DD date (parsed as a local calendar day). */
+export function formatDay(iso: string): string {
+  if (!iso) return '—';
+  const [y, m, d] = iso.split('-').map((n) => parseInt(n, 10));
+  return DAY_YEAR.format(new Date(y, (m || 1) - 1, d || 1));
+}
+
 /** Time-of-day greeting: "Buenos días" / "Buenas tardes" / "Buenas noches". */
 export function greeting(date = new Date()): string {
   const h = date.getHours();

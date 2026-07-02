@@ -158,6 +158,49 @@ Editor draft = `mergePageContent(PAGE_DEFAULTS[key], saved)`; dirty state drives
 sticky save bar; extras: JSON escape hatch, "Restaurar original", "Ver página".
 Talks to the guarded `/admin/*` + `/auth` endpoints with `credentials: 'include'`.
 
+## Student portal + AI Buddy (`/portal`)
+
+A second client-only React SPA (`apps/web/src/portal/`, mounted by
+`pages/portal/[...slug].astro`, `react-router basename="/portal"` + TanStack Query)
+for students, plus admin screens that feed it. **Student auth is a separate
+principal**: username + password (no email), a `student_access_token` httpOnly
+cookie carrying `typ:'student'` (reuses `JWT_ACCESS_SECRET`; the admin strategy
+only reads `access_token`), guarded by `StudentJwtGuard` (`student-jwt` passport
+strategy). Portal views: **Login**, **Dashboard** (streak/classes/topics stats,
+conditional booking callout, class history, chat callout), **ClassDetail** (typed
+note blocks p/ex/tip + PDF/blog materials; "Preguntar sobre esta clase" pre-fills
+the chat), **Chat** (the AI Buddy), **Booking** (weekly slot grid).
+
+New API modules (same NestJS + Prisma patterns, JSON-stringified blobs):
+`student-auth` (`/portal/auth/*`), `students` (admin `/admin/students[/:id]` +
+`ClassesService` for `/admin/students/:id/classes`, `/admin/classes/:id`, and
+portal `/portal/classes`), `portal` (`/portal/profile`), `chat`, `booking`.
+Prisma models: `Student`, `StudentClass`, `ChatMessage`, `Booking`,
+`PortalSettings` (singleton). Shared DTOs in `packages/shared/src/portal.ts`.
+
+**AI chat (core):** `chat/ai.service.ts` wraps **Google Gemini** (`@google/genai`,
+`GEMINI_API_KEY`, default `gemini-2.0-flash`). The system prompt is built from the
+student's class history + a strict Spanish guardrail (answer only on covered
+topics; warmly redirect off-topic to the tutor). Roles map student→user, ai→model,
+teacher→context. Missing key/error → friendly fallback. Every message is persisted;
+student messages start unread and clear when the tutor opens the thread. Admin
+**Conversaciones** (`/conversations`) shows the thread and lets the tutor inject a
+`teacher` reply (lime bubble in the student's chat).
+
+**Booking:** `PortalSettings` holds `bookingEnabled`, `zoomLink`, weekly
+availability, and Google OAuth tokens. Free slots = configured weekly ranges minus
+existing bookings minus **Google Calendar free/busy**. Admin **Agenda** (`/agenda`)
+toggles portal visibility, connects/disconnects Google (OAuth 2.0 `calendar.events`,
+`googleapis`; env `GOOGLE_CLIENT_ID/SECRET/REDIRECT_URI`), sets the Zoom link, and
+edits availability. On confirm, a booking is written to the tutor's Google Calendar
+with the Zoom link (video call is Zoom, not Meet). Without Google creds, booking
+still works on local availability (connect endpoint returns a graceful 503).
+
+Admin sidebar gains a **"Portal de estudiantes"** group (Estudiantes /
+Conversaciones + unread badge / Agenda + OFF badge). `uploads` now also accepts
+PDF (10 MB) for class materials. Demo students (`lya.pernia` … password
+`demo1234`) are seeded alongside the blog (`npm run seed`).
+
 ## Key Components
 
 **Pages** (`apps/web/src/views/` + `pages/*.astro`):

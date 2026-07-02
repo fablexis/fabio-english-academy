@@ -116,3 +116,94 @@ model BlogPost {
 
   @@index([published, sortOrder])
 }
+
+// ─────────────────────────── Student portal ───────────────────────────
+// A learner with portal access. Authenticates with a tutor-issued username +
+// password (no email — password resets regenerate a temp password instead of
+// emailing a link). `passwordHash` is bcrypt like User. Separate principal from
+// the admin User: portal JWTs carry `typ: 'student'`.
+model Student {
+  id                 String         @id @default(cuid())
+  name               String
+  username           String         @unique
+  passwordHash       String
+  level              String // CEFR: 'A1' | 'A2' | 'B1' | 'B2' | 'C1'
+  streakWeeks        Int            @default(0)
+  // Forces the change-password screen on first login (tutor sets a temp password).
+  mustChangePassword Boolean        @default(true)
+  createdAt          DateTime       @default(now())
+  updatedAt          DateTime       @updatedAt
+  classes            StudentClass[]
+  messages           ChatMessage[]
+  bookings           Booking[]
+
+  @@index([username])
+}
+
+// One registered class in a student's history. `topics`, `notes` and
+// `materials` are JSON-stringified (same pattern as BlogPost.body):
+//   topics:    string[]
+//   notes:     { kind: 'p' | 'ex' | 'tip', text?, en?, es? }[]  (ordered)
+//   materials: { type: 'pdf' | 'blog', title, url }[]
+// `summary` is an optional short recap fed to the AI as the allowed scope.
+model StudentClass {
+  id        String   @id @default(cuid())
+  student   Student  @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  studentId String
+  num       Int
+  date      DateTime
+  title     String
+  topics    String   @default("[]")
+  notes     String   @default("[]")
+  materials String   @default("[]")
+  summary   String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([studentId, num])
+}
+
+// One message in a student's Buddy conversation. `from` is the author:
+// 'student' (learner) | 'ai' (Buddy) | 'teacher' (tutor reply, shown distinct).
+// `readByTeacher` drives the admin unread count — student messages start unread
+// and are cleared when the tutor opens the thread.
+model ChatMessage {
+  id            String   @id @default(cuid())
+  student       Student  @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  studentId     String
+  from          String
+  text          String
+  readByTeacher Boolean  @default(false)
+  createdAt     DateTime @default(now())
+
+  @@index([studentId, createdAt])
+}
+
+// A confirmed class booking. `googleEventId` links the mirrored Google Calendar
+// event (created with the tutor's Zoom link) so it can be updated/removed.
+model Booking {
+  id            String   @id @default(cuid())
+  student       Student  @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  studentId     String
+  start         DateTime
+  end           DateTime
+  status        String   @default("confirmed") // 'confirmed' | 'cancelled'
+  googleEventId String?
+  createdAt     DateTime @default(now())
+
+  @@index([start])
+}
+
+// Singleton config row (one tutor) for the portal's booking feature.
+//   weeklyAvailability: { day: 0-6, on: boolean, ranges: { start, end }[] }[]
+//   googleTokens: JSON OAuth tokens { access_token, refresh_token, expiry_date, scope }
+model PortalSettings {
+  id                 String   @id @default("singleton")
+  bookingEnabled     Boolean  @default(false)
+  zoomLink           String?
+  weeklyAvailability String   @default("[]")
+  googleConnected    Boolean  @default(false)
+  googleEmail        String?
+  googleTokens       String?
+  updatedAt          DateTime @updatedAt
+}

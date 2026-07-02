@@ -1444,6 +1444,413 @@ a.dashRow:hover strong { color: $primary; }
   z-index: $z-toast;
 }
 
+// ── Student portal (admin extensions) ────────────────────────────────────────
+// Sidebar badges on the "Portal de estudiantes" items.
+.navCount {
+  min-width: 20px;
+  height: 20px;
+  margin-left: 0.4rem;
+  border-radius: 10px;
+  background: $lime;
+  color: $primary-strong;
+  font-size: 0.7rem;
+  font-weight: 800;
+  display: grid;
+  place-items: center;
+  padding: 0 0.4rem;
+  flex-shrink: 0;
+}
+.navWarn {
+  margin-left: 0.4rem;
+  border-radius: 6px;
+  background: #f8ecd9;
+  color: #8a5a10;
+  font-size: 0.62rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  padding: 0.1rem 0.4rem;
+  flex-shrink: 0;
+}
+
+// Modal (new student).
+.modalBackdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(22, 56, 59, 0.4);
+  z-index: $z-drawer + 5;
+  display: grid;
+  place-items: center;
+  padding: 1.25rem;
+}
+.modalCard {
+  width: 100%;
+  max-width: 440px;
+  background: $card;
+  border-radius: $r-card;
+  box-shadow: $shadow-lg;
+  padding: 1.6rem;
+  animation: fadeUp 0.3s $ease-out both;
+  h2 { font-size: 1.15rem; color: $heading; font-weight: 700; margin: 0; }
+}
+.modalSub { margin: 0.3rem 0 1.1rem; color: $muted; font-size: 0.82rem; }
+.modalActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.6rem;
+  margin-top: 1.2rem;
+}
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+// Ficha stat cards (horizontal grid, distinct from the vertical .pageStats).
+.statCards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+}
+.statCard {
+  background: $card;
+  border-radius: $r-card;
+  box-shadow: $shadow-sm;
+  padding: 1.1rem 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  strong { display: block; font-size: 1.15rem; color: $heading; font-weight: 800; }
+  small { color: $muted; font-size: 0.78rem; }
+}
+.statCardIcon {
+  width: 42px;
+  height: 42px;
+  border-radius: 10px;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+}
+.statCardCol { display: flex; flex-direction: column; gap: 0.5rem; align-items: flex-start; }
+
+// Chip editor (topics + availability ranges).
+.chipEditor { display: flex; flex-wrap: wrap; gap: 0.4rem; align-items: center; }
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: $primary;
+  background: $primary-soft;
+  border-radius: 6px;
+  padding: 0.3rem 0.35rem 0.3rem 0.6rem;
+  font-variant-numeric: tabular-nums;
+}
+.chipRemove {
+  width: 16px;
+  height: 16px;
+  border: 0;
+  border-radius: 4px;
+  background: transparent;
+  color: $primary;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  &:hover { background: $primary-ring; }
+}
+.chipInput {
+  font: inherit;
+  font-size: 0.82rem;
+  color: $heading;
+  padding: 0.35rem 0.6rem;
+  border: 1px dashed $input-border;
+  border-radius: $r-control;
+  background: $card;
+  width: 240px;
+  max-width: 100%;
+}
+
+// Class editor: note blocks.
+.noteList { display: flex; flex-direction: column; gap: 0.6rem; margin-top: 0.6rem; }
+.noteBlock {
+  border: 1px solid $line;
+  border-radius: $r-control;
+  padding: 0.75rem 0.85rem;
+  background: $card;
+}
+.noteBlockEx { background: #f6faf9; }
+.noteBlockTip { background: rgba(200, 228, 124, 0.16); }
+.noteHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+.noteLabel {
+  font-size: 0.66rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: $muted;
+}
+.noteLabelEx { color: $primary; }
+.noteLabelTip { color: #4c611c; }
+.noteTrash {
+  width: 22px;
+  height: 22px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: $muted;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  &:hover { background: $danger-soft; color: $danger; }
+}
+.noteTextarea {
+  font: inherit;
+  font-size: 0.875rem;
+  color: $heading;
+  line-height: 1.55;
+  padding: 0.5rem 0.65rem;
+  border: 1px solid $input-border;
+  border-radius: $r-control;
+  background: $card;
+  width: 100%;
+  resize: vertical;
+}
+.noteEx { display: flex; flex-direction: column; gap: 0.4rem; }
+.noteExEn { font-weight: 600; color: $primary-strong; }
+.noteExEs { font-style: italic; color: $text; }
+.addRow { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 0.75rem; }
+
+// Class editor: material rows.
+.matRow {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  border: 1px solid $line;
+  border-radius: $r-control;
+  padding: 0.6rem 0.75rem;
+}
+.matIcon {
+  width: 34px;
+  height: 34px;
+  border-radius: $r-control;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+}
+.matIconPdf { background: $primary-soft; color: $primary; }
+.matIconBlog { background: rgba(200, 228, 124, 0.42); color: #4c611c; }
+.matKind { font-size: 0.72rem; font-weight: 700; color: $muted; flex-shrink: 0; }
+
+// Conversations: 2-pane. Both panes AND the reply input need min-width:0 or the
+// thread column overflows the grid.
+.chatLayout {
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  background: $card;
+  border-radius: $r-card;
+  box-shadow: $shadow-sm;
+  overflow: hidden;
+  min-height: 560px;
+}
+@media (max-width: 720px) {
+  .chatLayout { grid-template-columns: 1fr; }
+}
+.chatList { border-right: 1px solid $line; display: flex; flex-direction: column; min-width: 0; }
+.chatListHead {
+  padding: 0.85rem 1rem;
+  border-bottom: 1px solid $line;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: $muted;
+}
+.chatListItem {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 0.8rem 1rem;
+  border: 0;
+  border-bottom: 1px solid $line;
+  cursor: pointer;
+  font-family: inherit;
+  text-align: left;
+  width: 100%;
+  background: $card;
+  transition: background 0.12s ease;
+  &:hover { background: #f6faf9; }
+}
+.chatListItemActive { background: rgba(24, 92, 96, 0.07); }
+.chatListMeta { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 1px; }
+.chatListName { font-size: 0.86rem; color: $heading; font-weight: 600; }
+.chatListPreview {
+  font-size: 0.75rem;
+  color: $muted;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.chatListUnread {
+  min-width: 19px;
+  height: 19px;
+  border-radius: 10px;
+  background: $primary;
+  color: #fff;
+  font-size: 0.68rem;
+  font-weight: 800;
+  display: grid;
+  place-items: center;
+  padding: 0 0.3rem;
+  flex-shrink: 0;
+}
+.chatThread { display: flex; flex-direction: column; max-height: 640px; min-width: 0; }
+.chatThreadHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.6rem;
+  padding: 0.8rem 1.25rem;
+  border-bottom: 1px solid $line;
+}
+.chatThreadWho { display: flex; align-items: center; gap: 0.6rem; }
+.chatMessages {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 1.25rem;
+}
+.chatMsgRow { display: flex; flex-direction: column; gap: 3px; }
+.chatMsgStudent { align-items: flex-start; }
+.chatMsgOther { align-items: flex-end; }
+.chatSender {
+  font-size: 0.66rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+.chatSenderStudent { color: $muted; }
+.chatSenderAi { color: $primary; }
+.chatSenderTeacher { color: #4c611c; }
+.chatBubble {
+  max-width: 72%;
+  padding: 0.7rem 0.95rem;
+  font-size: 0.875rem;
+  line-height: 1.55;
+  white-space: pre-wrap;
+}
+.chatBubbleStudent {
+  background: $card;
+  color: $heading;
+  border: 1px solid $line;
+  border-radius: 12px 12px 12px 4px;
+}
+.chatBubbleAi {
+  background: rgba(24, 92, 96, 0.08);
+  color: $primary-strong;
+  border-radius: 12px 12px 4px 12px;
+}
+.chatBubbleTeacher {
+  background: $lime;
+  color: $primary-strong;
+  border-radius: 12px 12px 4px 12px;
+}
+.chatComposer {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.85rem 1.25rem;
+  border-top: 1px solid $line;
+  background: #f8fbfb;
+  input {
+    font: inherit;
+    font-size: 0.875rem;
+    color: $heading;
+    padding: 0.6rem 0.85rem;
+    border: 1px solid $input-border;
+    border-radius: $r-control;
+    background: $card;
+    flex: 1;
+    min-width: 0;
+  }
+}
+
+// Agenda: toggle switches + day rows.
+.agendaRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.1rem;
+  flex-wrap: wrap;
+}
+.agendaRowLeft { display: flex; align-items: center; gap: 0.85rem; min-width: 0; }
+.agendaRowIcon {
+  width: 42px;
+  height: 42px;
+  border-radius: 10px;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  background: $primary-soft;
+  color: $primary;
+}
+.switch {
+  position: relative;
+  width: 44px;
+  height: 24px;
+  border-radius: 999px;
+  border: 0;
+  cursor: pointer;
+  flex-shrink: 0;
+  background: $input-border;
+  transition: background 0.2s $ease-out;
+}
+.switchOn { background: $primary; }
+.switchKnob {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 1px 3px rgba(22, 56, 59, 0.3);
+  transition: left 0.2s $ease-out;
+}
+.switchOn .switchKnob { left: 22px; }
+.switchSm { width: 36px; height: 20px; }
+.switchSm .switchKnob { width: 16px; height: 16px; }
+.switchSm.switchOn .switchKnob { left: 18px; }
+.gcalNote {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.85rem;
+  padding: 0.6rem 0.85rem;
+  background: #f6faf9;
+  border-radius: $r-control;
+  font-size: 0.8rem;
+  color: $text;
+}
+.dayRow {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  padding: 0.7rem 0;
+  border-bottom: 1px solid $line;
+  flex-wrap: wrap;
+}
+.dayName { width: 84px; font-size: 0.875rem; font-weight: 600; color: $heading; }
+.dayNameOff { color: $muted; }
+.dayRanges { display: flex; align-items: center; gap: 0.4rem; flex-wrap: wrap; flex: 1; }
+
 // ── Reduced motion ──────────────────────────────────────────────────────────
 @media (prefers-reduced-motion: reduce) {
   .sidebar, .saveBar, .pageCard, .btnPrimary, .menuItem, .menuChevron {
@@ -1451,4 +1858,5 @@ a.dashRow:hover strong { color: $primary; }
   }
   .tip::after, .tip::before { transition: none; }
   .skelRow { animation: none; }
+  .switch, .switchKnob, .modalCard { transition: none; animation: none; }
 }

@@ -8,8 +8,9 @@ import {
   Link,
   useLocation,
 } from 'react-router-dom';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { QueryClient, QueryClientProvider, useQuery } from '@tanstack/react-query';
 import {
+  CalendarDays,
   ChevronDown,
   ChevronRight,
   ExternalLink,
@@ -18,12 +19,14 @@ import {
   LayoutTemplate,
   LogOut,
   Menu,
+  MessageCircle,
   Newspaper,
   UserRound,
   Users as UsersIcon,
 } from 'lucide-react';
 import { BookStackLogo } from '../components/Icons';
 import { AuthProvider, useAuth } from './lib/auth';
+import { api } from './lib/client';
 import RequireAuth from './RequireAuth';
 import Login from './pages/Login';
 import ForgotPassword from './pages/ForgotPassword';
@@ -36,6 +39,11 @@ import PageEditor from './pages/PageEditor';
 import Users from './pages/Users';
 import Activity from './pages/Activity';
 import Profile from './pages/Profile';
+import StudentsList from './pages/StudentsList';
+import StudentDetail from './pages/StudentDetail';
+import ClassEditor from './pages/ClassEditor';
+import Conversations from './pages/Conversations';
+import Agenda from './pages/Agenda';
 import Avatar from './components/Avatar';
 import { PAGE_SCHEMAS, schemaFor } from './pageSchemas';
 import s from './styles/admin.module.scss';
@@ -88,6 +96,19 @@ const Crumbs: React.FC = () => {
     parts.push({ label: 'Contenido' }, { label: 'Blog', to: '/blog' });
     if (sub === 'new') parts.push({ label: 'Nuevo artículo' });
     else if (sub) parts.push({ label: 'Editar artículo' });
+  } else if (root === 'students') {
+    parts.push({ label: 'Portal de estudiantes' }, { label: 'Estudiantes', to: '/students' });
+    if (sub) {
+      const isNew = pathname.endsWith('/classes/new');
+      const isEdit = pathname.includes('/classes/');
+      parts.push({ label: 'Ficha del estudiante' });
+      if (isNew) parts.push({ label: 'Nueva clase' });
+      else if (isEdit) parts.push({ label: 'Editar clase' });
+    }
+  } else if (root === 'conversations') {
+    parts.push({ label: 'Portal de estudiantes' }, { label: 'Conversaciones', to: '/conversations' });
+  } else if (root === 'agenda') {
+    parts.push({ label: 'Portal de estudiantes' }, { label: 'Agenda de clases', to: '/agenda' });
   } else if (root === 'users') {
     parts.push({ label: 'Administración' }, { label: 'Usuarios', to: '/users' });
   } else if (root === 'activity') {
@@ -113,6 +134,44 @@ const Crumbs: React.FC = () => {
       ))}
       <span className={s.crumbCurrent}>{last.label}</span>
     </nav>
+  );
+};
+
+// ─── Portal de estudiantes nav (with live badges) ────────────────────────────
+
+const PortalNav: React.FC<{
+  linkClass: (p: { isActive: boolean }) => string;
+  onNav: () => void;
+}> = ({ linkClass, onNav }) => {
+  // Cached queries shared with the pages themselves — the badges piggyback.
+  const { data: students } = useQuery({
+    queryKey: ['admin', 'students'],
+    queryFn: api.listStudents,
+    staleTime: 30_000,
+  });
+  const { data: settings } = useQuery({
+    queryKey: ['admin', 'booking', 'settings'],
+    queryFn: api.getBookingSettings,
+    staleTime: 30_000,
+  });
+  const unread = students?.reduce((n, st) => n + st.unread, 0) ?? 0;
+  const bookingOff = settings ? !settings.bookingEnabled : false;
+
+  return (
+    <>
+      <span className={s.menuLabel}>Portal de estudiantes</span>
+      <NavLink to="/students" className={linkClass} onClick={onNav}>
+        <UsersIcon size={19} /> <span className={s.menuText}>Estudiantes</span>
+      </NavLink>
+      <NavLink to="/conversations" className={linkClass} onClick={onNav}>
+        <MessageCircle size={19} /> <span className={s.menuText}>Conversaciones</span>
+        {unread > 0 && <span className={s.navCount}>{unread}</span>}
+      </NavLink>
+      <NavLink to="/agenda" className={linkClass} onClick={onNav}>
+        <CalendarDays size={19} /> <span className={s.menuText}>Agenda</span>
+        {bookingOff && <span className={s.navWarn}>OFF</span>}
+      </NavLink>
+    </>
   );
 };
 
@@ -238,6 +297,8 @@ const Shell: React.FC<{ children: React.ReactNode }> = ({ children }) => {
             <LayoutDashboard size={19} /> <span className={s.menuText}>Panel</span>
           </NavLink>
 
+          <PortalNav linkClass={linkClass} onNav={onNav} />
+
           <span className={s.menuLabel}>Contenido</span>
           {MENU_GROUPS.map((group) => {
             const inGroup = pathname.startsWith(group.base);
@@ -328,6 +389,18 @@ const AdminApp: React.FC = () => (
           <Route path="/set-password" element={<SetPassword />} />
           <Route element={<RequireAuth />}>
             <Route path="/" element={<Shell><Dashboard /></Shell>} />
+            <Route path="/students" element={<Shell><StudentsList /></Shell>} />
+            <Route path="/students/:id" element={<Shell><StudentDetail /></Shell>} />
+            <Route
+              path="/students/:id/classes/new"
+              element={<Shell><ClassEditor /></Shell>}
+            />
+            <Route
+              path="/students/:id/classes/:classId"
+              element={<Shell><ClassEditor /></Shell>}
+            />
+            <Route path="/conversations" element={<Shell><Conversations /></Shell>} />
+            <Route path="/agenda" element={<Shell><Agenda /></Shell>} />
             <Route path="/pages" element={<Shell><PagesList /></Shell>} />
             <Route path="/pages/:key" element={<Shell><PageEditor /></Shell>} />
             <Route path="/blog" element={<Shell><BlogList /></Shell>} />

@@ -1,0 +1,23 @@
+---
+// Student portal — a client-only React SPA (react-router handles all /portal/*
+// sub-routes). SSR-rendered shell only; all data is fetched client-side against
+// the API with the student's httpOnly session cookie.
+export const prerender = false;
+
+import '../../styles/global.scss';
+import PortalApp from '../../portal/PortalApp.tsx';
+---
+
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>Portal del estudiante · Your English Buddy</title>
+  </head>
+  <body>
+    <PortalApp client:only="react" />
+  </body>
+</html>
